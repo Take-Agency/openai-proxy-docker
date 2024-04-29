@@ -49,3 +49,8 @@ It can be easily modified by Github codespaces:
 4. `npm start`
 
 And then, the codespace will provide a forward port (default 9017) for you to check the running.
+
+If everything is OK, check the docker by:
+```
+docker build .
+```
