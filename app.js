@@ -1,10 +1,11 @@
 const express = require('express')
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express()
-const port = 9017
+const port = process.env.PORT || 9017
+const target = process.env.TARGET || 'https://api.openai.com'
 
 app.use('/', createProxyMiddleware({
-    target: 'https://api.openai.com',
+    target: target,
     changeOrigin: true,
     onProxyReq: (proxyReq, req, res) => {
         proxyReq.removeHeader('x-forwarded-for');
