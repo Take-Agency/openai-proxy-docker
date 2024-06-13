@@ -3,6 +3,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express()
 const port = process.env.PORT || 9017
 const target = process.env.TARGET || 'https://api.openai.com'
+const apiKey = process.env.OPENAI_API_KEY;
 
 app.use('/', createProxyMiddleware({
     target: target,
@@ -10,6 +11,9 @@ app.use('/', createProxyMiddleware({
     onProxyReq: (proxyReq, req, res) => {
         proxyReq.removeHeader('x-forwarded-for');
         proxyReq.removeHeader('x-real-ip');
+        if (apiKey) {
+            proxyReq.appendHeader('Authorization', `Bearer ${apiKey}`);
+        }
     },
     onProxyRes: function (proxyRes, req, res) {
         proxyRes.headers['Access-Control-Allow-Origin'] = '*';
