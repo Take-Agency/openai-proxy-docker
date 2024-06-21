@@ -19,11 +19,10 @@ const limiter = rateLimit({
 // Apply the rate limiting middleware to all requests.
 app.use(limiter);
 
-app.get('/ip', (req, res) => res.send({
-    'test': 'yo',
-    'do-connecting-ip': req.headers['do-connecting-ip'],
-    'ip': req.ip,
-}));
+// app.get('/ip', (req, res) => res.send({
+//     'do-connecting-ip': req.headers['do-connecting-ip'],
+//     'ip': req.ip,
+// }));
 
 app.use('/', createProxyMiddleware({
     target: target,
