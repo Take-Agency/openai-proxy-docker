@@ -43,7 +43,7 @@ app.use('/', createProxyMiddleware({
         if (targetUrl.includes('api.openai.com') && openaiApiKey) {
             proxyReq.setHeader('Authorization', `Bearer ${openaiApiKey}`);
         } else if (targetUrl.includes('api.elevenlabs.io') && elevenLabsApiKey) {
-            proxyReq.setHeader('Authorization', `Bearer ${elevenLabsApiKey}`);
+            proxyReq.setHeader('xi-api-key', elevenLabsApiKey);
         }
     },
     onProxyRes: function (proxyRes, req, res) {
