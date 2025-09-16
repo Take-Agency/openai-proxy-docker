@@ -1,6 +1,7 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { rateLimit } from 'express-rate-limit';
+import queryString from 'query-string';
 
 const allowedTargets = [
     'https://api.openai.com/',
@@ -67,6 +68,27 @@ app.use('/', (req, res, next) => {
             proxyReq.setHeader('Authorization', `Bearer ${openaiApiKey}`);
         } else if (targetUrl.includes('api.elevenlabs.io') && elevenLabsApiKey) {
             proxyReq.setHeader('xi-api-key', elevenLabsApiKey);
+        }
+
+        // we need to restream parsed body before proxying
+        if (!req.body || !Object.keys(req.body).length) {
+            return;
+        }
+
+        var contentType = proxyReq.getHeader('Content-Type');
+        var bodyData;
+
+        if (contentType === 'application/json') {
+            bodyData = JSON.stringify(req.body);
+        }
+
+        if (contentType === 'application/x-www-form-urlencoded') {
+            bodyData = queryString.stringify(req.body);
+        }
+
+        if (bodyData) {
+            proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
+            proxyReq.write(bodyData);
         }
     },
     onProxyRes: function (proxyRes, req, res) {
