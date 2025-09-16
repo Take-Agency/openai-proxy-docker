@@ -2,9 +2,14 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { rateLimit } from 'express-rate-limit';
 
+const allowedTargets = [
+    'https://api.openai.com/',
+    'https://api.elevenlabs.io/',
+];
+
 const app = express();
 const port = process.env.PORT || 9017;
-const target = process.env.TARGET || 'https://api.openai.com';
+const target = process.env.TARGET || 'https://api.openai.com/';
 const openaiApiKey = process.env.OPENAI_API_KEY;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
 
@@ -28,7 +33,22 @@ app.use(limiter);
 //     'ip': req.ip,
 // }));
 
-app.use('/', createProxyMiddleware({
+app.use('/', (req, res, next) => {
+    // Get the target URL from the request
+    const targetUrl = getTargetUrl(req);
+
+    // TODO: uncomment this once the app uses trailing slashes
+    // const isAllowedTarget = allowedTargets.some(allowedTarget => targetUrl.startsWith(allowedTarget));
+    // if (!isAllowedTarget) {
+    //     return res.status(403).send({ success: false, error: 'forbidden' });
+    // }
+
+    if (targetUrl.includes('api.openai.com')) {
+        console.log('OpenAI API request', req.body);
+    }
+
+    next();
+}, createProxyMiddleware({
     router: getTargetUrl,
     changeOrigin: true,
     onProxyReq: (proxyReq, req, res) => {
