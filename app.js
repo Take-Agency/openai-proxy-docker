@@ -47,8 +47,8 @@ app.use('/', (req, res, next) => {
     //     return res.status(403).send({ success: false, error: 'forbidden' });
     // }
 
-    if (targetUrl.includes('api.openai.com')) {
-        console.log('OpenAI API request', req.method, req.path, req.query, req.body);
+    if (targetUrl.includes('api.openai.com') && req.body.model !== 'gpt-4o') {
+        console.log('suspicious OpenAI API request', req.method, req.path, req.query, req.body);
     }
 
     next();
