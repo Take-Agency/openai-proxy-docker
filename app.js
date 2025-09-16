@@ -44,7 +44,7 @@ app.use('/', (req, res, next) => {
     // }
 
     if (targetUrl.includes('api.openai.com')) {
-        console.log('OpenAI API request', req.body);
+        console.log('OpenAI API request', req.method, req.path, req.query, req.body);
     }
 
     next();
