@@ -9,7 +9,7 @@ const allowedTargets = [
 
 const app = express();
 const port = process.env.PORT || 9017;
-const target = process.env.TARGET || 'https://api.openai.com/';
+const target = process.env.TARGET || 'https://api.openai.com';
 const openaiApiKey = process.env.OPENAI_API_KEY;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
 
@@ -40,6 +40,7 @@ app.use('/', (req, res, next) => {
     const targetUrl = getTargetUrl(req);
 
     // TODO: uncomment this once the app uses trailing slashes
+    // TODO: looks like the proxy middleware does not like the trailing slash but we need it to prevent malicious domains, will need to strip the slash
     // const isAllowedTarget = allowedTargets.some(allowedTarget => targetUrl.startsWith(allowedTarget));
     // if (!isAllowedTarget) {
     //     return res.status(403).send({ success: false, error: 'forbidden' });
