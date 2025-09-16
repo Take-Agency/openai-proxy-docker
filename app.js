@@ -27,6 +27,8 @@ const limiter = rateLimit({
 
 // Apply the rate limiting middleware to all requests.
 app.use(limiter);
+// parse json bodies
+app.use(express.json({ limit: '1000mb' }));
 
 // app.get('/ip', (req, res) => res.send({
 //     'do-connecting-ip': req.headers['do-connecting-ip'],
