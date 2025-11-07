@@ -1,0 +1,2415 @@
+{
+  "generated_at": "2025-11-05T19:18:29.043368",
+  "version": "1.0",
+  "total_tracks": 100,
+  "tracks": [
+    {
+      "track_id": "100101_v1",
+      "prompt_id": "100101",
+      "title": "Dancing in the Lights",
+      "duration": 179.28,
+      "user_tags": [
+        "upbeat",
+        "energetic",
+        "electronic",
+        "dance"
+      ],
+      "suno_tags": [
+        "layered vocal harmonies",
+        "energetic synths",
+        "upbeat electronic dance music",
+        "pulsing bassline",
+        "dance",
+        "electronic"
+      ],
+      "detail_url": "tracks/100101_v1.json",
+      "audio_url": "assets/100101_v1.mp3",
+      "cover_url": "assets/100101_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100101_v2",
+      "prompt_id": "100101",
+      "title": "Catwalk",
+      "duration": 154.6,
+      "user_tags": [
+        "upbeat",
+        "energetic",
+        "electronic",
+        "dance"
+      ],
+      "suno_tags": [
+        "layered vocal harmonies",
+        "energetic synths",
+        "upbeat electronic dance music",
+        "pulsing bassline",
+        "dance",
+        "electronic"
+      ],
+      "detail_url": "tracks/100101_v2.json",
+      "audio_url": "assets/100101_v2.mp3",
+      "cover_url": "assets/100101_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100102_v1",
+      "prompt_id": "100102",
+      "title": "Lemonade Standoff",
+      "duration": 143.92,
+      "user_tags": [
+        "upbeat",
+        "indie",
+        "pop",
+        "energetic"
+      ],
+      "suno_tags": [
+        "pop",
+        "indie pop guitar-driven female vocals",
+        "happy",
+        "indie pop"
+      ],
+      "detail_url": "tracks/100102_v1.json",
+      "audio_url": "assets/100102_v1.mp3",
+      "cover_url": "assets/100102_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100102_v2",
+      "prompt_id": "100102",
+      "title": "Sunshine Melodies",
+      "duration": 126.96,
+      "user_tags": [
+        "upbeat",
+        "indie",
+        "pop",
+        "energetic"
+      ],
+      "suno_tags": [
+        "pop",
+        "indie pop guitar-driven female vocals",
+        "happy",
+        "indie pop"
+      ],
+      "detail_url": "tracks/100102_v2.json",
+      "audio_url": "assets/100102_v2.mp3",
+      "cover_url": "assets/100102_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100201_v1",
+      "prompt_id": "100201",
+      "title": "Midnight Echoes",
+      "duration": 119.4,
+      "user_tags": [
+        "chill",
+        "lofi",
+        "relaxed",
+        "ambient"
+      ],
+      "suno_tags": [
+        "mellow",
+        "lo-fi",
+        "beats",
+        "dreamy keys",
+        "soft beats with a hazy texture"
+      ],
+      "detail_url": "tracks/100201_v1.json",
+      "audio_url": "assets/100201_v1.mp3",
+      "cover_url": "assets/100201_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100201_v2",
+      "prompt_id": "100201",
+      "title": "Dreamy Nights",
+      "duration": 185.04,
+      "user_tags": [
+        "chill",
+        "lofi",
+        "relaxed",
+        "ambient"
+      ],
+      "suno_tags": [
+        "mellow",
+        "lo-fi",
+        "beats",
+        "dreamy keys",
+        "soft beats with a hazy texture"
+      ],
+      "detail_url": "tracks/100201_v2.json",
+      "audio_url": "assets/100201_v2.mp3",
+      "cover_url": "assets/100201_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100202_v1",
+      "prompt_id": "100202",
+      "title": "Velvet Horizon",
+      "duration": 124.16,
+      "user_tags": [
+        "chill",
+        "chillhop",
+        "lofi",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "smooth chillhop",
+        "soft piano melodies",
+        "vinyl crackle texture",
+        "gentle percussion loops",
+        "laid-back groove",
+        "warm basslines",
+        "smooth"
+      ],
+      "detail_url": "tracks/100202_v1.json",
+      "audio_url": "assets/100202_v1.mp3",
+      "cover_url": "assets/100202_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100202_v2",
+      "prompt_id": "100202",
+      "title": "Chill Vibes Only",
+      "duration": 106.96,
+      "user_tags": [
+        "chill",
+        "chillhop",
+        "lofi",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "smooth chillhop",
+        "soft piano melodies",
+        "vinyl crackle texture",
+        "gentle percussion loops",
+        "laid-back groove",
+        "warm basslines",
+        "smooth"
+      ],
+      "detail_url": "tracks/100202_v2.json",
+      "audio_url": "assets/100202_v2.mp3",
+      "cover_url": "assets/100202_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100301_v1",
+      "prompt_id": "100301",
+      "title": "Wanderlust Roads",
+      "duration": 169.8,
+      "user_tags": [
+        "adventure",
+        "travel",
+        "cinematic",
+        "acoustic"
+      ],
+      "suno_tags": [
+        "acoustic guitar",
+        "acoustic",
+        "cinematic",
+        "rhythmic percussion",
+        "atmospheric swells for travel montage"
+      ],
+      "detail_url": "tracks/100301_v1.json",
+      "audio_url": "assets/100301_v1.mp3",
+      "cover_url": "assets/100301_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100301_v2",
+      "prompt_id": "100301",
+      "title": "Chasing Horizons",
+      "duration": 199.0,
+      "user_tags": [
+        "adventure",
+        "travel",
+        "cinematic",
+        "acoustic"
+      ],
+      "suno_tags": [
+        "acoustic guitar",
+        "acoustic",
+        "cinematic",
+        "rhythmic percussion",
+        "atmospheric swells for travel montage"
+      ],
+      "detail_url": "tracks/100301_v2.json",
+      "audio_url": "assets/100301_v2.mp3",
+      "cover_url": "assets/100301_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100302_v1",
+      "prompt_id": "100302",
+      "title": "Rhythm of the Earth",
+      "duration": 207.44,
+      "user_tags": [
+        "adventure",
+        "worldbeat",
+        "cinematic",
+        "drums"
+      ],
+      "suno_tags": [
+        "epic",
+        "worldbeat",
+        "rich strings",
+        "layered with ethnic drums",
+        "and ambient textures that build to a powerful crescendo"
+      ],
+      "detail_url": "tracks/100302_v1.json",
+      "audio_url": "assets/100302_v1.mp3",
+      "cover_url": "assets/100302_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100302_v2",
+      "prompt_id": "100302",
+      "title": "Worldbeat Fusion",
+      "duration": 239.96,
+      "user_tags": [
+        "adventure",
+        "worldbeat",
+        "cinematic",
+        "drums"
+      ],
+      "suno_tags": [
+        "epic",
+        "worldbeat",
+        "rich strings",
+        "layered with ethnic drums",
+        "and ambient textures that build to a powerful crescendo"
+      ],
+      "detail_url": "tracks/100302_v2.json",
+      "audio_url": "assets/100302_v2.mp3",
+      "cover_url": "assets/100302_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100401_v1",
+      "prompt_id": "100401",
+      "title": "Funky Fever",
+      "duration": 142.92,
+      "user_tags": [
+        "fashion",
+        "lifestyle",
+        "house",
+        "funky"
+      ],
+      "suno_tags": [
+        "groovy",
+        "rhythmic layers with a pulsing funky bassline and crisp percussion. male vocals with playful energy and ad-libs.",
+        "bass-driven",
+        "funk",
+        "bassline",
+        "stylish",
+        "house",
+        "funky"
+      ],
+      "detail_url": "tracks/100401_v1.json",
+      "audio_url": "assets/100401_v1.mp3",
+      "cover_url": "assets/100401_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100401_v2",
+      "prompt_id": "100401",
+      "title": "Funky Aesthetic",
+      "duration": 141.24,
+      "user_tags": [
+        "fashion",
+        "lifestyle",
+        "house",
+        "funky"
+      ],
+      "suno_tags": [
+        "groovy",
+        "rhythmic layers with a pulsing funky bassline and crisp percussion. male vocals with playful energy and ad-libs.",
+        "bass-driven",
+        "funk",
+        "bassline",
+        "stylish",
+        "house",
+        "funky"
+      ],
+      "detail_url": "tracks/100401_v2.json",
+      "audio_url": "assets/100401_v2.mp3",
+      "cover_url": "assets/100401_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100402_v1",
+      "prompt_id": "100402",
+      "title": "Velvet Shadows",
+      "duration": 121.96,
+      "user_tags": [
+        "fashion",
+        "lifestyle",
+        "rnb",
+        "trap"
+      ],
+      "suno_tags": [
+        "modern rnb",
+        "while vocal adlibs echo softly in the background for a dreamy texture.",
+        "with trap drums and smooth synth layers. minimalist keys and 808s provide depth",
+        "rap",
+        "atmospheric"
+      ],
+      "detail_url": "tracks/100402_v1.json",
+      "audio_url": "assets/100402_v1.mp3",
+      "cover_url": "assets/100402_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100402_v2",
+      "prompt_id": "100402",
+      "title": "RnB Trap Bliss",
+      "duration": 135.92,
+      "user_tags": [
+        "fashion",
+        "lifestyle",
+        "rnb",
+        "trap"
+      ],
+      "suno_tags": [
+        "modern rnb",
+        "while vocal adlibs echo softly in the background for a dreamy texture.",
+        "with trap drums and smooth synth layers. minimalist keys and 808s provide depth",
+        "rap",
+        "atmospheric"
+      ],
+      "detail_url": "tracks/100402_v2.json",
+      "audio_url": "assets/100402_v2.mp3",
+      "cover_url": "assets/100402_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100501_v1",
+      "prompt_id": "100501",
+      "title": "Rise and Shine",
+      "duration": 154.92,
+      "user_tags": [
+        "corporate",
+        "motivational",
+        "pop",
+        "uplifting"
+      ],
+      "suno_tags": [
+        "creating an anthemic and motivational atmosphere",
+        "corporate pop",
+        "inspiring",
+        "pop",
+        "uplifting",
+        "uplifting piano and bright synths with a driving beat"
+      ],
+      "detail_url": "tracks/100501_v1.json",
+      "audio_url": "assets/100501_v1.mp3",
+      "cover_url": "assets/100501_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100501_v2",
+      "prompt_id": "100501",
+      "title": "Dream Big Bright",
+      "duration": 169.84,
+      "user_tags": [
+        "corporate",
+        "motivational",
+        "pop",
+        "uplifting"
+      ],
+      "suno_tags": [
+        "creating an anthemic and motivational atmosphere",
+        "corporate pop",
+        "inspiring",
+        "pop",
+        "uplifting",
+        "uplifting piano and bright synths with a driving beat"
+      ],
+      "detail_url": "tracks/100501_v2.json",
+      "audio_url": "assets/100501_v2.mp3",
+      "cover_url": "assets/100501_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100502_v1",
+      "prompt_id": "100502",
+      "title": "Rise and Run",
+      "duration": 145.28,
+      "user_tags": [
+        "corporate",
+        "motivational",
+        "guitar",
+        "uplifting"
+      ],
+      "suno_tags": [
+        "uplifting",
+        "clean electric guitars",
+        "steady kick drum",
+        "atmospheric synths",
+        "steady",
+        "clean",
+        "motivational",
+        "dynamic builds"
+      ],
+      "detail_url": "tracks/100502_v1.json",
+      "audio_url": "assets/100502_v1.mp3",
+      "cover_url": "assets/100502_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100502_v2",
+      "prompt_id": "100502",
+      "title": "Upbeat Rock Anthem",
+      "duration": 209.92,
+      "user_tags": [
+        "corporate",
+        "motivational",
+        "guitar",
+        "uplifting"
+      ],
+      "suno_tags": [
+        "uplifting",
+        "clean electric guitars",
+        "steady kick drum",
+        "atmospheric synths",
+        "steady",
+        "clean",
+        "motivational",
+        "dynamic builds"
+      ],
+      "detail_url": "tracks/100502_v2.json",
+      "audio_url": "assets/100502_v2.mp3",
+      "cover_url": "assets/100502_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100601_v1",
+      "prompt_id": "100601",
+      "title": "Neon Horizons",
+      "duration": 199.68,
+      "user_tags": [
+        "tech",
+        "futuristic",
+        "synthwave",
+        "electronic"
+      ],
+      "suno_tags": [
+        "futuristic synthwave",
+        "shimmering synths",
+        "driving bass",
+        "atmospheric pads",
+        "pulsating rhythm"
+      ],
+      "detail_url": "tracks/100601_v1.json",
+      "audio_url": "assets/100601_v1.mp3",
+      "cover_url": "assets/100601_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100601_v2",
+      "prompt_id": "100601",
+      "title": "Dreamy Synthwave Adventure",
+      "duration": 196.28,
+      "user_tags": [
+        "tech",
+        "futuristic",
+        "synthwave",
+        "electronic"
+      ],
+      "suno_tags": [
+        "futuristic synthwave",
+        "shimmering synths",
+        "driving bass",
+        "atmospheric pads",
+        "pulsating rhythm"
+      ],
+      "detail_url": "tracks/100601_v2.json",
+      "audio_url": "assets/100601_v2.mp3",
+      "cover_url": "assets/100601_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100602_v1",
+      "prompt_id": "100602",
+      "title": "Electric Whispers",
+      "duration": 272.2,
+      "user_tags": [
+        "tech",
+        "futuristic",
+        "minimal",
+        "ambient"
+      ],
+      "suno_tags": [
+        "minimal",
+        "electronic",
+        "minimal electronic",
+        "steady pulse",
+        "atmospheric textures with a focus on layered synths and subtle percussive elements",
+        "steady"
+      ],
+      "detail_url": "tracks/100602_v1.json",
+      "audio_url": "assets/100602_v1.mp3",
+      "cover_url": "assets/100602_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100602_v2",
+      "prompt_id": "100602",
+      "title": "Sleek Synth Vibes",
+      "duration": 234.04,
+      "user_tags": [
+        "tech",
+        "futuristic",
+        "minimal",
+        "ambient"
+      ],
+      "suno_tags": [
+        "minimal",
+        "electronic",
+        "minimal electronic",
+        "steady pulse",
+        "atmospheric textures with a focus on layered synths and subtle percussive elements",
+        "steady"
+      ],
+      "detail_url": "tracks/100602_v2.json",
+      "audio_url": "assets/100602_v2.mp3",
+      "cover_url": "assets/100602_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100701_v1",
+      "prompt_id": "100701",
+      "title": "Breaking the Chains",
+      "duration": 159.92,
+      "user_tags": [
+        "action",
+        "sports",
+        "rock",
+        "energetic"
+      ],
+      "suno_tags": [
+        "explosive drums",
+        "driving",
+        "high-energy",
+        "electric guitars with distortion",
+        "rock",
+        "raw male vocals"
+      ],
+      "detail_url": "tracks/100701_v1.json",
+      "audio_url": "assets/100701_v1.mp3",
+      "cover_url": "assets/100701_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100701_v2",
+      "prompt_id": "100701",
+      "title": "Rock Surge",
+      "duration": 156.4,
+      "user_tags": [
+        "action",
+        "sports",
+        "rock",
+        "energetic"
+      ],
+      "suno_tags": [
+        "explosive drums",
+        "driving",
+        "high-energy",
+        "electric guitars with distortion",
+        "rock",
+        "raw male vocals"
+      ],
+      "detail_url": "tracks/100701_v2.json",
+      "audio_url": "assets/100701_v2.mp3",
+      "cover_url": "assets/100701_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100702_v1",
+      "prompt_id": "100702",
+      "title": "Brass Inferno",
+      "duration": 142.6,
+      "user_tags": [
+        "action",
+        "sports",
+        "trap",
+        "intense"
+      ],
+      "suno_tags": [
+        "punchy rhymes",
+        "and male vocals delivering rapid-fire",
+        "sharp hi-hats",
+        "rap",
+        "heavy brass",
+        "trap",
+        "booming 808s"
+      ],
+      "detail_url": "tracks/100702_v1.json",
+      "audio_url": "assets/100702_v1.mp3",
+      "cover_url": "assets/100702_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100702_v2",
+      "prompt_id": "100702",
+      "title": "Heavy Is the Head",
+      "duration": 111.44,
+      "user_tags": [
+        "action",
+        "sports",
+        "trap",
+        "intense"
+      ],
+      "suno_tags": [
+        "punchy rhymes",
+        "and male vocals delivering rapid-fire",
+        "sharp hi-hats",
+        "rap",
+        "heavy brass",
+        "trap",
+        "booming 808s"
+      ],
+      "detail_url": "tracks/100702_v2.json",
+      "audio_url": "assets/100702_v2.mp3",
+      "cover_url": "assets/100702_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100801_v1",
+      "prompt_id": "100801",
+      "title": "Falling Into Blue",
+      "duration": 184.12,
+      "user_tags": [
+        "cinematic",
+        "emotional",
+        "piano",
+        "orchestral"
+      ],
+      "suno_tags": [
+        "piano and strings; gentle crescendos and sweeping textures build an atmosphere of longing and hope",
+        "cinematic",
+        "emotional"
+      ],
+      "detail_url": "tracks/100801_v1.json",
+      "audio_url": "assets/100801_v1.mp3",
+      "cover_url": "assets/100801_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100801_v2",
+      "prompt_id": "100801",
+      "title": "Cinematic Reverie",
+      "duration": 216.96,
+      "user_tags": [
+        "cinematic",
+        "emotional",
+        "piano",
+        "orchestral"
+      ],
+      "suno_tags": [
+        "piano and strings; gentle crescendos and sweeping textures build an atmosphere of longing and hope",
+        "cinematic",
+        "emotional"
+      ],
+      "detail_url": "tracks/100801_v2.json",
+      "audio_url": "assets/100801_v2.mp3",
+      "cover_url": "assets/100801_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100802_v1",
+      "prompt_id": "100802",
+      "title": "Whispering Shadows",
+      "duration": 192.0,
+      "user_tags": [
+        "cinematic",
+        "emotional",
+        "ambient",
+        "orchestral"
+      ],
+      "suno_tags": [
+        "gradually intensifying to a climactic swell",
+        "cinematic build with a slow rise; lush strings",
+        "ethereal pads",
+        "orchestral",
+        "slow",
+        "ambient",
+        "and soft choral textures"
+      ],
+      "detail_url": "tracks/100802_v1.json",
+      "audio_url": "assets/100802_v1.mp3",
+      "cover_url": "assets/100802_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100802_v2",
+      "prompt_id": "100802",
+      "title": "Ethereal Reverie",
+      "duration": 190.56,
+      "user_tags": [
+        "cinematic",
+        "emotional",
+        "ambient",
+        "orchestral"
+      ],
+      "suno_tags": [
+        "gradually intensifying to a climactic swell",
+        "cinematic build with a slow rise; lush strings",
+        "ethereal pads",
+        "orchestral",
+        "slow",
+        "ambient",
+        "and soft choral textures"
+      ],
+      "detail_url": "tracks/100802_v2.json",
+      "audio_url": "assets/100802_v2.mp3",
+      "cover_url": "assets/100802_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100901_v1",
+      "prompt_id": "100901",
+      "title": "Neon Mirage",
+      "duration": 194.92,
+      "user_tags": [
+        "retro",
+        "nostalgic",
+        "synthpop",
+        "80s"
+      ],
+      "suno_tags": [
+        "instrumental",
+        "lush pads",
+        "driving bassline",
+        "and shimmering arpeggios",
+        "80s synthpop",
+        "pop",
+        "analog textures",
+        "synthpop"
+      ],
+      "detail_url": "tracks/100901_v1.json",
+      "audio_url": "assets/100901_v1.mp3",
+      "cover_url": "assets/100901_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100901_v2",
+      "prompt_id": "100901",
+      "title": "Synthpop Instrumental",
+      "duration": 204.6,
+      "user_tags": [
+        "retro",
+        "nostalgic",
+        "synthpop",
+        "80s"
+      ],
+      "suno_tags": [
+        "instrumental",
+        "lush pads",
+        "driving bassline",
+        "and shimmering arpeggios",
+        "80s synthpop",
+        "pop",
+        "analog textures",
+        "synthpop"
+      ],
+      "detail_url": "tracks/100901_v2.json",
+      "audio_url": "assets/100901_v2.mp3",
+      "cover_url": "assets/100901_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100902_v1",
+      "prompt_id": "100902",
+      "title": "Boogie Electric",
+      "duration": 192.96,
+      "user_tags": [
+        "retro",
+        "nostalgic",
+        "disco",
+        "funk"
+      ],
+      "suno_tags": [
+        "vintage drum machine",
+        "funky disco groove",
+        "funky",
+        "funk",
+        "disco",
+        "and tight rhythm guitar; driving bassline with syncopated energy",
+        "shimmering synths"
+      ],
+      "detail_url": "tracks/100902_v1.json",
+      "audio_url": "assets/100902_v1.mp3",
+      "cover_url": "assets/100902_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "100902_v2",
+      "prompt_id": "100902",
+      "title": "Funk Fusion Groove",
+      "duration": 156.16,
+      "user_tags": [
+        "retro",
+        "nostalgic",
+        "disco",
+        "funk"
+      ],
+      "suno_tags": [
+        "vintage drum machine",
+        "funky disco groove",
+        "funky",
+        "funk",
+        "disco",
+        "and tight rhythm guitar; driving bassline with syncopated energy",
+        "shimmering synths"
+      ],
+      "detail_url": "tracks/100902_v2.json",
+      "audio_url": "assets/100902_v2.mp3",
+      "cover_url": "assets/100902_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "101001_v1",
+      "prompt_id": "101001",
+      "title": "Shadows Whisper",
+      "duration": 143.56,
+      "user_tags": [
+        "dark",
+        "dramatic",
+        "trap",
+        "cinematic"
+      ],
+      "suno_tags": [
+        "heavy 808s",
+        "male vocals",
+        "dark trap",
+        "eerie pads",
+        "rap",
+        "haunting textures"
+      ],
+      "detail_url": "tracks/101001_v1.json",
+      "audio_url": "assets/101001_v1.mp3",
+      "cover_url": "assets/101001_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "101001_v2",
+      "prompt_id": "101001",
+      "title": "Dark Trap Vibe",
+      "duration": 131.92,
+      "user_tags": [
+        "dark",
+        "dramatic",
+        "trap",
+        "cinematic"
+      ],
+      "suno_tags": [
+        "heavy 808s",
+        "male vocals",
+        "dark trap",
+        "eerie pads",
+        "rap",
+        "haunting textures"
+      ],
+      "detail_url": "tracks/101001_v2.json",
+      "audio_url": "assets/101001_v2.mp3",
+      "cover_url": "assets/101001_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "101002_v1",
+      "prompt_id": "101002",
+      "title": "Iron Pulse",
+      "duration": 260.72,
+      "user_tags": [
+        "dark",
+        "dramatic",
+        "industrial",
+        "cinematic"
+      ],
+      "suno_tags": [
+        "industrial",
+        "deep",
+        "layered with metallic percussion and atmospheric synth pads",
+        "heavy tension with deep bass",
+        "cinematic"
+      ],
+      "detail_url": "tracks/101002_v1.json",
+      "audio_url": "assets/101002_v1.mp3",
+      "cover_url": "assets/101002_v1_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "101002_v2",
+      "prompt_id": "101002",
+      "title": "Cinematic Industrial Tension",
+      "duration": 269.44,
+      "user_tags": [
+        "dark",
+        "dramatic",
+        "industrial",
+        "cinematic"
+      ],
+      "suno_tags": [
+        "industrial",
+        "deep",
+        "layered with metallic percussion and atmospheric synth pads",
+        "heavy tension with deep bass",
+        "cinematic"
+      ],
+      "detail_url": "tracks/101002_v2.json",
+      "audio_url": "assets/101002_v2.mp3",
+      "cover_url": "assets/101002_v2_cover.jpg",
+      "batch": 1
+    },
+    {
+      "track_id": "101101_v1",
+      "prompt_id": "101101",
+      "title": "Chasing the Morning Glow",
+      "duration": 76.0,
+      "user_tags": [
+        "acoustic",
+        "pop",
+        "light",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "light acoustic pop",
+        "warm and breezy atmosphere",
+        "gentle rhythm",
+        "gentle",
+        "pop",
+        "light",
+        "acoustic pop",
+        "soft strumming with subtle percussion"
+      ],
+      "detail_url": "tracks/101101_v1.json",
+      "audio_url": "assets/101101_v1.mp3",
+      "cover_url": "assets/101101_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101101_v2",
+      "prompt_id": "101101",
+      "title": "Acoustic Daybreak Soundtrack",
+      "duration": 127.04,
+      "user_tags": [
+        "acoustic",
+        "pop",
+        "light",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "light acoustic pop",
+        "warm and breezy atmosphere",
+        "gentle rhythm",
+        "gentle",
+        "pop",
+        "light",
+        "acoustic pop",
+        "soft strumming with subtle percussion"
+      ],
+      "detail_url": "tracks/101101_v2.json",
+      "audio_url": "assets/101101_v2.mp3",
+      "cover_url": "assets/101101_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101102_v1",
+      "prompt_id": "101102",
+      "title": "Moonlit Whispers",
+      "duration": 154.72,
+      "user_tags": [
+        "chill",
+        "groove",
+        "relaxed",
+        "soft"
+      ],
+      "suno_tags": [
+        "chill groove",
+        "ethereal atmosphere",
+        "smooth",
+        "light guitar picking",
+        "soft percussion",
+        "chill",
+        "dreamy synths",
+        "soft"
+      ],
+      "detail_url": "tracks/101102_v1.json",
+      "audio_url": "assets/101102_v1.mp3",
+      "cover_url": "assets/101102_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101102_v2",
+      "prompt_id": "101102",
+      "title": "Chill Pop Vibes",
+      "duration": 127.72,
+      "user_tags": [
+        "chill",
+        "groove",
+        "relaxed",
+        "soft"
+      ],
+      "suno_tags": [
+        "chill groove",
+        "ethereal atmosphere",
+        "smooth",
+        "light guitar picking",
+        "soft percussion",
+        "chill",
+        "dreamy synths",
+        "soft"
+      ],
+      "detail_url": "tracks/101102_v2.json",
+      "audio_url": "assets/101102_v2.mp3",
+      "cover_url": "assets/101102_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101201_v1",
+      "prompt_id": "101201",
+      "title": "Groove in the Pocket",
+      "duration": 139.76,
+      "user_tags": [
+        "funk",
+        "groove",
+        "laidback",
+        "bass"
+      ],
+      "suno_tags": [
+        "funk",
+        "laid-back funk",
+        "steady",
+        "bassline",
+        "steady bassline",
+        "smooth male vocals",
+        "tight rhythm guitar",
+        "syncopated claps"
+      ],
+      "detail_url": "tracks/101201_v1.json",
+      "audio_url": "assets/101201_v1.mp3",
+      "cover_url": "assets/101201_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101201_v2",
+      "prompt_id": "101201",
+      "title": "Funky Chill Vibes",
+      "duration": 105.72,
+      "user_tags": [
+        "funk",
+        "groove",
+        "laidback",
+        "bass"
+      ],
+      "suno_tags": [
+        "funk",
+        "laid-back funk",
+        "steady",
+        "bassline",
+        "steady bassline",
+        "smooth male vocals",
+        "tight rhythm guitar",
+        "syncopated claps"
+      ],
+      "detail_url": "tracks/101201_v2.json",
+      "audio_url": "assets/101201_v2.mp3",
+      "cover_url": "assets/101201_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101202_v1",
+      "prompt_id": "101202",
+      "title": "Neon Glow",
+      "duration": 139.56,
+      "user_tags": [
+        "house",
+        "electronic",
+        "warm",
+        "smooth"
+      ],
+      "suno_tags": [
+        "warm house beat",
+        "warm",
+        "mellow groove with subtle percussion layers and atmospheric textures",
+        "soft",
+        "soft synth chords"
+      ],
+      "detail_url": "tracks/101202_v1.json",
+      "audio_url": "assets/101202_v1.mp3",
+      "cover_url": "assets/101202_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101202_v2",
+      "prompt_id": "101202",
+      "title": "Warm Grooves Only",
+      "duration": 125.8,
+      "user_tags": [
+        "house",
+        "electronic",
+        "warm",
+        "smooth"
+      ],
+      "suno_tags": [
+        "warm house beat",
+        "warm",
+        "mellow groove with subtle percussion layers and atmospheric textures",
+        "soft",
+        "soft synth chords"
+      ],
+      "detail_url": "tracks/101202_v2.json",
+      "audio_url": "assets/101202_v2.mp3",
+      "cover_url": "assets/101202_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101301_v1",
+      "prompt_id": "101301",
+      "title": "Chasing the Sun",
+      "duration": 132.2,
+      "user_tags": [
+        "indie",
+        "pop",
+        "sunny",
+        "acoustic"
+      ],
+      "suno_tags": [
+        "upbeat",
+        "indie pop",
+        "vibrant and warm energy",
+        "acoustic",
+        "sunny indie pop",
+        "acoustic guitar with handclaps",
+        "pop"
+      ],
+      "detail_url": "tracks/101301_v1.json",
+      "audio_url": "assets/101301_v1.mp3",
+      "cover_url": "assets/101301_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101301_v2",
+      "prompt_id": "101301",
+      "title": "Indie Pop Sunshine",
+      "duration": 107.36,
+      "user_tags": [
+        "indie",
+        "pop",
+        "sunny",
+        "acoustic"
+      ],
+      "suno_tags": [
+        "upbeat",
+        "indie pop",
+        "vibrant and warm energy",
+        "acoustic",
+        "sunny indie pop",
+        "acoustic guitar with handclaps",
+        "pop"
+      ],
+      "detail_url": "tracks/101301_v2.json",
+      "audio_url": "assets/101301_v2.mp3",
+      "cover_url": "assets/101301_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101302_v1",
+      "prompt_id": "101302",
+      "title": "Cloudy Afternoon",
+      "duration": 109.08,
+      "user_tags": [
+        "lofi",
+        "chill",
+        "easygoing",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "relaxed vibe",
+        "lo-fi",
+        "easygoing",
+        "soft",
+        "soft keys",
+        "warm textures"
+      ],
+      "detail_url": "tracks/101302_v1.json",
+      "audio_url": "assets/101302_v1.mp3",
+      "cover_url": "assets/101302_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101302_v2",
+      "prompt_id": "101302",
+      "title": "Warm Hues",
+      "duration": 116.64,
+      "user_tags": [
+        "lofi",
+        "chill",
+        "easygoing",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "relaxed vibe",
+        "lo-fi",
+        "easygoing",
+        "soft",
+        "soft keys",
+        "warm textures"
+      ],
+      "detail_url": "tracks/101302_v2.json",
+      "audio_url": "assets/101302_v2.mp3",
+      "cover_url": "assets/101302_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101401_v1",
+      "prompt_id": "101401",
+      "title": "Under the Glow of the Moonlight",
+      "duration": 120.76,
+      "user_tags": [
+        "jazz",
+        "chill",
+        "coffee",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "and a smoky piano accompaniment. the mood is intimate and nostalgic",
+        "warm jazz",
+        "jazzy",
+        "jazz",
+        "warm",
+        "perfect for a late-night lounge atmosphere. female vocals.",
+        "soft",
+        "soft drums",
+        "upright bass"
+      ],
+      "detail_url": "tracks/101401_v1.json",
+      "audio_url": "assets/101401_v1.mp3",
+      "cover_url": "assets/101401_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101401_v2",
+      "prompt_id": "101401",
+      "title": "Velvet Jazz Nights",
+      "duration": 161.16,
+      "user_tags": [
+        "jazz",
+        "chill",
+        "coffee",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "and a smoky piano accompaniment. the mood is intimate and nostalgic",
+        "warm jazz",
+        "jazzy",
+        "jazz",
+        "warm",
+        "perfect for a late-night lounge atmosphere. female vocals.",
+        "soft",
+        "soft drums",
+        "upright bass"
+      ],
+      "detail_url": "tracks/101401_v2.json",
+      "audio_url": "assets/101401_v2.mp3",
+      "cover_url": "assets/101401_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101402_v1",
+      "prompt_id": "101402",
+      "title": "Chill Lounge Groove",
+      "duration": 229.72,
+      "user_tags": [
+        "lounge",
+        "relaxed",
+        "smooth",
+        "soft"
+      ],
+      "suno_tags": [
+        "light percussion",
+        "mellow",
+        "lounge",
+        "light",
+        "smooth and sultry atmosphere with soft electric piano and subtle basslines",
+        "mellow lounge groove"
+      ],
+      "detail_url": "tracks/101402_v1.json",
+      "audio_url": "assets/101402_v1.mp3",
+      "cover_url": "assets/101402_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101402_v2",
+      "prompt_id": "101402",
+      "title": "Soft Electric Nights",
+      "duration": 201.0,
+      "user_tags": [
+        "lounge",
+        "relaxed",
+        "smooth",
+        "soft"
+      ],
+      "suno_tags": [
+        "light percussion",
+        "mellow",
+        "lounge",
+        "light",
+        "smooth and sultry atmosphere with soft electric piano and subtle basslines",
+        "mellow lounge groove"
+      ],
+      "detail_url": "tracks/101402_v2.json",
+      "audio_url": "assets/101402_v2.mp3",
+      "cover_url": "assets/101402_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101501_v1",
+      "prompt_id": "101501",
+      "title": "Sunshine in My Pocket",
+      "duration": 99.72,
+      "user_tags": [
+        "pop",
+        "upbeat",
+        "acoustic",
+        "happy"
+      ],
+      "suno_tags": [
+        "ukulele-driven",
+        "pop",
+        "playful snaps",
+        "upbeat and lighthearted texture",
+        "ukulele",
+        "catchy pop groove"
+      ],
+      "detail_url": "tracks/101501_v1.json",
+      "audio_url": "assets/101501_v1.mp3",
+      "cover_url": "assets/101501_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101501_v2",
+      "prompt_id": "101501",
+      "title": "Pop Music Delight",
+      "duration": 109.88,
+      "user_tags": [
+        "pop",
+        "upbeat",
+        "acoustic",
+        "happy"
+      ],
+      "suno_tags": [
+        "ukulele-driven",
+        "pop",
+        "playful snaps",
+        "upbeat and lighthearted texture",
+        "ukulele",
+        "catchy pop groove"
+      ],
+      "detail_url": "tracks/101501_v2.json",
+      "audio_url": "assets/101501_v2.mp3",
+      "cover_url": "assets/101501_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101502_v1",
+      "prompt_id": "101502",
+      "title": "Sunshine in My Pockets",
+      "duration": 127.92,
+      "user_tags": [
+        "indie",
+        "pop",
+        "bright",
+        "happy"
+      ],
+      "suno_tags": [
+        "upbeat drums",
+        "layered harmonies",
+        "indie pop",
+        "bright guitar riffs",
+        "bright"
+      ],
+      "detail_url": "tracks/101502_v1.json",
+      "audio_url": "assets/101502_v1.mp3",
+      "cover_url": "assets/101502_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101502_v2",
+      "prompt_id": "101502",
+      "title": "Bright indie tune",
+      "duration": 144.68,
+      "user_tags": [
+        "indie",
+        "pop",
+        "bright",
+        "happy"
+      ],
+      "suno_tags": [
+        "upbeat drums",
+        "layered harmonies",
+        "indie pop",
+        "bright guitar riffs",
+        "bright"
+      ],
+      "detail_url": "tracks/101502_v2.json",
+      "audio_url": "assets/101502_v2.mp3",
+      "cover_url": "assets/101502_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101601_v1",
+      "prompt_id": "101601",
+      "title": "Velvet Nights",
+      "duration": 209.52,
+      "user_tags": [
+        "rnb",
+        "modern",
+        "lifestyle",
+        "smooth"
+      ],
+      "suno_tags": [
+        "clean",
+        "with a focus on groove and emotional depth.",
+        "tight drum patterns",
+        "modern rnb",
+        "and layered harmonies. the vibe is sultry and atmospheric",
+        "clean production with lush synths",
+        "smooth"
+      ],
+      "detail_url": "tracks/101601_v1.json",
+      "audio_url": "assets/101601_v1.mp3",
+      "cover_url": "assets/101601_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101601_v2",
+      "prompt_id": "101601",
+      "title": "Sultry Dreams",
+      "duration": 211.12,
+      "user_tags": [
+        "rnb",
+        "modern",
+        "lifestyle",
+        "smooth"
+      ],
+      "suno_tags": [
+        "clean",
+        "with a focus on groove and emotional depth.",
+        "tight drum patterns",
+        "modern rnb",
+        "and layered harmonies. the vibe is sultry and atmospheric",
+        "clean production with lush synths",
+        "smooth"
+      ],
+      "detail_url": "tracks/101601_v2.json",
+      "audio_url": "assets/101601_v2.mp3",
+      "cover_url": "assets/101601_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101602_v1",
+      "prompt_id": "101602",
+      "title": "Dancing in Slow Motion",
+      "duration": 150.96,
+      "user_tags": [
+        "pop",
+        "chill",
+        "smooth",
+        "modern"
+      ],
+      "suno_tags": [
+        "gentle synth layers",
+        "dreamy atmosphere with layered vocals and a smooth rhythmic pulse",
+        "gentle",
+        "soft pop",
+        "pop",
+        "soft"
+      ],
+      "detail_url": "tracks/101602_v1.json",
+      "audio_url": "assets/101602_v1.mp3",
+      "cover_url": "assets/101602_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101602_v2",
+      "prompt_id": "101602",
+      "title": "Dreamy Glow",
+      "duration": 153.28,
+      "user_tags": [
+        "pop",
+        "chill",
+        "smooth",
+        "modern"
+      ],
+      "suno_tags": [
+        "gentle synth layers",
+        "dreamy atmosphere with layered vocals and a smooth rhythmic pulse",
+        "gentle",
+        "soft pop",
+        "pop",
+        "soft"
+      ],
+      "detail_url": "tracks/101602_v2.json",
+      "audio_url": "assets/101602_v2.mp3",
+      "cover_url": "assets/101602_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101701_v1",
+      "prompt_id": "101701",
+      "title": "Sunset Sways",
+      "duration": 107.96,
+      "user_tags": [
+        "tropical",
+        "house",
+        "travel",
+        "bright"
+      ],
+      "suno_tags": [
+        "airy percussion",
+        "light",
+        "light guitar",
+        "warm tones that evoke a breezy coastline at dusk",
+        "vibrant yet mellow atmosphere",
+        "tropical house"
+      ],
+      "detail_url": "tracks/101701_v1.json",
+      "audio_url": "assets/101701_v1.mp3",
+      "cover_url": "assets/101701_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101701_v2",
+      "prompt_id": "101701",
+      "title": "Coastal Girl Dreams",
+      "duration": 129.96,
+      "user_tags": [
+        "tropical",
+        "house",
+        "travel",
+        "bright"
+      ],
+      "suno_tags": [
+        "airy percussion",
+        "light",
+        "light guitar",
+        "warm tones that evoke a breezy coastline at dusk",
+        "vibrant yet mellow atmosphere",
+        "tropical house"
+      ],
+      "detail_url": "tracks/101701_v2.json",
+      "audio_url": "assets/101701_v2.mp3",
+      "cover_url": "assets/101701_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101702_v1",
+      "prompt_id": "101702",
+      "title": "Sunset Breeze",
+      "duration": 121.32,
+      "user_tags": [
+        "chill",
+        "summer",
+        "bright",
+        "travel"
+      ],
+      "suno_tags": [
+        "summer chill",
+        "breezy synths",
+        "light percussion with a dreamy vibe"
+      ],
+      "detail_url": "tracks/101702_v1.json",
+      "audio_url": "assets/101702_v1.mp3",
+      "cover_url": "assets/101702_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101702_v2",
+      "prompt_id": "101702",
+      "title": "Dreamy Licks",
+      "duration": 99.72,
+      "user_tags": [
+        "chill",
+        "summer",
+        "bright",
+        "travel"
+      ],
+      "suno_tags": [
+        "summer chill",
+        "breezy synths",
+        "light percussion with a dreamy vibe"
+      ],
+      "detail_url": "tracks/101702_v2.json",
+      "audio_url": "assets/101702_v2.mp3",
+      "cover_url": "assets/101702_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101801_v1",
+      "prompt_id": "101801",
+      "title": "Digital Echoes",
+      "duration": 135.96,
+      "user_tags": [
+        "tech",
+        "futuristic",
+        "ambient",
+        "minimal"
+      ],
+      "suno_tags": [
+        "ambient",
+        "steady",
+        "layered digital textures",
+        "steady ambient beat",
+        "ethereal atmosphere"
+      ],
+      "detail_url": "tracks/101801_v1.json",
+      "audio_url": "assets/101801_v1.mp3",
+      "cover_url": "assets/101801_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101801_v2",
+      "prompt_id": "101801",
+      "title": "Ethereal Chillhop Dreamscape",
+      "duration": 156.0,
+      "user_tags": [
+        "tech",
+        "futuristic",
+        "ambient",
+        "minimal"
+      ],
+      "suno_tags": [
+        "ambient",
+        "steady",
+        "layered digital textures",
+        "steady ambient beat",
+        "ethereal atmosphere"
+      ],
+      "detail_url": "tracks/101801_v2.json",
+      "audio_url": "assets/101801_v2.mp3",
+      "cover_url": "assets/101801_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101802_v1",
+      "prompt_id": "101802",
+      "title": "Neon Threads",
+      "duration": 234.48,
+      "user_tags": [
+        "tech",
+        "corporate",
+        "ambient",
+        "smooth"
+      ],
+      "suno_tags": [
+        "subtle pulse with atmospheric synths and soft percussive textures creating a dreamy",
+        "introspective vibe",
+        "modern",
+        "electronic"
+      ],
+      "detail_url": "tracks/101802_v1.json",
+      "audio_url": "assets/101802_v1.mp3",
+      "cover_url": "assets/101802_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101802_v2",
+      "prompt_id": "101802",
+      "title": "Tron Wave",
+      "duration": 194.0,
+      "user_tags": [
+        "tech",
+        "corporate",
+        "ambient",
+        "smooth"
+      ],
+      "suno_tags": [
+        "subtle pulse with atmospheric synths and soft percussive textures creating a dreamy",
+        "introspective vibe",
+        "modern",
+        "electronic"
+      ],
+      "detail_url": "tracks/101802_v2.json",
+      "audio_url": "assets/101802_v2.mp3",
+      "cover_url": "assets/101802_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101901_v1",
+      "prompt_id": "101901",
+      "title": "Good as It Gets",
+      "duration": 127.88,
+      "user_tags": [
+        "acoustic",
+        "relaxed",
+        "happy",
+        "natural"
+      ],
+      "suno_tags": [
+        "relaxed acoustic groove",
+        "acoustic",
+        "gentle claps",
+        "gentle",
+        "warm and breezy feel with fingerpicked guitar and soft handclap rhythm"
+      ],
+      "detail_url": "tracks/101901_v1.json",
+      "audio_url": "assets/101901_v1.mp3",
+      "cover_url": "assets/101901_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101901_v2",
+      "prompt_id": "101901",
+      "title": "Sunshine Whisper",
+      "duration": 101.88,
+      "user_tags": [
+        "acoustic",
+        "relaxed",
+        "happy",
+        "natural"
+      ],
+      "suno_tags": [
+        "relaxed acoustic groove",
+        "acoustic",
+        "gentle claps",
+        "gentle",
+        "warm and breezy feel with fingerpicked guitar and soft handclap rhythm"
+      ],
+      "detail_url": "tracks/101901_v2.json",
+      "audio_url": "assets/101901_v2.mp3",
+      "cover_url": "assets/101901_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101902_v1",
+      "prompt_id": "101902",
+      "title": "Whispers in the Pines",
+      "duration": 134.92,
+      "user_tags": [
+        "folk",
+        "pop",
+        "acoustic",
+        "calm"
+      ],
+      "suno_tags": [
+        "light folk pop",
+        "soothing acoustic textures with warm",
+        "pop",
+        "light",
+        "folk",
+        "airy vocals",
+        "calm rhythm",
+        "hand percussion"
+      ],
+      "detail_url": "tracks/101902_v1.json",
+      "audio_url": "assets/101902_v1.mp3",
+      "cover_url": "assets/101902_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "101902_v2",
+      "prompt_id": "101902",
+      "title": "Folk Pop Serenity",
+      "duration": 159.8,
+      "user_tags": [
+        "folk",
+        "pop",
+        "acoustic",
+        "calm"
+      ],
+      "suno_tags": [
+        "light folk pop",
+        "soothing acoustic textures with warm",
+        "pop",
+        "light",
+        "folk",
+        "airy vocals",
+        "calm rhythm",
+        "hand percussion"
+      ],
+      "detail_url": "tracks/101902_v2.json",
+      "audio_url": "assets/101902_v2.mp3",
+      "cover_url": "assets/101902_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "102001_v1",
+      "prompt_id": "102001",
+      "title": "Drift Away",
+      "duration": 213.4,
+      "user_tags": [
+        "chill",
+        "electronic",
+        "ambient",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "soft",
+        "electronic",
+        "calm electronic",
+        "chill",
+        "atmospheric and dreamy texture",
+        "soft pads"
+      ],
+      "detail_url": "tracks/102001_v1.json",
+      "audio_url": "assets/102001_v1.mp3",
+      "cover_url": "assets/102001_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "102001_v2",
+      "prompt_id": "102001",
+      "title": "Soft Pad Serenity",
+      "duration": 225.08,
+      "user_tags": [
+        "chill",
+        "electronic",
+        "ambient",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "soft",
+        "electronic",
+        "calm electronic",
+        "chill",
+        "atmospheric and dreamy texture",
+        "soft pads"
+      ],
+      "detail_url": "tracks/102001_v2.json",
+      "audio_url": "assets/102001_v2.mp3",
+      "cover_url": "assets/102001_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "102002_v1",
+      "prompt_id": "102002",
+      "title": "Dancing in the Glow",
+      "duration": 71.36,
+      "user_tags": [
+        "upbeat",
+        "pop",
+        "simple",
+        "bright"
+      ],
+      "suno_tags": [
+        "light",
+        "simple",
+        "steady bassline driving the energy",
+        "bright and playful texture",
+        "simple upbeat rhythm with light synth melody"
+      ],
+      "detail_url": "tracks/102002_v1.json",
+      "audio_url": "assets/102002_v1.mp3",
+      "cover_url": "assets/102002_v1_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "102002_v2",
+      "prompt_id": "102002",
+      "title": "Sunlit Vibes",
+      "duration": 39.04,
+      "user_tags": [
+        "upbeat",
+        "pop",
+        "simple",
+        "bright"
+      ],
+      "suno_tags": [
+        "light",
+        "simple",
+        "steady bassline driving the energy",
+        "bright and playful texture",
+        "simple upbeat rhythm with light synth melody"
+      ],
+      "detail_url": "tracks/102002_v2.json",
+      "audio_url": "assets/102002_v2.mp3",
+      "cover_url": "assets/102002_v2_cover.jpg",
+      "batch": 2
+    },
+    {
+      "track_id": "102101_v1",
+      "prompt_id": "102101",
+      "title": "Electric Sunlight",
+      "duration": 107.76,
+      "user_tags": [
+        "indie",
+        "electronic",
+        "light",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "pulsing rhythms and warm synth undertones",
+        "electronic",
+        "light indie electronic",
+        "light",
+        "gentle",
+        "gentle plucks",
+        "airy textures with soft"
+      ],
+      "detail_url": "tracks/102101_v1.json",
+      "audio_url": "assets/102101_v1.mp3",
+      "cover_url": "assets/102101_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102101_v2",
+      "prompt_id": "102101",
+      "title": "Indie Chill Escape",
+      "duration": 146.4,
+      "user_tags": [
+        "indie",
+        "electronic",
+        "light",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "pulsing rhythms and warm synth undertones",
+        "electronic",
+        "light indie electronic",
+        "light",
+        "gentle",
+        "gentle plucks",
+        "airy textures with soft"
+      ],
+      "detail_url": "tracks/102101_v2.json",
+      "audio_url": "assets/102101_v2.mp3",
+      "cover_url": "assets/102101_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102102_v1",
+      "prompt_id": "102102",
+      "title": "Velvet Skies",
+      "duration": 114.52,
+      "user_tags": [
+        "pop",
+        "chill",
+        "warm",
+        "smooth"
+      ],
+      "suno_tags": [
+        "pop",
+        "soft bedroom pop groove",
+        "warm electric piano chords",
+        "warm",
+        "soft",
+        "ethereal texture",
+        "lo-fi beats"
+      ],
+      "detail_url": "tracks/102102_v1.json",
+      "audio_url": "assets/102102_v1.mp3",
+      "cover_url": "assets/102102_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102102_v2",
+      "prompt_id": "102102",
+      "title": "Lo-Fi Bedroom Pop",
+      "duration": 107.96,
+      "user_tags": [
+        "pop",
+        "chill",
+        "warm",
+        "smooth"
+      ],
+      "suno_tags": [
+        "pop",
+        "soft bedroom pop groove",
+        "warm electric piano chords",
+        "warm",
+        "soft",
+        "ethereal texture",
+        "lo-fi beats"
+      ],
+      "detail_url": "tracks/102102_v2.json",
+      "audio_url": "assets/102102_v2.mp3",
+      "cover_url": "assets/102102_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102103_v1",
+      "prompt_id": "102103",
+      "title": "Sunshine Sneakers",
+      "duration": 105.56,
+      "user_tags": [
+        "lofi",
+        "chill",
+        "bouncy",
+        "easygoing"
+      ],
+      "suno_tags": [
+        "lo-fi",
+        "bouncy lo-fi",
+        "soft beats with warm textures",
+        "playful melodies",
+        "layered with friendly synths and gentle vocal harmonies"
+      ],
+      "detail_url": "tracks/102103_v1.json",
+      "audio_url": "assets/102103_v1.mp3",
+      "cover_url": "assets/102103_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102103_v2",
+      "prompt_id": "102103",
+      "title": "Lo-fi Chill Beats",
+      "duration": 96.12,
+      "user_tags": [
+        "lofi",
+        "chill",
+        "bouncy",
+        "easygoing"
+      ],
+      "suno_tags": [
+        "lo-fi",
+        "bouncy lo-fi",
+        "soft beats with warm textures",
+        "playful melodies",
+        "layered with friendly synths and gentle vocal harmonies"
+      ],
+      "detail_url": "tracks/102103_v2.json",
+      "audio_url": "assets/102103_v2.mp3",
+      "cover_url": "assets/102103_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102104_v1",
+      "prompt_id": "102104",
+      "title": "Whispered Echoes",
+      "duration": 170.16,
+      "user_tags": [
+        "acoustic",
+        "pop",
+        "mellow",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "dreamy atmosphere with soft male vocals",
+        "steady percussion",
+        "steady",
+        "pop",
+        "mellow",
+        "mellow guitar pop"
+      ],
+      "detail_url": "tracks/102104_v1.json",
+      "audio_url": "assets/102104_v1.mp3",
+      "cover_url": "assets/102104_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102104_v2",
+      "prompt_id": "102104",
+      "title": "That Boy Energy",
+      "duration": 114.96,
+      "user_tags": [
+        "acoustic",
+        "pop",
+        "mellow",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "dreamy atmosphere with soft male vocals",
+        "steady percussion",
+        "steady",
+        "pop",
+        "mellow",
+        "mellow guitar pop"
+      ],
+      "detail_url": "tracks/102104_v2.json",
+      "audio_url": "assets/102104_v2.mp3",
+      "cover_url": "assets/102104_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102105_v1",
+      "prompt_id": "102105",
+      "title": "A Sip of Serenity",
+      "duration": 138.16,
+      "user_tags": [
+        "jazz",
+        "cafe",
+        "relaxed",
+        "soft"
+      ],
+      "suno_tags": [
+        "light",
+        "and a gentle saxophone melody creating a relaxed",
+        "smooth cafe jazz",
+        "brushed drums",
+        "upright bass",
+        "intimate atmosphere",
+        "jazz",
+        "smooth",
+        "light keys"
+      ],
+      "detail_url": "tracks/102105_v1.json",
+      "audio_url": "assets/102105_v1.mp3",
+      "cover_url": "assets/102105_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102105_v2",
+      "prompt_id": "102105",
+      "title": "Soothe & Sip",
+      "duration": 153.36,
+      "user_tags": [
+        "jazz",
+        "cafe",
+        "relaxed",
+        "soft"
+      ],
+      "suno_tags": [
+        "light",
+        "and a gentle saxophone melody creating a relaxed",
+        "smooth cafe jazz",
+        "brushed drums",
+        "upright bass",
+        "intimate atmosphere",
+        "jazz",
+        "smooth",
+        "light keys"
+      ],
+      "detail_url": "tracks/102105_v2.json",
+      "audio_url": "assets/102105_v2.mp3",
+      "cover_url": "assets/102105_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102106_v1",
+      "prompt_id": "102106",
+      "title": "Shining Through the Night",
+      "duration": 139.52,
+      "user_tags": [
+        "pop",
+        "electronic",
+        "bright",
+        "upbeat"
+      ],
+      "suno_tags": [
+        "uplifting",
+        "electro",
+        "bright",
+        "pop",
+        "driving beat",
+        "uplifting synths",
+        "bright electro pop groove",
+        "layered harmonies"
+      ],
+      "detail_url": "tracks/102106_v1.json",
+      "audio_url": "assets/102106_v1.mp3",
+      "cover_url": "assets/102106_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102106_v2",
+      "prompt_id": "102106",
+      "title": "Electro Pop Uplift",
+      "duration": 151.88,
+      "user_tags": [
+        "pop",
+        "electronic",
+        "bright",
+        "upbeat"
+      ],
+      "suno_tags": [
+        "uplifting",
+        "electro",
+        "bright",
+        "pop",
+        "driving beat",
+        "uplifting synths",
+        "bright electro pop groove",
+        "layered harmonies"
+      ],
+      "detail_url": "tracks/102106_v2.json",
+      "audio_url": "assets/102106_v2.mp3",
+      "cover_url": "assets/102106_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102107_v1",
+      "prompt_id": "102107",
+      "title": "Soft Summer Glow",
+      "duration": 122.76,
+      "user_tags": [
+        "house",
+        "summer",
+        "chill",
+        "smooth"
+      ],
+      "suno_tags": [
+        "mellow vibe with light percussive elements and dreamy textures",
+        "chill summer house beat",
+        "soft pads",
+        "soft"
+      ],
+      "detail_url": "tracks/102107_v1.json",
+      "audio_url": "assets/102107_v1.mp3",
+      "cover_url": "assets/102107_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102107_v2",
+      "prompt_id": "102107",
+      "title": "Ocean Mist",
+      "duration": 147.56,
+      "user_tags": [
+        "house",
+        "summer",
+        "chill",
+        "smooth"
+      ],
+      "suno_tags": [
+        "mellow vibe with light percussive elements and dreamy textures",
+        "chill summer house beat",
+        "soft pads",
+        "soft"
+      ],
+      "detail_url": "tracks/102107_v2.json",
+      "audio_url": "assets/102107_v2.mp3",
+      "cover_url": "assets/102107_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102108_v1",
+      "prompt_id": "102108",
+      "title": "Whispering Winds",
+      "duration": 106.16,
+      "user_tags": [
+        "acoustic",
+        "folk",
+        "easygoing",
+        "natural"
+      ],
+      "suno_tags": [
+        "acoustic",
+        "mellow",
+        "gentle",
+        "easy strum with soft hand percussion; intimate and soothing with a touch of raw vulnerability"
+      ],
+      "detail_url": "tracks/102108_v1.json",
+      "audio_url": "assets/102108_v1.mp3",
+      "cover_url": "assets/102108_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102108_v2",
+      "prompt_id": "102108",
+      "title": "Acoustic Mellow Bliss",
+      "duration": 139.32,
+      "user_tags": [
+        "acoustic",
+        "folk",
+        "easygoing",
+        "natural"
+      ],
+      "suno_tags": [
+        "acoustic",
+        "mellow",
+        "gentle",
+        "easy strum with soft hand percussion; intimate and soothing with a touch of raw vulnerability"
+      ],
+      "detail_url": "tracks/102108_v2.json",
+      "audio_url": "assets/102108_v2.mp3",
+      "cover_url": "assets/102108_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102109_v1",
+      "prompt_id": "102109",
+      "title": "Neon Dreams",
+      "duration": 147.28,
+      "user_tags": [
+        "synthpop",
+        "pop",
+        "light",
+        "friendly"
+      ],
+      "suno_tags": [
+        "clean drum groove",
+        "pop",
+        "light",
+        "light synth pop",
+        "shimmering synth pads and a tight",
+        "crisp drum pattern. layers of arpeggiated synths and a melodic bassline create a dreamy yet danceable vibe.",
+        "clean"
+      ],
+      "detail_url": "tracks/102109_v1.json",
+      "audio_url": "assets/102109_v1.mp3",
+      "cover_url": "assets/102109_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102109_v2",
+      "prompt_id": "102109",
+      "title": "Shimmer",
+      "duration": 163.96,
+      "user_tags": [
+        "synthpop",
+        "pop",
+        "light",
+        "friendly"
+      ],
+      "suno_tags": [
+        "clean drum groove",
+        "pop",
+        "light",
+        "light synth pop",
+        "shimmering synth pads and a tight",
+        "crisp drum pattern. layers of arpeggiated synths and a melodic bassline create a dreamy yet danceable vibe.",
+        "clean"
+      ],
+      "detail_url": "tracks/102109_v2.json",
+      "audio_url": "assets/102109_v2.mp3",
+      "cover_url": "assets/102109_v2_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102110_v1",
+      "prompt_id": "102110",
+      "title": "Moonlit Miles",
+      "duration": 95.84,
+      "user_tags": [
+        "indie",
+        "chill",
+        "groove",
+        "soft"
+      ],
+      "suno_tags": [
+        "soft",
+        "dreamy atmosphere with light percussion and layered harmonies",
+        "chill indie groove",
+        "airy chords",
+        "soft bass"
+      ],
+      "detail_url": "tracks/102110_v1.json",
+      "audio_url": "assets/102110_v1.mp3",
+      "cover_url": "assets/102110_v1_cover.jpg",
+      "batch": 3
+    },
+    {
+      "track_id": "102110_v2",
+      "prompt_id": "102110",
+      "title": "That Girl Moment",
+      "duration": 106.12,
+      "user_tags": [
+        "indie",
+        "chill",
+        "groove",
+        "soft"
+      ],
+      "suno_tags": [
+        "soft",
+        "dreamy atmosphere with light percussion and layered harmonies",
+        "chill indie groove",
+        "airy chords",
+        "soft bass"
+      ],
+      "detail_url": "tracks/102110_v2.json",
+      "audio_url": "assets/102110_v2.mp3",
+      "cover_url": "assets/102110_v2_cover.jpg",
+      "batch": 3
+    }
+  ]
+}

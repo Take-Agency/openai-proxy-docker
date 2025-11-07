@@ -1,11 +1,16 @@
+import 'dotenv/config';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { rateLimit } from 'express-rate-limit';
 import queryString from 'query-string';
+import { readFile } from 'fs/promises';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const allowedTargets = [
     'https://api.openai.com/',
     'https://api.elevenlabs.io/',
+    'https://openapi-proxy-zmg9c.ondigitalocean.app/',
 ];
 
 const app = express();
@@ -13,6 +18,25 @@ const port = process.env.PORT || 9017;
 const target = process.env.TARGET || 'https://api.openai.com';
 const openaiApiKey = process.env.OPENAI_API_KEY;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
+
+// DigitalOcean Spaces configuration
+const spacesEndpoint = process.env.DO_SPACES_ENDPOINT; // e.g., 'nyc3.digitaloceanspaces.com'
+const spacesRegion = process.env.DO_SPACES_REGION || 'nyc3';
+const spacesAccessKeyId = process.env.DO_SPACES_ACCESS_KEY_ID;
+const spacesSecretAccessKey = process.env.DO_SPACES_SECRET_ACCESS_KEY;
+const spacesBucket = process.env.DO_SPACES_BUCKET;
+const signedUrlExpiration = parseInt(process.env.DO_SIGNED_URL_EXPIRATION || '3600', 10); // Default 1 hour
+
+// Initialize S3 client for DigitalOcean Spaces
+const s3Client = spacesEndpoint && spacesAccessKeyId && spacesSecretAccessKey ? new S3Client({
+    endpoint: `https://${spacesEndpoint}`,
+    region: spacesRegion,
+    credentials: {
+        accessKeyId: spacesAccessKeyId,
+        secretAccessKey: spacesSecretAccessKey,
+    },
+    forcePathStyle: false, // DigitalOcean Spaces uses virtual-hosted-style URLs
+}) : null;
 
 // Helper function to get target URL from request
 const getTargetUrl = (req) => req.headers['x-target-url'] || target;
@@ -50,6 +74,13 @@ app.use('/', (req, res, next) => {
     if (targetUrl.includes('api.openai.com') && req.body.model !== 'gpt-4o') {
         console.log('suspicious OpenAI API request', req.method, req.path, req.query, req.body);
         return res.status(403).send({ success: false, error: 'forbidden' });
+    }
+
+    if (targetUrl.includes('openapi-proxy-zmg9c.ondigitalocean.app')) {
+        if (req.url === '/music') {
+            return getMusic(req, res);
+        }
+        return res.status(404).send({ success: false, error: 'not found' });
     }
 
     next();
@@ -96,6 +127,63 @@ app.use('/', (req, res, next) => {
         proxyRes.headers['Access-Control-Allow-Origin'] = '*';
     }
 }));
+
+const getMusic = async (req, res) => {
+    try {
+        // Read and parse the music index JSON
+        const musicIndexJson = await readFile('./music_index.json', 'utf8');
+        const musicData = JSON.parse(musicIndexJson);
+
+        // If S3 client is configured, generate signed URLs for all tracks
+        if (s3Client && spacesBucket && musicData.tracks) {
+            // Generate all signed URLs in parallel for better performance
+            const urlPromises = musicData.tracks.flatMap(track => {
+                const promises = [];
+                if (track.audio_url) {
+                    promises.push(
+                        generateSignedUrl(track.audio_url).then(url => { track.audio_url = url; })
+                    );
+                }
+                if (track.cover_url) {
+                    promises.push(
+                        generateSignedUrl(track.cover_url).then(url => { track.cover_url = url; })
+                    );
+                }
+                if (track.detail_url) {
+                    promises.push(
+                        generateSignedUrl(track.detail_url).then(url => { track.detail_url = url; })
+                    );
+                }
+                return promises;
+            });
+
+            await Promise.all(urlPromises);
+        }
+
+        return res.status(200).json(musicData);
+    } catch (error) {
+        console.error('Error in getMusic:', error);
+        return res.status(500).json({ success: false, error: 'failed to load music data' });
+    }
+}
+
+const generateSignedUrl = async (key) => {
+    if (!s3Client || !spacesBucket) {
+        return key; // Return original path if S3 is not configured
+    }
+
+    try {
+        const command = new GetObjectCommand({
+            Bucket: spacesBucket,
+            Key: key,
+        });
+        const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: signedUrlExpiration });
+        return signedUrl;
+    } catch (error) {
+        console.error(`Error generating signed URL for ${key}:`, error);
+        return key; // Return original path on error
+    }
+}
 
 app.listen(port, () => {
     console.log(`Proxy agent started: http://localhost:${port}`)
