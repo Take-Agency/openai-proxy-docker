@@ -1,7 +1,7 @@
 {
-  "generated_at": "2025-11-05T19:18:29.043368",
+  "generated_at": "2025-11-18T14:07:49.228113",
   "version": "1.0",
-  "total_tracks": 100,
+  "total_tracks": 152,
   "tracks": [
     {
       "track_id": "100101_v1",
@@ -24,8 +24,7 @@
       ],
       "detail_url": "tracks/100101_v1.json",
       "audio_url": "assets/100101_v1.mp3",
-      "cover_url": "assets/100101_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100101_v1_cover.jpg"
     },
     {
       "track_id": "100101_v2",
@@ -48,8 +47,7 @@
       ],
       "detail_url": "tracks/100101_v2.json",
       "audio_url": "assets/100101_v2.mp3",
-      "cover_url": "assets/100101_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100101_v2_cover.jpg"
     },
     {
       "track_id": "100102_v1",
@@ -70,8 +68,7 @@
       ],
       "detail_url": "tracks/100102_v1.json",
       "audio_url": "assets/100102_v1.mp3",
-      "cover_url": "assets/100102_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100102_v1_cover.jpg"
     },
     {
       "track_id": "100102_v2",
@@ -92,8 +89,7 @@
       ],
       "detail_url": "tracks/100102_v2.json",
       "audio_url": "assets/100102_v2.mp3",
-      "cover_url": "assets/100102_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100102_v2_cover.jpg"
     },
     {
       "track_id": "100201_v1",
@@ -115,8 +111,7 @@
       ],
       "detail_url": "tracks/100201_v1.json",
       "audio_url": "assets/100201_v1.mp3",
-      "cover_url": "assets/100201_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100201_v1_cover.jpg"
     },
     {
       "track_id": "100201_v2",
@@ -138,8 +133,7 @@
       ],
       "detail_url": "tracks/100201_v2.json",
       "audio_url": "assets/100201_v2.mp3",
-      "cover_url": "assets/100201_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100201_v2_cover.jpg"
     },
     {
       "track_id": "100202_v1",
@@ -163,8 +157,7 @@
       ],
       "detail_url": "tracks/100202_v1.json",
       "audio_url": "assets/100202_v1.mp3",
-      "cover_url": "assets/100202_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100202_v1_cover.jpg"
     },
     {
       "track_id": "100202_v2",
@@ -188,8 +181,7 @@
       ],
       "detail_url": "tracks/100202_v2.json",
       "audio_url": "assets/100202_v2.mp3",
-      "cover_url": "assets/100202_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100202_v2_cover.jpg"
     },
     {
       "track_id": "100301_v1",
@@ -211,8 +203,7 @@
       ],
       "detail_url": "tracks/100301_v1.json",
       "audio_url": "assets/100301_v1.mp3",
-      "cover_url": "assets/100301_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100301_v1_cover.jpg"
     },
     {
       "track_id": "100301_v2",
@@ -234,8 +225,7 @@
       ],
       "detail_url": "tracks/100301_v2.json",
       "audio_url": "assets/100301_v2.mp3",
-      "cover_url": "assets/100301_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100301_v2_cover.jpg"
     },
     {
       "track_id": "100302_v1",
@@ -257,8 +247,7 @@
       ],
       "detail_url": "tracks/100302_v1.json",
       "audio_url": "assets/100302_v1.mp3",
-      "cover_url": "assets/100302_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100302_v1_cover.jpg"
     },
     {
       "track_id": "100302_v2",
@@ -280,8 +269,7 @@
       ],
       "detail_url": "tracks/100302_v2.json",
       "audio_url": "assets/100302_v2.mp3",
-      "cover_url": "assets/100302_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100302_v2_cover.jpg"
     },
     {
       "track_id": "100401_v1",
@@ -306,8 +294,7 @@
       ],
       "detail_url": "tracks/100401_v1.json",
       "audio_url": "assets/100401_v1.mp3",
-      "cover_url": "assets/100401_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100401_v1_cover.jpg"
     },
     {
       "track_id": "100401_v2",
@@ -332,8 +319,7 @@
       ],
       "detail_url": "tracks/100401_v2.json",
       "audio_url": "assets/100401_v2.mp3",
-      "cover_url": "assets/100401_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100401_v2_cover.jpg"
     },
     {
       "track_id": "100402_v1",
@@ -355,8 +341,7 @@
       ],
       "detail_url": "tracks/100402_v1.json",
       "audio_url": "assets/100402_v1.mp3",
-      "cover_url": "assets/100402_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100402_v1_cover.jpg"
     },
     {
       "track_id": "100402_v2",
@@ -378,8 +363,7 @@
       ],
       "detail_url": "tracks/100402_v2.json",
       "audio_url": "assets/100402_v2.mp3",
-      "cover_url": "assets/100402_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100402_v2_cover.jpg"
     },
     {
       "track_id": "100501_v1",
@@ -402,8 +386,7 @@
       ],
       "detail_url": "tracks/100501_v1.json",
       "audio_url": "assets/100501_v1.mp3",
-      "cover_url": "assets/100501_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100501_v1_cover.jpg"
     },
     {
       "track_id": "100501_v2",
@@ -426,8 +409,7 @@
       ],
       "detail_url": "tracks/100501_v2.json",
       "audio_url": "assets/100501_v2.mp3",
-      "cover_url": "assets/100501_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100501_v2_cover.jpg"
     },
     {
       "track_id": "100502_v1",
@@ -452,8 +434,7 @@
       ],
       "detail_url": "tracks/100502_v1.json",
       "audio_url": "assets/100502_v1.mp3",
-      "cover_url": "assets/100502_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100502_v1_cover.jpg"
     },
     {
       "track_id": "100502_v2",
@@ -478,8 +459,7 @@
       ],
       "detail_url": "tracks/100502_v2.json",
       "audio_url": "assets/100502_v2.mp3",
-      "cover_url": "assets/100502_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100502_v2_cover.jpg"
     },
     {
       "track_id": "100601_v1",
@@ -501,8 +481,7 @@
       ],
       "detail_url": "tracks/100601_v1.json",
       "audio_url": "assets/100601_v1.mp3",
-      "cover_url": "assets/100601_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100601_v1_cover.jpg"
     },
     {
       "track_id": "100601_v2",
@@ -524,8 +503,7 @@
       ],
       "detail_url": "tracks/100601_v2.json",
       "audio_url": "assets/100601_v2.mp3",
-      "cover_url": "assets/100601_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100601_v2_cover.jpg"
     },
     {
       "track_id": "100602_v1",
@@ -548,8 +526,7 @@
       ],
       "detail_url": "tracks/100602_v1.json",
       "audio_url": "assets/100602_v1.mp3",
-      "cover_url": "assets/100602_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100602_v1_cover.jpg"
     },
     {
       "track_id": "100602_v2",
@@ -572,8 +549,7 @@
       ],
       "detail_url": "tracks/100602_v2.json",
       "audio_url": "assets/100602_v2.mp3",
-      "cover_url": "assets/100602_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100602_v2_cover.jpg"
     },
     {
       "track_id": "100701_v1",
@@ -596,8 +572,7 @@
       ],
       "detail_url": "tracks/100701_v1.json",
       "audio_url": "assets/100701_v1.mp3",
-      "cover_url": "assets/100701_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100701_v1_cover.jpg"
     },
     {
       "track_id": "100701_v2",
@@ -620,8 +595,7 @@
       ],
       "detail_url": "tracks/100701_v2.json",
       "audio_url": "assets/100701_v2.mp3",
-      "cover_url": "assets/100701_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100701_v2_cover.jpg"
     },
     {
       "track_id": "100702_v1",
@@ -645,8 +619,7 @@
       ],
       "detail_url": "tracks/100702_v1.json",
       "audio_url": "assets/100702_v1.mp3",
-      "cover_url": "assets/100702_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100702_v1_cover.jpg"
     },
     {
       "track_id": "100702_v2",
@@ -670,8 +643,7 @@
       ],
       "detail_url": "tracks/100702_v2.json",
       "audio_url": "assets/100702_v2.mp3",
-      "cover_url": "assets/100702_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100702_v2_cover.jpg"
     },
     {
       "track_id": "100801_v1",
@@ -691,8 +663,7 @@
       ],
       "detail_url": "tracks/100801_v1.json",
       "audio_url": "assets/100801_v1.mp3",
-      "cover_url": "assets/100801_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100801_v1_cover.jpg"
     },
     {
       "track_id": "100801_v2",
@@ -712,8 +683,7 @@
       ],
       "detail_url": "tracks/100801_v2.json",
       "audio_url": "assets/100801_v2.mp3",
-      "cover_url": "assets/100801_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100801_v2_cover.jpg"
     },
     {
       "track_id": "100802_v1",
@@ -737,8 +707,7 @@
       ],
       "detail_url": "tracks/100802_v1.json",
       "audio_url": "assets/100802_v1.mp3",
-      "cover_url": "assets/100802_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100802_v1_cover.jpg"
     },
     {
       "track_id": "100802_v2",
@@ -762,8 +731,7 @@
       ],
       "detail_url": "tracks/100802_v2.json",
       "audio_url": "assets/100802_v2.mp3",
-      "cover_url": "assets/100802_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100802_v2_cover.jpg"
     },
     {
       "track_id": "100901_v1",
@@ -788,8 +756,7 @@
       ],
       "detail_url": "tracks/100901_v1.json",
       "audio_url": "assets/100901_v1.mp3",
-      "cover_url": "assets/100901_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100901_v1_cover.jpg"
     },
     {
       "track_id": "100901_v2",
@@ -814,8 +781,7 @@
       ],
       "detail_url": "tracks/100901_v2.json",
       "audio_url": "assets/100901_v2.mp3",
-      "cover_url": "assets/100901_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100901_v2_cover.jpg"
     },
     {
       "track_id": "100902_v1",
@@ -839,8 +805,7 @@
       ],
       "detail_url": "tracks/100902_v1.json",
       "audio_url": "assets/100902_v1.mp3",
-      "cover_url": "assets/100902_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100902_v1_cover.jpg"
     },
     {
       "track_id": "100902_v2",
@@ -864,8 +829,7 @@
       ],
       "detail_url": "tracks/100902_v2.json",
       "audio_url": "assets/100902_v2.mp3",
-      "cover_url": "assets/100902_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/100902_v2_cover.jpg"
     },
     {
       "track_id": "101001_v1",
@@ -888,8 +852,7 @@
       ],
       "detail_url": "tracks/101001_v1.json",
       "audio_url": "assets/101001_v1.mp3",
-      "cover_url": "assets/101001_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/101001_v1_cover.jpg"
     },
     {
       "track_id": "101001_v2",
@@ -912,8 +875,7 @@
       ],
       "detail_url": "tracks/101001_v2.json",
       "audio_url": "assets/101001_v2.mp3",
-      "cover_url": "assets/101001_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/101001_v2_cover.jpg"
     },
     {
       "track_id": "101002_v1",
@@ -935,8 +897,7 @@
       ],
       "detail_url": "tracks/101002_v1.json",
       "audio_url": "assets/101002_v1.mp3",
-      "cover_url": "assets/101002_v1_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/101002_v1_cover.jpg"
     },
     {
       "track_id": "101002_v2",
@@ -958,8 +919,7 @@
       ],
       "detail_url": "tracks/101002_v2.json",
       "audio_url": "assets/101002_v2.mp3",
-      "cover_url": "assets/101002_v2_cover.jpg",
-      "batch": 1
+      "cover_url": "assets/101002_v2_cover.jpg"
     },
     {
       "track_id": "101101_v1",
@@ -984,8 +944,7 @@
       ],
       "detail_url": "tracks/101101_v1.json",
       "audio_url": "assets/101101_v1.mp3",
-      "cover_url": "assets/101101_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101101_v1_cover.jpg"
     },
     {
       "track_id": "101101_v2",
@@ -1010,8 +969,7 @@
       ],
       "detail_url": "tracks/101101_v2.json",
       "audio_url": "assets/101101_v2.mp3",
-      "cover_url": "assets/101101_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101101_v2_cover.jpg"
     },
     {
       "track_id": "101102_v1",
@@ -1036,8 +994,7 @@
       ],
       "detail_url": "tracks/101102_v1.json",
       "audio_url": "assets/101102_v1.mp3",
-      "cover_url": "assets/101102_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101102_v1_cover.jpg"
     },
     {
       "track_id": "101102_v2",
@@ -1062,8 +1019,7 @@
       ],
       "detail_url": "tracks/101102_v2.json",
       "audio_url": "assets/101102_v2.mp3",
-      "cover_url": "assets/101102_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101102_v2_cover.jpg"
     },
     {
       "track_id": "101201_v1",
@@ -1088,8 +1044,7 @@
       ],
       "detail_url": "tracks/101201_v1.json",
       "audio_url": "assets/101201_v1.mp3",
-      "cover_url": "assets/101201_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101201_v1_cover.jpg"
     },
     {
       "track_id": "101201_v2",
@@ -1114,8 +1069,7 @@
       ],
       "detail_url": "tracks/101201_v2.json",
       "audio_url": "assets/101201_v2.mp3",
-      "cover_url": "assets/101201_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101201_v2_cover.jpg"
     },
     {
       "track_id": "101202_v1",
@@ -1137,8 +1091,7 @@
       ],
       "detail_url": "tracks/101202_v1.json",
       "audio_url": "assets/101202_v1.mp3",
-      "cover_url": "assets/101202_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101202_v1_cover.jpg"
     },
     {
       "track_id": "101202_v2",
@@ -1160,8 +1113,7 @@
       ],
       "detail_url": "tracks/101202_v2.json",
       "audio_url": "assets/101202_v2.mp3",
-      "cover_url": "assets/101202_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101202_v2_cover.jpg"
     },
     {
       "track_id": "101301_v1",
@@ -1185,8 +1137,7 @@
       ],
       "detail_url": "tracks/101301_v1.json",
       "audio_url": "assets/101301_v1.mp3",
-      "cover_url": "assets/101301_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101301_v1_cover.jpg"
     },
     {
       "track_id": "101301_v2",
@@ -1210,8 +1161,7 @@
       ],
       "detail_url": "tracks/101301_v2.json",
       "audio_url": "assets/101301_v2.mp3",
-      "cover_url": "assets/101301_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101301_v2_cover.jpg"
     },
     {
       "track_id": "101302_v1",
@@ -1234,8 +1184,7 @@
       ],
       "detail_url": "tracks/101302_v1.json",
       "audio_url": "assets/101302_v1.mp3",
-      "cover_url": "assets/101302_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101302_v1_cover.jpg"
     },
     {
       "track_id": "101302_v2",
@@ -1258,8 +1207,7 @@
       ],
       "detail_url": "tracks/101302_v2.json",
       "audio_url": "assets/101302_v2.mp3",
-      "cover_url": "assets/101302_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101302_v2_cover.jpg"
     },
     {
       "track_id": "101401_v1",
@@ -1285,8 +1233,7 @@
       ],
       "detail_url": "tracks/101401_v1.json",
       "audio_url": "assets/101401_v1.mp3",
-      "cover_url": "assets/101401_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101401_v1_cover.jpg"
     },
     {
       "track_id": "101401_v2",
@@ -1312,8 +1259,7 @@
       ],
       "detail_url": "tracks/101401_v2.json",
       "audio_url": "assets/101401_v2.mp3",
-      "cover_url": "assets/101401_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101401_v2_cover.jpg"
     },
     {
       "track_id": "101402_v1",
@@ -1336,8 +1282,7 @@
       ],
       "detail_url": "tracks/101402_v1.json",
       "audio_url": "assets/101402_v1.mp3",
-      "cover_url": "assets/101402_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101402_v1_cover.jpg"
     },
     {
       "track_id": "101402_v2",
@@ -1360,8 +1305,7 @@
       ],
       "detail_url": "tracks/101402_v2.json",
       "audio_url": "assets/101402_v2.mp3",
-      "cover_url": "assets/101402_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101402_v2_cover.jpg"
     },
     {
       "track_id": "101501_v1",
@@ -1384,8 +1328,7 @@
       ],
       "detail_url": "tracks/101501_v1.json",
       "audio_url": "assets/101501_v1.mp3",
-      "cover_url": "assets/101501_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101501_v1_cover.jpg"
     },
     {
       "track_id": "101501_v2",
@@ -1408,8 +1351,7 @@
       ],
       "detail_url": "tracks/101501_v2.json",
       "audio_url": "assets/101501_v2.mp3",
-      "cover_url": "assets/101501_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101501_v2_cover.jpg"
     },
     {
       "track_id": "101502_v1",
@@ -1431,8 +1373,7 @@
       ],
       "detail_url": "tracks/101502_v1.json",
       "audio_url": "assets/101502_v1.mp3",
-      "cover_url": "assets/101502_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101502_v1_cover.jpg"
     },
     {
       "track_id": "101502_v2",
@@ -1454,8 +1395,7 @@
       ],
       "detail_url": "tracks/101502_v2.json",
       "audio_url": "assets/101502_v2.mp3",
-      "cover_url": "assets/101502_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101502_v2_cover.jpg"
     },
     {
       "track_id": "101601_v1",
@@ -1479,8 +1419,7 @@
       ],
       "detail_url": "tracks/101601_v1.json",
       "audio_url": "assets/101601_v1.mp3",
-      "cover_url": "assets/101601_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101601_v1_cover.jpg"
     },
     {
       "track_id": "101601_v2",
@@ -1504,8 +1443,7 @@
       ],
       "detail_url": "tracks/101601_v2.json",
       "audio_url": "assets/101601_v2.mp3",
-      "cover_url": "assets/101601_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101601_v2_cover.jpg"
     },
     {
       "track_id": "101602_v1",
@@ -1528,8 +1466,7 @@
       ],
       "detail_url": "tracks/101602_v1.json",
       "audio_url": "assets/101602_v1.mp3",
-      "cover_url": "assets/101602_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101602_v1_cover.jpg"
     },
     {
       "track_id": "101602_v2",
@@ -1552,8 +1489,7 @@
       ],
       "detail_url": "tracks/101602_v2.json",
       "audio_url": "assets/101602_v2.mp3",
-      "cover_url": "assets/101602_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101602_v2_cover.jpg"
     },
     {
       "track_id": "101701_v1",
@@ -1576,8 +1512,7 @@
       ],
       "detail_url": "tracks/101701_v1.json",
       "audio_url": "assets/101701_v1.mp3",
-      "cover_url": "assets/101701_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101701_v1_cover.jpg"
     },
     {
       "track_id": "101701_v2",
@@ -1600,8 +1535,7 @@
       ],
       "detail_url": "tracks/101701_v2.json",
       "audio_url": "assets/101701_v2.mp3",
-      "cover_url": "assets/101701_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101701_v2_cover.jpg"
     },
     {
       "track_id": "101702_v1",
@@ -1621,8 +1555,7 @@
       ],
       "detail_url": "tracks/101702_v1.json",
       "audio_url": "assets/101702_v1.mp3",
-      "cover_url": "assets/101702_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101702_v1_cover.jpg"
     },
     {
       "track_id": "101702_v2",
@@ -1642,8 +1575,7 @@
       ],
       "detail_url": "tracks/101702_v2.json",
       "audio_url": "assets/101702_v2.mp3",
-      "cover_url": "assets/101702_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101702_v2_cover.jpg"
     },
     {
       "track_id": "101801_v1",
@@ -1665,8 +1597,7 @@
       ],
       "detail_url": "tracks/101801_v1.json",
       "audio_url": "assets/101801_v1.mp3",
-      "cover_url": "assets/101801_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101801_v1_cover.jpg"
     },
     {
       "track_id": "101801_v2",
@@ -1688,8 +1619,7 @@
       ],
       "detail_url": "tracks/101801_v2.json",
       "audio_url": "assets/101801_v2.mp3",
-      "cover_url": "assets/101801_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101801_v2_cover.jpg"
     },
     {
       "track_id": "101802_v1",
@@ -1710,8 +1640,7 @@
       ],
       "detail_url": "tracks/101802_v1.json",
       "audio_url": "assets/101802_v1.mp3",
-      "cover_url": "assets/101802_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101802_v1_cover.jpg"
     },
     {
       "track_id": "101802_v2",
@@ -1732,8 +1661,7 @@
       ],
       "detail_url": "tracks/101802_v2.json",
       "audio_url": "assets/101802_v2.mp3",
-      "cover_url": "assets/101802_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101802_v2_cover.jpg"
     },
     {
       "track_id": "101901_v1",
@@ -1755,8 +1683,7 @@
       ],
       "detail_url": "tracks/101901_v1.json",
       "audio_url": "assets/101901_v1.mp3",
-      "cover_url": "assets/101901_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101901_v1_cover.jpg"
     },
     {
       "track_id": "101901_v2",
@@ -1778,8 +1705,7 @@
       ],
       "detail_url": "tracks/101901_v2.json",
       "audio_url": "assets/101901_v2.mp3",
-      "cover_url": "assets/101901_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101901_v2_cover.jpg"
     },
     {
       "track_id": "101902_v1",
@@ -1804,8 +1730,7 @@
       ],
       "detail_url": "tracks/101902_v1.json",
       "audio_url": "assets/101902_v1.mp3",
-      "cover_url": "assets/101902_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101902_v1_cover.jpg"
     },
     {
       "track_id": "101902_v2",
@@ -1830,8 +1755,7 @@
       ],
       "detail_url": "tracks/101902_v2.json",
       "audio_url": "assets/101902_v2.mp3",
-      "cover_url": "assets/101902_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/101902_v2_cover.jpg"
     },
     {
       "track_id": "102001_v1",
@@ -1854,8 +1778,7 @@
       ],
       "detail_url": "tracks/102001_v1.json",
       "audio_url": "assets/102001_v1.mp3",
-      "cover_url": "assets/102001_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/102001_v1_cover.jpg"
     },
     {
       "track_id": "102001_v2",
@@ -1878,8 +1801,7 @@
       ],
       "detail_url": "tracks/102001_v2.json",
       "audio_url": "assets/102001_v2.mp3",
-      "cover_url": "assets/102001_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/102001_v2_cover.jpg"
     },
     {
       "track_id": "102002_v1",
@@ -1901,8 +1823,7 @@
       ],
       "detail_url": "tracks/102002_v1.json",
       "audio_url": "assets/102002_v1.mp3",
-      "cover_url": "assets/102002_v1_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/102002_v1_cover.jpg"
     },
     {
       "track_id": "102002_v2",
@@ -1924,8 +1845,7 @@
       ],
       "detail_url": "tracks/102002_v2.json",
       "audio_url": "assets/102002_v2.mp3",
-      "cover_url": "assets/102002_v2_cover.jpg",
-      "batch": 2
+      "cover_url": "assets/102002_v2_cover.jpg"
     },
     {
       "track_id": "102101_v1",
@@ -1949,8 +1869,7 @@
       ],
       "detail_url": "tracks/102101_v1.json",
       "audio_url": "assets/102101_v1.mp3",
-      "cover_url": "assets/102101_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102101_v1_cover.jpg"
     },
     {
       "track_id": "102101_v2",
@@ -1974,8 +1893,7 @@
       ],
       "detail_url": "tracks/102101_v2.json",
       "audio_url": "assets/102101_v2.mp3",
-      "cover_url": "assets/102101_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102101_v2_cover.jpg"
     },
     {
       "track_id": "102102_v1",
@@ -1999,8 +1917,7 @@
       ],
       "detail_url": "tracks/102102_v1.json",
       "audio_url": "assets/102102_v1.mp3",
-      "cover_url": "assets/102102_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102102_v1_cover.jpg"
     },
     {
       "track_id": "102102_v2",
@@ -2024,8 +1941,7 @@
       ],
       "detail_url": "tracks/102102_v2.json",
       "audio_url": "assets/102102_v2.mp3",
-      "cover_url": "assets/102102_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102102_v2_cover.jpg"
     },
     {
       "track_id": "102103_v1",
@@ -2047,8 +1963,7 @@
       ],
       "detail_url": "tracks/102103_v1.json",
       "audio_url": "assets/102103_v1.mp3",
-      "cover_url": "assets/102103_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102103_v1_cover.jpg"
     },
     {
       "track_id": "102103_v2",
@@ -2070,8 +1985,7 @@
       ],
       "detail_url": "tracks/102103_v2.json",
       "audio_url": "assets/102103_v2.mp3",
-      "cover_url": "assets/102103_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102103_v2_cover.jpg"
     },
     {
       "track_id": "102104_v1",
@@ -2094,8 +2008,7 @@
       ],
       "detail_url": "tracks/102104_v1.json",
       "audio_url": "assets/102104_v1.mp3",
-      "cover_url": "assets/102104_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102104_v1_cover.jpg"
     },
     {
       "track_id": "102104_v2",
@@ -2118,8 +2031,7 @@
       ],
       "detail_url": "tracks/102104_v2.json",
       "audio_url": "assets/102104_v2.mp3",
-      "cover_url": "assets/102104_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102104_v2_cover.jpg"
     },
     {
       "track_id": "102105_v1",
@@ -2145,8 +2057,7 @@
       ],
       "detail_url": "tracks/102105_v1.json",
       "audio_url": "assets/102105_v1.mp3",
-      "cover_url": "assets/102105_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102105_v1_cover.jpg"
     },
     {
       "track_id": "102105_v2",
@@ -2172,8 +2083,7 @@
       ],
       "detail_url": "tracks/102105_v2.json",
       "audio_url": "assets/102105_v2.mp3",
-      "cover_url": "assets/102105_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102105_v2_cover.jpg"
     },
     {
       "track_id": "102106_v1",
@@ -2198,8 +2108,7 @@
       ],
       "detail_url": "tracks/102106_v1.json",
       "audio_url": "assets/102106_v1.mp3",
-      "cover_url": "assets/102106_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102106_v1_cover.jpg"
     },
     {
       "track_id": "102106_v2",
@@ -2224,8 +2133,7 @@
       ],
       "detail_url": "tracks/102106_v2.json",
       "audio_url": "assets/102106_v2.mp3",
-      "cover_url": "assets/102106_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102106_v2_cover.jpg"
     },
     {
       "track_id": "102107_v1",
@@ -2246,8 +2154,7 @@
       ],
       "detail_url": "tracks/102107_v1.json",
       "audio_url": "assets/102107_v1.mp3",
-      "cover_url": "assets/102107_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102107_v1_cover.jpg"
     },
     {
       "track_id": "102107_v2",
@@ -2268,8 +2175,7 @@
       ],
       "detail_url": "tracks/102107_v2.json",
       "audio_url": "assets/102107_v2.mp3",
-      "cover_url": "assets/102107_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102107_v2_cover.jpg"
     },
     {
       "track_id": "102108_v1",
@@ -2290,8 +2196,7 @@
       ],
       "detail_url": "tracks/102108_v1.json",
       "audio_url": "assets/102108_v1.mp3",
-      "cover_url": "assets/102108_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102108_v1_cover.jpg"
     },
     {
       "track_id": "102108_v2",
@@ -2312,8 +2217,7 @@
       ],
       "detail_url": "tracks/102108_v2.json",
       "audio_url": "assets/102108_v2.mp3",
-      "cover_url": "assets/102108_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102108_v2_cover.jpg"
     },
     {
       "track_id": "102109_v1",
@@ -2337,8 +2241,7 @@
       ],
       "detail_url": "tracks/102109_v1.json",
       "audio_url": "assets/102109_v1.mp3",
-      "cover_url": "assets/102109_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102109_v1_cover.jpg"
     },
     {
       "track_id": "102109_v2",
@@ -2362,8 +2265,7 @@
       ],
       "detail_url": "tracks/102109_v2.json",
       "audio_url": "assets/102109_v2.mp3",
-      "cover_url": "assets/102109_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102109_v2_cover.jpg"
     },
     {
       "track_id": "102110_v1",
@@ -2385,8 +2287,7 @@
       ],
       "detail_url": "tracks/102110_v1.json",
       "audio_url": "assets/102110_v1.mp3",
-      "cover_url": "assets/102110_v1_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102110_v1_cover.jpg"
     },
     {
       "track_id": "102110_v2",
@@ -2408,8 +2309,1197 @@
       ],
       "detail_url": "tracks/102110_v2.json",
       "audio_url": "assets/102110_v2.mp3",
-      "cover_url": "assets/102110_v2_cover.jpg",
-      "batch": 3
+      "cover_url": "assets/102110_v2_cover.jpg"
+    },
+    {
+      "track_id": "102111_v1",
+      "prompt_id": "102111",
+      "title": "Brand New Day",
+      "duration": 19.96,
+      "user_tags": [
+        "news",
+        "broadcast",
+        "bright",
+        "corporate"
+      ],
+      "suno_tags": [
+        "clean",
+        "bright",
+        "jingle upbeat drums synth stabs"
+      ],
+      "detail_url": "tracks/102111_v1.json",
+      "audio_url": "assets/102111_v1.mp3",
+      "cover_url": "assets/102111_v1_cover.jpg"
+    },
+    {
+      "track_id": "102111_v2",
+      "prompt_id": "102111",
+      "title": "Upbeat Pop Jingle",
+      "duration": 40.48,
+      "user_tags": [
+        "news",
+        "broadcast",
+        "bright",
+        "corporate"
+      ],
+      "suno_tags": [
+        "clean",
+        "bright",
+        "jingle upbeat drums synth stabs"
+      ],
+      "detail_url": "tracks/102111_v2.json",
+      "audio_url": "assets/102111_v2.mp3",
+      "cover_url": "assets/102111_v2_cover.jpg"
+    },
+    {
+      "track_id": "102112_v1",
+      "prompt_id": "102112",
+      "title": "Here and Now",
+      "duration": 188.32,
+      "user_tags": [
+        "news",
+        "broadcast",
+        "corporate",
+        "light"
+      ],
+      "suno_tags": [
+        "theme",
+        "broadcast theme light percussion warm pads",
+        "warm",
+        "light"
+      ],
+      "detail_url": "tracks/102112_v1.json",
+      "audio_url": "assets/102112_v1.mp3",
+      "cover_url": "assets/102112_v1_cover.jpg"
+    },
+    {
+      "track_id": "102112_v2",
+      "prompt_id": "102112",
+      "title": "Chill Broadcast Vibes",
+      "duration": 204.92,
+      "user_tags": [
+        "news",
+        "broadcast",
+        "corporate",
+        "light"
+      ],
+      "suno_tags": [
+        "theme",
+        "broadcast theme light percussion warm pads",
+        "warm",
+        "light"
+      ],
+      "detail_url": "tracks/102112_v2.json",
+      "audio_url": "assets/102112_v2.mp3",
+      "cover_url": "assets/102112_v2_cover.jpg"
+    },
+    {
+      "track_id": "102113_v1",
+      "prompt_id": "102113",
+      "title": "Breaking the Glass Ceiling",
+      "duration": 159.16,
+      "user_tags": [
+        "news",
+        "corporate",
+        "broadcast",
+        "clean"
+      ],
+      "suno_tags": [
+        "crisp piano",
+        "professional yet inspiring",
+        "subtle electronic pulses",
+        "corporate"
+      ],
+      "detail_url": "tracks/102113_v1.json",
+      "audio_url": "assets/102113_v1.mp3",
+      "cover_url": "assets/102113_v1_cover.jpg"
+    },
+    {
+      "track_id": "102113_v2",
+      "prompt_id": "102113",
+      "title": "Piano-Driven Inspiration",
+      "duration": 132.52,
+      "user_tags": [
+        "news",
+        "corporate",
+        "broadcast",
+        "clean"
+      ],
+      "suno_tags": [
+        "crisp piano",
+        "professional yet inspiring",
+        "subtle electronic pulses",
+        "corporate"
+      ],
+      "detail_url": "tracks/102113_v2.json",
+      "audio_url": "assets/102113_v2.mp3",
+      "cover_url": "assets/102113_v2_cover.jpg"
+    },
+    {
+      "track_id": "102114_v1",
+      "prompt_id": "102114",
+      "title": "Breaking the Grid",
+      "duration": 173.32,
+      "user_tags": [
+        "news",
+        "digital",
+        "broadcast",
+        "clean"
+      ],
+      "suno_tags": [
+        "rhythmic",
+        "simple",
+        "and a pulsing bassline for a modern digital vibe",
+        "synth plucks",
+        "electronic",
+        "minimal; features tight percussion"
+      ],
+      "detail_url": "tracks/102114_v1.json",
+      "audio_url": "assets/102114_v1.mp3",
+      "cover_url": "assets/102114_v1_cover.jpg"
+    },
+    {
+      "track_id": "102114_v2",
+      "prompt_id": "102114",
+      "title": "Pulsing Digital Vibes",
+      "duration": 154.84,
+      "user_tags": [
+        "news",
+        "digital",
+        "broadcast",
+        "clean"
+      ],
+      "suno_tags": [
+        "rhythmic",
+        "simple",
+        "and a pulsing bassline for a modern digital vibe",
+        "synth plucks",
+        "electronic",
+        "minimal; features tight percussion"
+      ],
+      "detail_url": "tracks/102114_v2.json",
+      "audio_url": "assets/102114_v2.mp3",
+      "cover_url": "assets/102114_v2_cover.jpg"
+    },
+    {
+      "track_id": "102115_v1",
+      "prompt_id": "102115",
+      "title": "Twinkle in Your Eyes",
+      "duration": 157.12,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "cute",
+        "bright"
+      ],
+      "suno_tags": [
+        "soft claps",
+        "bubbly and uplifting with a dreamy atmosphere",
+        "cute pop",
+        "sparkly synths",
+        "pop",
+        "soft"
+      ],
+      "detail_url": "tracks/102115_v1.json",
+      "audio_url": "assets/102115_v1.mp3",
+      "cover_url": "assets/102115_v1_cover.jpg"
+    },
+    {
+      "track_id": "102115_v2",
+      "prompt_id": "102115",
+      "title": "Pop Chill Vibes",
+      "duration": 100.84,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "cute",
+        "bright"
+      ],
+      "suno_tags": [
+        "soft claps",
+        "bubbly and uplifting with a dreamy atmosphere",
+        "cute pop",
+        "sparkly synths",
+        "pop",
+        "soft"
+      ],
+      "detail_url": "tracks/102115_v2.json",
+      "audio_url": "assets/102115_v2.mp3",
+      "cover_url": "assets/102115_v2_cover.jpg"
+    },
+    {
+      "track_id": "102116_v1",
+      "prompt_id": "102116",
+      "title": "Electric Smile",
+      "duration": 166.6,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "bubbly",
+        "electronic"
+      ],
+      "suno_tags": [
+        "upbeat rhythm",
+        "bubbly electronic pop",
+        "bright",
+        "pop",
+        "layered harmonies",
+        "electronic",
+        "bright synths"
+      ],
+      "detail_url": "tracks/102116_v1.json",
+      "audio_url": "assets/102116_v1.mp3",
+      "cover_url": "assets/102116_v1_cover.jpg"
+    },
+    {
+      "track_id": "102116_v2",
+      "prompt_id": "102116",
+      "title": "Bubbly Aesthetic",
+      "duration": 124.72,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "bubbly",
+        "electronic"
+      ],
+      "suno_tags": [
+        "upbeat rhythm",
+        "bubbly electronic pop",
+        "bright",
+        "pop",
+        "layered harmonies",
+        "electronic",
+        "bright synths"
+      ],
+      "detail_url": "tracks/102116_v2.json",
+      "audio_url": "assets/102116_v2.mp3",
+      "cover_url": "assets/102116_v2_cover.jpg"
+    },
+    {
+      "track_id": "102117_v1",
+      "prompt_id": "102117",
+      "title": "Bubblegum Heartbeat",
+      "duration": 104.96,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "playful",
+        "light"
+      ],
+      "suno_tags": [
+        "playful",
+        "pop",
+        "bouncy bassline",
+        "girly pop groove with light percussion",
+        "light",
+        "and airy synths"
+      ],
+      "detail_url": "tracks/102117_v1.json",
+      "audio_url": "assets/102117_v1.mp3",
+      "cover_url": "assets/102117_v1_cover.jpg"
+    },
+    {
+      "track_id": "102117_v2",
+      "prompt_id": "102117",
+      "title": "Cotton Candy Dreams",
+      "duration": 87.8,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "playful",
+        "light"
+      ],
+      "suno_tags": [
+        "playful",
+        "pop",
+        "bouncy bassline",
+        "girly pop groove with light percussion",
+        "light",
+        "and airy synths"
+      ],
+      "detail_url": "tracks/102117_v2.json",
+      "audio_url": "assets/102117_v2.mp3",
+      "cover_url": "assets/102117_v2_cover.jpg"
+    },
+    {
+      "track_id": "102118_v1",
+      "prompt_id": "102118",
+      "title": "Clouds Like Cotton",
+      "duration": 93.96,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "aesthetic",
+        "soft"
+      ],
+      "suno_tags": [
+        "soft aesthetic pop",
+        "pop",
+        "soft",
+        "ethereal and dreamy with gentle layers of synths and reverb-soaked vocals",
+        "airy pads"
+      ],
+      "detail_url": "tracks/102118_v1.json",
+      "audio_url": "assets/102118_v1.mp3",
+      "cover_url": "assets/102118_v1_cover.jpg"
+    },
+    {
+      "track_id": "102118_v2",
+      "prompt_id": "102118",
+      "title": "Main Character Vibes",
+      "duration": 156.0,
+      "user_tags": [
+        "girltok",
+        "pop",
+        "aesthetic",
+        "soft"
+      ],
+      "suno_tags": [
+        "soft aesthetic pop",
+        "pop",
+        "soft",
+        "ethereal and dreamy with gentle layers of synths and reverb-soaked vocals",
+        "airy pads"
+      ],
+      "detail_url": "tracks/102118_v2.json",
+      "audio_url": "assets/102118_v2.mp3",
+      "cover_url": "assets/102118_v2_cover.jpg"
+    },
+    {
+      "track_id": "102119_v1",
+      "prompt_id": "102119",
+      "title": "Cherry Blossom Whispers",
+      "duration": 192.0,
+      "user_tags": [
+        "asian",
+        "pop",
+        "light",
+        "soft"
+      ],
+      "suno_tags": [
+        "asian-inspired pop",
+        "ethereal atmosphere",
+        "light",
+        "light plucks",
+        "pop",
+        "soft pads",
+        "soft"
+      ],
+      "detail_url": "tracks/102119_v1.json",
+      "audio_url": "assets/102119_v1.mp3",
+      "cover_url": "assets/102119_v1_cover.jpg"
+    },
+    {
+      "track_id": "102119_v2",
+      "prompt_id": "102119",
+      "title": "Soft Petal Dreams",
+      "duration": 181.44,
+      "user_tags": [
+        "asian",
+        "pop",
+        "light",
+        "soft"
+      ],
+      "suno_tags": [
+        "asian-inspired pop",
+        "ethereal atmosphere",
+        "light",
+        "light plucks",
+        "pop",
+        "soft pads",
+        "soft"
+      ],
+      "detail_url": "tracks/102119_v2.json",
+      "audio_url": "assets/102119_v2.mp3",
+      "cover_url": "assets/102119_v2_cover.jpg"
+    },
+    {
+      "track_id": "102120_v1",
+      "prompt_id": "102120",
+      "title": "Whispers in the Bamboo",
+      "duration": 212.96,
+      "user_tags": [
+        "asian",
+        "instrumental",
+        "gentle",
+        "airy"
+      ],
+      "suno_tags": [
+        "flowing texture",
+        "accompanied by soft percussive elements and a delicate",
+        "instrumental with airy melodies; features traditional instruments like guzheng and shakuhachi",
+        "gentle",
+        "east asian-inspired"
+      ],
+      "detail_url": "tracks/102120_v1.json",
+      "audio_url": "assets/102120_v1.mp3",
+      "cover_url": "assets/102120_v1_cover.jpg"
+    },
+    {
+      "track_id": "102120_v2",
+      "prompt_id": "102120",
+      "title": "Zen Garden Bliss",
+      "duration": 236.44,
+      "user_tags": [
+        "asian",
+        "instrumental",
+        "gentle",
+        "airy"
+      ],
+      "suno_tags": [
+        "flowing texture",
+        "accompanied by soft percussive elements and a delicate",
+        "instrumental with airy melodies; features traditional instruments like guzheng and shakuhachi",
+        "gentle",
+        "east asian-inspired"
+      ],
+      "detail_url": "tracks/102120_v2.json",
+      "audio_url": "assets/102120_v2.mp3",
+      "cover_url": "assets/102120_v2_cover.jpg"
+    },
+    {
+      "track_id": "102121_v1",
+      "prompt_id": "102121",
+      "title": "Whispers of Bamboo",
+      "duration": 208.44,
+      "user_tags": [
+        "asian",
+        "fusion",
+        "calm",
+        "smooth"
+      ],
+      "suno_tags": [
+        "smooth percussion with soft strings and delicate flutes weaving through a tranquil rhythm",
+        "smooth",
+        "calm",
+        "evoking a meditative and serene atmosphere",
+        "asian fusion"
+      ],
+      "detail_url": "tracks/102121_v1.json",
+      "audio_url": "assets/102121_v1.mp3",
+      "cover_url": "assets/102121_v1_cover.jpg"
+    },
+    {
+      "track_id": "102121_v2",
+      "prompt_id": "102121",
+      "title": "Bamboo Breeze",
+      "duration": 192.72,
+      "user_tags": [
+        "asian",
+        "fusion",
+        "calm",
+        "smooth"
+      ],
+      "suno_tags": [
+        "smooth percussion with soft strings and delicate flutes weaving through a tranquil rhythm",
+        "smooth",
+        "calm",
+        "evoking a meditative and serene atmosphere",
+        "asian fusion"
+      ],
+      "detail_url": "tracks/102121_v2.json",
+      "audio_url": "assets/102121_v2.mp3",
+      "cover_url": "assets/102121_v2_cover.jpg"
+    },
+    {
+      "track_id": "102122_v1",
+      "prompt_id": "102122",
+      "title": "Neon Nights",
+      "duration": 176.6,
+      "user_tags": [
+        "asian",
+        "citypop",
+        "bright",
+        "retro"
+      ],
+      "suno_tags": [
+        "pop",
+        "groovy",
+        "upbeat with shimmering textures and layered harmonies",
+        "bright",
+        "clean synths",
+        "clean",
+        "bright city pop"
+      ],
+      "detail_url": "tracks/102122_v1.json",
+      "audio_url": "assets/102122_v1.mp3",
+      "cover_url": "assets/102122_v1_cover.jpg"
+    },
+    {
+      "track_id": "102122_v2",
+      "prompt_id": "102122",
+      "title": "That Girl Energy",
+      "duration": 147.16,
+      "user_tags": [
+        "asian",
+        "citypop",
+        "bright",
+        "retro"
+      ],
+      "suno_tags": [
+        "pop",
+        "groovy",
+        "upbeat with shimmering textures and layered harmonies",
+        "bright",
+        "clean synths",
+        "clean",
+        "bright city pop"
+      ],
+      "detail_url": "tracks/102122_v2.json",
+      "audio_url": "assets/102122_v2.mp3",
+      "cover_url": "assets/102122_v2_cover.jpg"
+    },
+    {
+      "track_id": "102123_v1",
+      "prompt_id": "102123",
+      "title": "Shadow City",
+      "duration": 157.88,
+      "user_tags": [
+        "future",
+        "trap",
+        "atlanta",
+        "808"
+      ],
+      "suno_tags": [
+        "dark",
+        "atmospheric",
+        "heavy 808s",
+        "rap",
+        "spaced-out hi-hats",
+        "brooding tone",
+        "male vocals with a deep"
+      ],
+      "detail_url": "tracks/102123_v1.json",
+      "audio_url": "assets/102123_v1.mp3",
+      "cover_url": "assets/102123_v1_cover.jpg"
+    },
+    {
+      "track_id": "102123_v2",
+      "prompt_id": "102123",
+      "title": "Dark Trap Beat",
+      "duration": 154.28,
+      "user_tags": [
+        "future",
+        "trap",
+        "atlanta",
+        "808"
+      ],
+      "suno_tags": [
+        "dark",
+        "atmospheric",
+        "heavy 808s",
+        "rap",
+        "spaced-out hi-hats",
+        "brooding tone",
+        "male vocals with a deep"
+      ],
+      "detail_url": "tracks/102123_v2.json",
+      "audio_url": "assets/102123_v2.mp3",
+      "cover_url": "assets/102123_v2_cover.jpg"
+    },
+    {
+      "track_id": "102124_v1",
+      "prompt_id": "102124",
+      "title": "Shadow Play",
+      "duration": 273.6,
+      "user_tags": [
+        "future",
+        "trap",
+        "melodic",
+        "moody"
+      ],
+      "suno_tags": [
+        "melodic trap",
+        "rap",
+        "moody",
+        "atmospheric texture with haunting male vocals",
+        "deep",
+        "moody bells",
+        "deep sub bass"
+      ],
+      "detail_url": "tracks/102124_v1.json",
+      "audio_url": "assets/102124_v1.mp3",
+      "cover_url": "assets/102124_v1_cover.jpg"
+    },
+    {
+      "track_id": "102124_v2",
+      "prompt_id": "102124",
+      "title": "Melodic Trap Atmosphere",
+      "duration": 163.52,
+      "user_tags": [
+        "future",
+        "trap",
+        "melodic",
+        "moody"
+      ],
+      "suno_tags": [
+        "melodic trap",
+        "rap",
+        "moody",
+        "atmospheric texture with haunting male vocals",
+        "deep",
+        "moody bells",
+        "deep sub bass"
+      ],
+      "detail_url": "tracks/102124_v2.json",
+      "audio_url": "assets/102124_v2.mp3",
+      "cover_url": "assets/102124_v2_cover.jpg"
+    },
+    {
+      "track_id": "102125_v1",
+      "prompt_id": "102125",
+      "title": "Smoke Signals",
+      "duration": 133.08,
+      "user_tags": [
+        "future",
+        "trap",
+        "dark",
+        "808"
+      ],
+      "suno_tags": [
+        "hard 808s",
+        "slow rolling trap",
+        "rap",
+        "slow",
+        "moody",
+        "hazy pads",
+        "spacious",
+        "atmospheric"
+      ],
+      "detail_url": "tracks/102125_v1.json",
+      "audio_url": "assets/102125_v1.mp3",
+      "cover_url": "assets/102125_v1_cover.jpg"
+    },
+    {
+      "track_id": "102125_v2",
+      "prompt_id": "102125",
+      "title": "Hazy Dreamscape",
+      "duration": 110.4,
+      "user_tags": [
+        "future",
+        "trap",
+        "dark",
+        "808"
+      ],
+      "suno_tags": [
+        "hard 808s",
+        "slow rolling trap",
+        "rap",
+        "slow",
+        "moody",
+        "hazy pads",
+        "spacious",
+        "atmospheric"
+      ],
+      "detail_url": "tracks/102125_v2.json",
+      "audio_url": "assets/102125_v2.mp3",
+      "cover_url": "assets/102125_v2_cover.jpg"
+    },
+    {
+      "track_id": "102126_v1",
+      "prompt_id": "102126",
+      "title": "Heartstrings in Chains",
+      "duration": 124.84,
+      "user_tags": [
+        "future",
+        "trap",
+        "emotional",
+        "melodic"
+      ],
+      "suno_tags": [
+        "auto-tune melodies",
+        "layered with haunting synth pads and reverb-soaked vocal textures",
+        "rap",
+        "punchy drums",
+        "emotional",
+        "emotional trap",
+        "atmospheric"
+      ],
+      "detail_url": "tracks/102126_v1.json",
+      "audio_url": "assets/102126_v1.mp3",
+      "cover_url": "assets/102126_v1_cover.jpg"
+    },
+    {
+      "track_id": "102126_v2",
+      "prompt_id": "102126",
+      "title": "That Villain Era",
+      "duration": 170.68,
+      "user_tags": [
+        "future",
+        "trap",
+        "emotional",
+        "melodic"
+      ],
+      "suno_tags": [
+        "auto-tune melodies",
+        "layered with haunting synth pads and reverb-soaked vocal textures",
+        "rap",
+        "punchy drums",
+        "emotional",
+        "emotional trap",
+        "atmospheric"
+      ],
+      "detail_url": "tracks/102126_v2.json",
+      "audio_url": "assets/102126_v2.mp3",
+      "cover_url": "assets/102126_v2_cover.jpg"
+    },
+    {
+      "track_id": "102127_v1",
+      "prompt_id": "102127",
+      "title": "Trapped in my Head",
+      "duration": 142.88,
+      "user_tags": [
+        "future",
+        "trap",
+        "gritty",
+        "808"
+      ],
+      "suno_tags": [
+        "gritty trap beat",
+        "sparse piano",
+        "sliding 808s",
+        "rap"
+      ],
+      "detail_url": "tracks/102127_v1.json",
+      "audio_url": "assets/102127_v1.mp3",
+      "cover_url": "assets/102127_v1_cover.jpg"
+    },
+    {
+      "track_id": "102127_v2",
+      "prompt_id": "102127",
+      "title": "Gritty Beatz",
+      "duration": 131.76,
+      "user_tags": [
+        "future",
+        "trap",
+        "gritty",
+        "808"
+      ],
+      "suno_tags": [
+        "gritty trap beat",
+        "sparse piano",
+        "sliding 808s",
+        "rap"
+      ],
+      "detail_url": "tracks/102127_v2.json",
+      "audio_url": "assets/102127_v2.mp3",
+      "cover_url": "assets/102127_v2_cover.jpg"
+    },
+    {
+      "track_id": "102128_v1",
+      "prompt_id": "102128",
+      "title": "Galactic Drift",
+      "duration": 131.76,
+      "user_tags": [
+        "future",
+        "trap",
+        "spacey",
+        "dark"
+      ],
+      "suno_tags": [
+        "rap",
+        "spacey trap",
+        "tight drum pattern",
+        "distant synths",
+        "ethereal atmosphere with reverb-heavy layers",
+        "male vocals"
+      ],
+      "detail_url": "tracks/102128_v1.json",
+      "audio_url": "assets/102128_v1.mp3",
+      "cover_url": "assets/102128_v1_cover.jpg"
+    },
+    {
+      "track_id": "102128_v2",
+      "prompt_id": "102128",
+      "title": "Celestial Flow",
+      "duration": 145.0,
+      "user_tags": [
+        "future",
+        "trap",
+        "spacey",
+        "dark"
+      ],
+      "suno_tags": [
+        "rap",
+        "spacey trap",
+        "tight drum pattern",
+        "distant synths",
+        "ethereal atmosphere with reverb-heavy layers",
+        "male vocals"
+      ],
+      "detail_url": "tracks/102128_v2.json",
+      "audio_url": "assets/102128_v2.mp3",
+      "cover_url": "assets/102128_v2_cover.jpg"
+    },
+    {
+      "track_id": "102129_v1",
+      "prompt_id": "102129",
+      "title": "By the Fireside",
+      "duration": 167.72,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "acoustic",
+        "cozy"
+      ],
+      "suno_tags": [
+        "evoking a sense of intimacy and nostalgia",
+        "folk",
+        "soft",
+        "warm",
+        "acoustic",
+        "cozy atmosphere; gentle guitar picking with subtle rhythmic taps",
+        "layered with a soft hum of harmonica",
+        "warm acoustic",
+        "soft percussion"
+      ],
+      "detail_url": "tracks/102129_v1.json",
+      "audio_url": "assets/102129_v1.mp3",
+      "cover_url": "assets/102129_v1_cover.jpg"
+    },
+    {
+      "track_id": "102129_v2",
+      "prompt_id": "102129",
+      "title": "Cozy Acoustic Dream",
+      "duration": 133.92,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "acoustic",
+        "cozy"
+      ],
+      "suno_tags": [
+        "evoking a sense of intimacy and nostalgia",
+        "folk",
+        "soft",
+        "warm",
+        "acoustic",
+        "cozy atmosphere; gentle guitar picking with subtle rhythmic taps",
+        "layered with a soft hum of harmonica",
+        "warm acoustic",
+        "soft percussion"
+      ],
+      "detail_url": "tracks/102129_v2.json",
+      "audio_url": "assets/102129_v2.mp3",
+      "cover_url": "assets/102129_v2_cover.jpg"
+    },
+    {
+      "track_id": "102130_v1",
+      "prompt_id": "102130",
+      "title": "Sweater Weather Heart",
+      "duration": 84.88,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "pop",
+        "acoustic"
+      ],
+      "suno_tags": [
+        "pop",
+        "gentle",
+        "light",
+        "gentle autumn pop with light guitar and calm rhythm"
+      ],
+      "detail_url": "tracks/102130_v1.json",
+      "audio_url": "assets/102130_v1.mp3",
+      "cover_url": "assets/102130_v1_cover.jpg"
+    },
+    {
+      "track_id": "102130_v2",
+      "prompt_id": "102130",
+      "title": "Autumn Aesthetic",
+      "duration": 99.76,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "pop",
+        "acoustic"
+      ],
+      "suno_tags": [
+        "pop",
+        "gentle",
+        "light",
+        "gentle autumn pop with light guitar and calm rhythm"
+      ],
+      "detail_url": "tracks/102130_v2.json",
+      "audio_url": "assets/102130_v2.mp3",
+      "cover_url": "assets/102130_v2_cover.jpg"
+    },
+    {
+      "track_id": "102131_v1",
+      "prompt_id": "102131",
+      "title": "Golden Fields",
+      "duration": 163.0,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "acoustic",
+        "warm"
+      ],
+      "suno_tags": [
+        "earthy",
+        "acoustic",
+        "warm"
+      ],
+      "detail_url": "tracks/102131_v1.json",
+      "audio_url": "assets/102131_v1.mp3",
+      "cover_url": "assets/102131_v1_cover.jpg"
+    },
+    {
+      "track_id": "102131_v2",
+      "prompt_id": "102131",
+      "title": "Folk Instrumental Vibes",
+      "duration": 192.16,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "acoustic",
+        "warm"
+      ],
+      "suno_tags": [
+        "earthy",
+        "acoustic",
+        "warm"
+      ],
+      "detail_url": "tracks/102131_v2.json",
+      "audio_url": "assets/102131_v2.mp3",
+      "cover_url": "assets/102131_v2_cover.jpg"
+    },
+    {
+      "track_id": "102132_v1",
+      "prompt_id": "102132",
+      "title": "Golden Leaves Falling",
+      "duration": 169.8,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "chill",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "soft",
+        "mellow keys",
+        "mellow",
+        "warm and soothing tones",
+        "soft drums",
+        "perfect for a crisp autumn day",
+        "relaxed"
+      ],
+      "detail_url": "tracks/102132_v1.json",
+      "audio_url": "assets/102132_v1.mp3",
+      "cover_url": "assets/102132_v1_cover.jpg"
+    },
+    {
+      "track_id": "102132_v2",
+      "prompt_id": "102132",
+      "title": "Chill Jazz Vibes",
+      "duration": 145.24,
+      "user_tags": [
+        "thanksgiving",
+        "fall",
+        "chill",
+        "relaxed"
+      ],
+      "suno_tags": [
+        "soft",
+        "mellow keys",
+        "mellow",
+        "warm and soothing tones",
+        "soft drums",
+        "perfect for a crisp autumn day",
+        "relaxed"
+      ],
+      "detail_url": "tracks/102132_v2.json",
+      "audio_url": "assets/102132_v2.mp3",
+      "cover_url": "assets/102132_v2_cover.jpg"
+    },
+    {
+      "track_id": "102133_v1",
+      "prompt_id": "102133",
+      "title": "Snowfall Serenade",
+      "duration": 114.12,
+      "user_tags": [
+        "christmas",
+        "holiday",
+        "pop",
+        "bright"
+      ],
+      "suno_tags": [
+        "shimmering synths",
+        "bright",
+        "pop",
+        "bright holiday pop",
+        "uplifting energy",
+        "cheerful piano chords",
+        "sleigh bells"
+      ],
+      "detail_url": "tracks/102133_v1.json",
+      "audio_url": "assets/102133_v1.mp3",
+      "cover_url": "assets/102133_v1_cover.jpg"
+    },
+    {
+      "track_id": "102133_v2",
+      "prompt_id": "102133",
+      "title": "Holiday Sparkle",
+      "duration": 148.8,
+      "user_tags": [
+        "christmas",
+        "holiday",
+        "pop",
+        "bright"
+      ],
+      "suno_tags": [
+        "shimmering synths",
+        "bright",
+        "pop",
+        "bright holiday pop",
+        "uplifting energy",
+        "cheerful piano chords",
+        "sleigh bells"
+      ],
+      "detail_url": "tracks/102133_v2.json",
+      "audio_url": "assets/102133_v2.mp3",
+      "cover_url": "assets/102133_v2_cover.jpg"
+    },
+    {
+      "track_id": "102134_v1",
+      "prompt_id": "102134",
+      "title": "Glockenspiel Glow",
+      "duration": 148.72,
+      "user_tags": [
+        "christmas",
+        "holiday",
+        "light",
+        "instrumental"
+      ],
+      "suno_tags": [
+        "light christmas instrumental",
+        "light",
+        "soft",
+        "glockenspiel",
+        "warm and gentle texture",
+        "soft strings"
+      ],
+      "detail_url": "tracks/102134_v1.json",
+      "audio_url": "assets/102134_v1.mp3",
+      "cover_url": "assets/102134_v1_cover.jpg"
+    },
+    {
+      "track_id": "102134_v2",
+      "prompt_id": "102134",
+      "title": "Holiday Glow",
+      "duration": 102.36,
+      "user_tags": [
+        "christmas",
+        "holiday",
+        "light",
+        "instrumental"
+      ],
+      "suno_tags": [
+        "light christmas instrumental",
+        "light",
+        "soft",
+        "glockenspiel",
+        "warm and gentle texture",
+        "soft strings"
+      ],
+      "detail_url": "tracks/102134_v2.json",
+      "audio_url": "assets/102134_v2.mp3",
+      "cover_url": "assets/102134_v2_cover.jpg"
+    },
+    {
+      "track_id": "102135_v1",
+      "prompt_id": "102135",
+      "title": "Cozy By The Fireplace",
+      "duration": 183.8,
+      "user_tags": [
+        "christmas",
+        "winter",
+        "acoustic",
+        "cozy"
+      ],
+      "suno_tags": [
+        "and subtle strings create an intimate",
+        "warm",
+        "soothing; fingerpicked guitar",
+        "acoustic",
+        "gentle",
+        "soft jingles",
+        "fireside ambiance"
+      ],
+      "detail_url": "tracks/102135_v1.json",
+      "audio_url": "assets/102135_v1.mp3",
+      "cover_url": "assets/102135_v1_cover.jpg"
+    },
+    {
+      "track_id": "102135_v2",
+      "prompt_id": "102135",
+      "title": "Fireside Aesthetic",
+      "duration": 171.96,
+      "user_tags": [
+        "christmas",
+        "winter",
+        "acoustic",
+        "cozy"
+      ],
+      "suno_tags": [
+        "and subtle strings create an intimate",
+        "warm",
+        "soothing; fingerpicked guitar",
+        "acoustic",
+        "gentle",
+        "soft jingles",
+        "fireside ambiance"
+      ],
+      "detail_url": "tracks/102135_v2.json",
+      "audio_url": "assets/102135_v2.mp3",
+      "cover_url": "assets/102135_v2_cover.jpg"
+    },
+    {
+      "track_id": "102136_v1",
+      "prompt_id": "102136",
+      "title": "Snowlight Serenade",
+      "duration": 169.72,
+      "user_tags": [
+        "christmas",
+        "holiday",
+        "pop",
+        "bright"
+      ],
+      "suno_tags": [
+        "pop",
+        "soft bells",
+        "shimmering textures",
+        "modern holiday pop",
+        "soft",
+        "sparkly synths"
+      ],
+      "detail_url": "tracks/102136_v1.json",
+      "audio_url": "assets/102136_v1.mp3",
+      "cover_url": "assets/102136_v1_cover.jpg"
+    },
+    {
+      "track_id": "102136_v2",
+      "prompt_id": "102136",
+      "title": "Pop Holiday Sparkle",
+      "duration": 107.16,
+      "user_tags": [
+        "christmas",
+        "holiday",
+        "pop",
+        "bright"
+      ],
+      "suno_tags": [
+        "pop",
+        "soft bells",
+        "shimmering textures",
+        "modern holiday pop",
+        "soft",
+        "sparkly synths"
+      ],
+      "detail_url": "tracks/102136_v2.json",
+      "audio_url": "assets/102136_v2.mp3",
+      "cover_url": "assets/102136_v2_cover.jpg"
     }
   ]
 }
