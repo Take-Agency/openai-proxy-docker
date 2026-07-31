@@ -10,6 +10,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 const allowedTargets = [
     'https://api.openai.com/',
     'https://api.elevenlabs.io/',
+    'https://api.cleanvoice.ai/',
     'https://openapi-proxy-zmg9c.ondigitalocean.app/',
 ];
 
@@ -18,6 +19,7 @@ const port = process.env.PORT || 9017;
 const target = process.env.TARGET || 'https://api.openai.com';
 const openaiApiKey = process.env.OPENAI_API_KEY;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
+const cleanvoiceApiKey = process.env.CLEANVOICE_API_KEY;
 
 // DigitalOcean Spaces configuration
 const spacesEndpoint = process.env.DO_SPACES_ENDPOINT; // e.g., 'nyc3.digitaloceanspaces.com'
@@ -48,6 +50,11 @@ const limiter = rateLimit({
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
     // store: ... , // Redis, Memcached, etc. See below.
     keyGenerator: (req, res) => req.headers['do-connecting-ip'] || req.ip,
+    // Cleanvoice edit-status polling (GET /v2/edits/:id) fires every ~2s while a job runs;
+    // it's a cheap read, so exempt it from the 3/min budget shared by everything else.
+    skip: (req) => req.method === 'GET'
+        && getTargetUrl(req).includes('api.cleanvoice.ai')
+        && req.path.startsWith('/v2/edits/'),
 });
 
 // Apply the rate limiting middleware to all requests.
@@ -100,6 +107,8 @@ app.use('/', (req, res, next) => {
             proxyReq.setHeader('Authorization', `Bearer ${openaiApiKey}`);
         } else if (targetUrl.includes('api.elevenlabs.io') && elevenLabsApiKey) {
             proxyReq.setHeader('xi-api-key', elevenLabsApiKey);
+        } else if (targetUrl.includes('api.cleanvoice.ai') && cleanvoiceApiKey) {
+            proxyReq.setHeader('X-API-Key', cleanvoiceApiKey);
         }
 
         // we need to restream parsed body before proxying
