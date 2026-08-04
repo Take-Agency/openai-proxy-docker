@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import { readFile } from 'fs/promises';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { createHinglishFeedbackRouter } from './hinglishFeedback.js';
 
 const allowedTargets = [
     'https://api.openai.com/',
@@ -81,6 +82,20 @@ app.use((req, res, next) => {
     if (!limiter) return next();
     return limiter(req, res, next);
 });
+
+
+// Mounted before the global 1000mb json parser so the router can cap its untrusted body at 2mb.
+// Rides the per-class defaultLimiter above (10/min per IP) plus its own daily budgets inside the
+// router — with per-class buckets there is no shared limiter for a transcription to starve, so
+// no exemption is needed. generateSignedUrl is wrapped in a closure because the const isn't
+// initialized until further down this module; by request time it is.
+app.use(createHinglishFeedbackRouter({
+    s3Client,
+    spacesBucket,
+    signedUrlExpiration,
+    generateSignedUrl: (key) => generateSignedUrl(key),
+}));
+
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
 

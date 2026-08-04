@@ -25,6 +25,90 @@ You can change default port and default target by setting `-e` in docker, which 
 
 If you want to check detailed about API, you can star my another repo [OpenApiWiki](https://github.com/k8rw/openapi-wiki) and [Demo](https://www.openapi.wiki/openai)
 
+## Hinglish transcription feedback
+
+Collects real problem clips for Hindi/Urdu transcription from the Auto Caption app, keyed by what
+the user said was wrong, so they can become regression fixtures for `BatchProcessorCLI`.
+Full design: `shorts-caption/docs/hinglish_feedback_plan.md`.
+
+Auth is split on purpose. `POST` takes `x-feedback-secret`, which ships inside the app binary and
+is therefore extractable — treat it as a deterrent, not a boundary; abuse is bounded by the IP
+limiter and the signed size cap. `GET` returns full transcripts and presigned audio URLs, so it
+takes a separate `x-feedback-admin-secret` that must never ship in a client. The route refuses to
+serve (503) if the admin secret is unset or equal to the client secret.
+
+### `POST /hinglish-feedback`
+
+Stores a thumbs-down record and returns a presigned PUT for the audio. Thumbs-up is an Amplitude
+event only and never reaches the backend — a record's existence means "confirmed problem", and
+Amplitude is the source of truth for overall rates.
+
+```jsonc
+// request
+{ "language": "hi", "issues": ["eng_in_hindi"],
+  "audioConsented": true, "audioBytes": 812340, "model": "elevenLabs", "transcript": { … },
+  "appVersion": "3.6.1", "region": "IN", "locale": "hi_IN", "durationSec": 42.1 }
+
+// response
+{ "success": true, "feedbackId": "…", "mediaKey": "…", "putUrl": "…", "maxAudioBytes": 52428800 }
+```
+
+`language` ∈ `hi|ur`, `issues` ⊆ `urdu_script|eng_in_hindi|missing_eng|other` — allowlisted so a
+client can't invent object prefixes. `issues` is required and non-empty. Records are stored with
+or without consent (a declined-consent record still carries the transcript, which shows
+`eng_in_hindi` on its own); `mediaKey`/`putUrl` are null without it.
+When `audioConsented` is true, `audioBytes` is required, capped at
+`HINGLISH_FEEDBACK_MAX_AUDIO_BYTES` (413 above it), and **signed into the presigned PUT as
+`ContentLength`** — the upload only succeeds at exactly the declared size, so the size cap is
+enforced, not advisory. Send `x-install-id` so the daily budget is keyed per install rather than
+per IP.
+
+### `GET /hinglish-feedback?issue=&from=&to=&limit=`
+
+Returns matching records, each with a presigned `mediaUrl`. With `issue` this is a single prefix
+list; without it, a scan of `records/`.
+
+### Storage layout
+
+```
+hinglish-feedback/
+  records/<feedbackId>.json                 full record + transcript
+  media/<yyyy-mm-dd>/<feedbackId>.m4a
+  by-issue/<issue>/<yyyy-mm-dd>/<id>.json   pointer, one per selected issue
+```
+
+Issues are multi-select, so a record appears under each one it matched. The date sits in the
+pointer key so range filtering needs no object reads. There is no upload-status field — the media
+key is deterministic, so object existence *is* the status.
+
+### Rate limits
+
+Both routes ride the app's per-class `defaultLimiter` (10/min per IP) — with per-class buckets
+there is no shared limiter for a transcription to starve, so no exemption is needed, and the
+admin secret can't be brute-forced faster than 10/min. On top of that, POST has two 24h windows:
+
+| Limiter | Key | Limit |
+| ----- | ----- | ----- |
+| per install | `x-install-id`, falling back to IP | 5 |
+| per IP | `do-connecting-ip` | 50 |
+
+The per-install budget is a politeness guard for honest clients only — `x-install-id` is
+client-supplied and trivially rotated. The per-IP ceiling is the actual abuse bound, since it's
+keyed on something the client can't choose; it's kept above plausible CGNAT collision (India's
+mobile carriers share egress IPs heavily, and only thumbs-down submits reach this route) but low
+enough to bound a secret-extracting attacker. Note the limiter store is in-memory, so counters
+reset on redeploy.
+
+### Environment
+
+| Parameter | Default |
+| ----- | ----- |
+| HINGLISH_FEEDBACK_SECRET | *(required — POST returns 503 without it)* |
+| HINGLISH_FEEDBACK_ADMIN_SECRET | *(required for GET — 503 if unset or equal to the client secret)* |
+| HINGLISH_FEEDBACK_MAX_AUDIO_BYTES | 52428800 |
+
+Reuses the existing `DO_SPACES_*` configuration.
+
 ## How to maintain
 Use PM2 to scale up this proxy application accross CPU(s):
 - Listing managed processes
