@@ -43,22 +43,44 @@ const s3Client = spacesEndpoint && spacesAccessKeyId && spacesSecretAccessKey ? 
 // Helper function to get target URL from request
 const getTargetUrl = (req) => req.headers['x-target-url'] || target;
 
-const limiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minutes
-    limit: 3, // Limit each IP to 100 requests per `window` (here, per 1 minute).
+// Per-request-class rate limits (each per-IP, 1-minute window, independent counters).
+// A single global bucket meant one feature's burst starved every other feature — e.g. a
+// Cleanup Audio run (two POSTs) plus an import's title generation emptied the music list.
+// Separate buckets keep each request class abuse-protected on its own budget.
+const makeLimiter = (limit) => rateLimit({
+    windowMs: 60 * 1000,
+    limit,
     standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-    // store: ... , // Redis, Memcached, etc. See below.
     keyGenerator: (req, res) => req.headers['do-connecting-ip'] || req.ip,
-    // Cleanvoice edit-status polling (GET /v2/edits/:id) fires every ~2s while a job runs;
-    // it's a cheap read, so exempt it from the 3/min budget shared by everything else.
-    skip: (req) => req.method === 'GET'
-        && getTargetUrl(req).includes('api.cleanvoice.ai')
-        && req.path.startsWith('/v2/edits/'),
 });
 
-// Apply the rate limiting middleware to all requests.
-app.use(limiter);
+const sttLimiter = makeLimiter(3);        // ElevenLabs speech-to-text — the most expensive call
+const chatLimiter = makeLimiter(6);       // OpenAI title generation (imports get double-tapped)
+const cleanvoiceLimiter = makeLimiter(6); // Cleanup Audio: one run = upload-url POST + create-edit POST
+const musicLimiter = makeLimiter(20);     // our own static catalog; cheap but not free
+const defaultLimiter = makeLimiter(10);   // anything unclassified
+
+const limiterFor = (req) => {
+    const targetUrl = getTargetUrl(req);
+    // Cleanvoice edit-status polling (GET /v2/edits/:id) fires every ~2s while a job runs;
+    // it's a cheap read against our own edit, so it is never counted.
+    if (req.method === 'GET' && targetUrl.includes('api.cleanvoice.ai') && req.path.startsWith('/v2/edits/')) {
+        return null;
+    }
+    if (targetUrl.includes('api.cleanvoice.ai')) return cleanvoiceLimiter;
+    if (targetUrl.includes('api.elevenlabs.io')) return sttLimiter;
+    if (req.method === 'GET' && req.path === '/music') return musicLimiter;
+    if (req.path === '/v1/chat/completions') return chatLimiter;
+    return defaultLimiter;
+};
+
+// Apply the class-appropriate rate limiter to every request.
+app.use((req, res, next) => {
+    const limiter = limiterFor(req);
+    if (!limiter) return next();
+    return limiter(req, res, next);
+});
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
 
