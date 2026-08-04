@@ -4,9 +4,9 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import { rateLimit } from 'express-rate-limit';
 import queryString from 'query-string';
 import { readFile } from 'fs/promises';
-import { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { randomUUID, timingSafeEqual } from 'node:crypto';
+import { createHinglishFeedbackRouter } from './hinglishFeedback.js';
 
 const allowedTargets = [
     'https://api.openai.com/',
@@ -40,21 +40,6 @@ const s3Client = spacesEndpoint && spacesAccessKeyId && spacesSecretAccessKey ? 
     },
     forcePathStyle: false, // DigitalOcean Spaces uses virtual-hosted-style URLs
 }) : null;
-
-// Hinglish transcription feedback (see shorts-caption docs/hinglish_feedback_plan.md).
-// Collects real problem clips for Hindi/Urdu transcription, keyed by what the user said was wrong.
-// Two credentials on purpose. The client secret ships inside the app binary and is extractable
-// with `strings`, so it only deters drive-by traffic — POST abuse is really bounded by the IP
-// limiter and the signed size cap. The admin secret gates listing (full transcripts + presigned
-// audio URLs) and must never ship in a client or share a value with the client secret.
-const feedbackSecret = process.env.HINGLISH_FEEDBACK_SECRET;
-const feedbackAdminSecret = process.env.HINGLISH_FEEDBACK_ADMIN_SECRET;
-const feedbackMaxAudioBytes = parseInt(process.env.HINGLISH_FEEDBACK_MAX_AUDIO_BYTES || '52428800', 10); // 50 MiB
-const FEEDBACK_PREFIX = 'hinglish-feedback';
-// Allowlisted so a client can never invent prefixes and scatter objects through the bucket.
-const FEEDBACK_ISSUES = ['urdu_script', 'eng_in_hindi', 'missing_eng', 'other'];
-const FEEDBACK_LANGUAGES = ['hi', 'ur'];
-const FEEDBACK_RATINGS = ['up', 'down'];
 
 // Helper function to get target URL from request
 const getTargetUrl = (req) => req.headers['x-target-url'] || target;
@@ -98,47 +83,18 @@ app.use((req, res, next) => {
     return limiter(req, res, next);
 });
 
-const DAY_MS = 24 * 60 * 60 * 1000;
 
-// Politeness guard, NOT an abuse control: x-install-id is client-supplied and trivially rotated,
-// so this only bounds honest clients (e.g. a retry loop bug). Keyed on install id rather than IP
-// because India is heavily CGNAT'd on mobile carriers and a tight per-IP cap would block real
-// users. The app also caps asks via hinglish_feedback_max_asks_per_30d. The per-class
-// defaultLimiter above still applies per-IP per-minute on top of these.
-const feedbackLimiter = rateLimit({
-    windowMs: DAY_MS,
-    limit: 5,
-    standardHeaders: 'draft-7',
-    legacyHeaders: false,
-    keyGenerator: (req) => req.headers['x-install-id'] || req.headers['do-connecting-ip'] || req.ip,
-    message: { success: false, error: 'rate_limited' },
-});
-
-// The actual ceiling, since it's keyed on something the client can't choose. Kept above plausible
-// CGNAT collision (only thumbs-down submits, and the app caps asks per user) — an attacker with
-// the app's secret is bounded by this, not by the limiter above. Note x-feedback-secret ships in
-// the app binary and is extractable; this is defense in depth against casual abuse, not a hard
-// security boundary. That would need App Attest.
-const feedbackIpLimiter = rateLimit({
-    windowMs: DAY_MS,
-    limit: 50,
-    standardHeaders: 'draft-7',
-    legacyHeaders: false,
-    keyGenerator: (req) => req.headers['do-connecting-ip'] || req.ip,
-    message: { success: false, error: 'rate_limited' },
-});
-
-// Feedback routes are registered before the global 1000mb json parser so they can enforce a much
-// tighter body cap — they're the only routes reachable with an untrusted body.
-app.post(
-    '/hinglish-feedback',
-    feedbackIpLimiter,
-    feedbackLimiter,
-    requireFeedbackSecret,
-    express.json({ limit: '2mb' }),
-    postHinglishFeedback,
-);
-app.get('/hinglish-feedback', requireFeedbackAdminSecret, listHinglishFeedback);
+// Mounted before the global 1000mb json parser so the router can cap its untrusted body at 2mb.
+// Rides the per-class defaultLimiter above (10/min per IP) plus its own daily budgets inside the
+// router — with per-class buckets there is no shared limiter for a transcription to starve, so
+// no exemption is needed. generateSignedUrl is wrapped in a closure because the const isn't
+// initialized until further down this module; by request time it is.
+app.use(createHinglishFeedbackRouter({
+    s3Client,
+    spacesBucket,
+    signedUrlExpiration,
+    generateSignedUrl: (key) => generateSignedUrl(key),
+}));
 
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
@@ -272,232 +228,6 @@ const generateSignedUrl = async (key) => {
     } catch (error) {
         console.error(`Error generating signed URL for ${key}:`, error);
         return key; // Return original path on error
-    }
-}
-
-// --- Hinglish transcription feedback ---------------------------------------------------------
-// Handlers are function declarations (not const arrows) because they're referenced by the route
-// registrations near the top of the file, which evaluate at module load.
-
-function safeEqual(a, b) {
-    const ab = Buffer.from(String(a ?? ''));
-    const bb = Buffer.from(String(b ?? ''));
-    return ab.length === bb.length && timingSafeEqual(ab, bb);
-}
-
-function requireFeedbackSecret(req, res, next) {
-    if (!feedbackSecret) {
-        return res.status(503).send({ success: false, error: 'feedback_not_configured' });
-    }
-    if (!safeEqual(req.headers['x-feedback-secret'], feedbackSecret)) {
-        return res.status(401).send({ success: false, error: 'unauthorized' });
-    }
-    next();
-}
-
-function requireFeedbackAdminSecret(req, res, next) {
-    // Refuse to run with a shared or missing admin secret — falling back to the client secret here
-    // would silently let anyone who extracted the app binary list user audio.
-    if (!feedbackAdminSecret || feedbackAdminSecret === feedbackSecret) {
-        return res.status(503).send({ success: false, error: 'feedback_admin_not_configured' });
-    }
-    if (!safeEqual(req.headers['x-feedback-admin-secret'], feedbackAdminSecret)) {
-        return res.status(401).send({ success: false, error: 'unauthorized' });
-    }
-    next();
-}
-
-const isDateString = (value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
-
-async function putJson(key, value) {
-    await s3Client.send(new PutObjectCommand({
-        Bucket: spacesBucket,
-        Key: key,
-        Body: JSON.stringify(value),
-        ContentType: 'application/json',
-    }));
-}
-
-async function readJson(key) {
-    try {
-        const output = await s3Client.send(new GetObjectCommand({ Bucket: spacesBucket, Key: key }));
-        return JSON.parse(await output.Body.transformToString());
-    } catch (error) {
-        console.error(`Error reading ${key}:`, error);
-        return null;
-    }
-}
-
-async function postHinglishFeedback(req, res) {
-    if (!s3Client || !spacesBucket) {
-        return res.status(503).json({ success: false, error: 'storage_not_configured' });
-    }
-
-    const body = req.body || {};
-    const { rating, language } = body;
-    const issues = Array.isArray(body.issues) ? [...new Set(body.issues)] : [];
-
-    if (!FEEDBACK_RATINGS.includes(rating)) {
-        return res.status(400).json({ success: false, error: 'invalid_rating' });
-    }
-    if (!FEEDBACK_LANGUAGES.includes(language)) {
-        return res.status(400).json({ success: false, error: 'invalid_language' });
-    }
-    if (issues.some((issue) => !FEEDBACK_ISSUES.includes(issue))) {
-        return res.status(400).json({ success: false, error: 'invalid_issue' });
-    }
-    if (rating === 'down' && issues.length === 0) {
-        return res.status(400).json({ success: false, error: 'issues_required' });
-    }
-    // Symmetric guard: pointers are only written for issues, and the by-issue index must mean
-    // "confirmed problems" — a thumbs-up carrying issues would quietly pollute it.
-    if (rating === 'up' && issues.length > 0) {
-        return res.status(400).json({ success: false, error: 'issues_forbidden_on_up' });
-    }
-
-    // Size is signed into the presigned PUT below, so the client must declare it up front. This is
-    // the only hard cap available: a presigned PUT can't carry a content-length-range policy the
-    // way a presigned POST can, and without it any holder of the app's secret could upload
-    // arbitrarily large objects onto our storage bill.
-    const audioConsented = body.audioConsented === true;
-    const audioBytes = body.audioBytes;
-    if (audioConsented) {
-        if (!Number.isInteger(audioBytes) || audioBytes <= 0) {
-            return res.status(400).json({ success: false, error: 'audio_bytes_required' });
-        }
-        if (audioBytes > feedbackMaxAudioBytes) {
-            return res.status(413).json({
-                success: false,
-                error: 'audio_too_large',
-                maxAudioBytes: feedbackMaxAudioBytes,
-            });
-        }
-    }
-
-    const feedbackId = randomUUID();
-    const createdAt = new Date();
-    const date = createdAt.toISOString().slice(0, 10);
-    // Deterministic, so object existence IS the upload status — no callback to lose, and no orphan
-    // records if the app is killed mid-upload.
-    const mediaKey = audioConsented ? `${FEEDBACK_PREFIX}/media/${date}/${feedbackId}.m4a` : null;
-
-    const str = (value, max) => (typeof value === 'string' ? value.slice(0, max) : null);
-    const record = {
-        feedbackId,
-        createdAt: createdAt.toISOString(),
-        rating,
-        issues,
-        language,
-        model: str(body.model, 64),
-        audioConsented,
-        mediaKey,
-        audioBytes: audioConsented ? audioBytes : null,
-        transcript: body.transcript ?? null,
-        appVersion: str(body.appVersion, 32),
-        region: str(body.region, 8),
-        locale: str(body.locale, 32),
-        durationSec: typeof body.durationSec === 'number' ? body.durationSec : null,
-    };
-
-    try {
-        await putJson(`${FEEDBACK_PREFIX}/records/${feedbackId}.json`, record);
-        // One pointer per issue — issues are multi-select, so a record can appear under several.
-        // The date sits in the key so a listing can range-filter without reading any objects.
-        await Promise.all(issues.map((issue) => putJson(
-            `${FEEDBACK_PREFIX}/by-issue/${issue}/${date}/${feedbackId}.json`,
-            { feedbackId, createdAt: record.createdAt, mediaKey },
-        )));
-
-        // ContentLength is part of the signature, so the upload only succeeds at exactly the size
-        // declared and validated above — the client can't inflate it after the fact.
-        const putUrl = audioConsented
-            ? await getSignedUrl(s3Client, new PutObjectCommand({
-                Bucket: spacesBucket,
-                Key: mediaKey,
-                ContentType: 'audio/m4a',
-                ContentLength: audioBytes,
-            }), { expiresIn: signedUrlExpiration })
-            : null;
-
-        return res.status(200).json({
-            success: true,
-            feedbackId,
-            mediaKey,
-            putUrl,
-            maxAudioBytes: feedbackMaxAudioBytes,
-        });
-    } catch (error) {
-        console.error('Error in postHinglishFeedback:', error);
-        return res.status(500).json({ success: false, error: 'failed to store feedback' });
-    }
-}
-
-async function listHinglishFeedback(req, res) {
-    if (!s3Client || !spacesBucket) {
-        return res.status(503).json({ success: false, error: 'storage_not_configured' });
-    }
-
-    const { issue, from, to } = req.query;
-    if (issue !== undefined && !FEEDBACK_ISSUES.includes(issue)) {
-        return res.status(400).json({ success: false, error: 'invalid_issue' });
-    }
-    if ((from !== undefined && !isDateString(from)) || (to !== undefined && !isDateString(to))) {
-        return res.status(400).json({ success: false, error: 'invalid_date' });
-    }
-    const limit = Math.min(Math.max(parseInt(req.query.limit || '50', 10) || 50, 1), 200);
-
-    // The crucial query — "every clip where English came out in Devanagari" — is one prefix list.
-    // Without an issue we fall back to listing records/, which is a scan but fine at this volume.
-    const prefix = issue
-        ? `${FEEDBACK_PREFIX}/by-issue/${issue}/`
-        : `${FEEDBACK_PREFIX}/records/`;
-
-    try {
-        const entries = [];
-        let token;
-        do {
-            const page = await s3Client.send(new ListObjectsV2Command({
-                Bucket: spacesBucket,
-                Prefix: prefix,
-                ContinuationToken: token,
-            }));
-            for (const object of page.Contents || []) {
-                const parts = object.Key.slice(prefix.length).split('/');
-                // In by-issue mode the date is in the key; in scan mode fall back to LastModified
-                // so from/to filtering behaves the same either way.
-                const date = issue ? parts[0] : (object.LastModified?.toISOString().slice(0, 10) ?? '');
-                entries.push({
-                    feedbackId: parts[parts.length - 1].replace(/\.json$/, ''),
-                    date,
-                    sortKey: issue ? date : (object.LastModified?.toISOString() ?? ''),
-                });
-            }
-            token = page.IsTruncated ? page.NextContinuationToken : undefined;
-        } while (token);
-
-        const matched = entries.filter((entry) =>
-            (!from || entry.date >= from) && (!to || entry.date <= to));
-        matched.sort((a, b) => b.sortKey.localeCompare(a.sortKey));
-
-        const records = await Promise.all(matched.slice(0, limit).map(async (entry) => {
-            const record = await readJson(`${FEEDBACK_PREFIX}/records/${entry.feedbackId}.json`);
-            if (!record) return null;
-            return {
-                ...record,
-                mediaUrl: record.mediaKey ? await generateSignedUrl(record.mediaKey) : null,
-            };
-        }));
-
-        const found = records.filter(Boolean);
-        return res.status(200).json({
-            success: true,
-            total: matched.length,
-            returned: found.length,
-            records: found,
-        });
-    } catch (error) {
-        console.error('Error in listHinglishFeedback:', error);
-        return res.status(500).json({ success: false, error: 'failed to list feedback' });
     }
 }
 
