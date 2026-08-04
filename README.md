@@ -106,8 +106,14 @@ reset on redeploy.
 | HINGLISH_FEEDBACK_SECRET | *(required — POST returns 503 without it)* |
 | HINGLISH_FEEDBACK_ADMIN_SECRET | *(required for GET — 503 if unset or equal to the client secret)* |
 | HINGLISH_FEEDBACK_MAX_AUDIO_BYTES | 52428800 |
+| FEEDBACK_SPACES_BUCKET | falls back to `DO_SPACES_BUCKET` |
+| FEEDBACK_SPACES_ACCESS_KEY_ID | falls back to the main key |
+| FEEDBACK_SPACES_SECRET_ACCESS_KEY | falls back to the main key |
 
-Reuses the existing `DO_SPACES_*` configuration.
+Feedback storage lives in its own bucket with its own scoped read/write key so the main
+`DO_SPACES_*` key can stay **read-only** (it only presigns music GETs) — a proxy-side bug can
+never touch music assets, and feedback abuse is jailed to a bucket containing nothing else.
+Endpoint/region are shared with the main config.
 
 ## How to maintain
 Use PM2 to scale up this proxy application accross CPU(s):

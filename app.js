@@ -30,14 +30,10 @@ const spacesSecretAccessKey = process.env.DO_SPACES_SECRET_ACCESS_KEY;
 const spacesBucket = process.env.DO_SPACES_BUCKET;
 const signedUrlExpiration = parseInt(process.env.DO_SIGNED_URL_EXPIRATION || '3600', 10); // Default 1 hour
 
-// Initialize S3 client for DigitalOcean Spaces
-const s3Client = spacesEndpoint && spacesAccessKeyId && spacesSecretAccessKey ? new S3Client({
+const makeSpacesClient = (accessKeyId, secretAccessKey) => spacesEndpoint && accessKeyId && secretAccessKey ? new S3Client({
     endpoint: `https://${spacesEndpoint}`,
     region: spacesRegion,
-    credentials: {
-        accessKeyId: spacesAccessKeyId,
-        secretAccessKey: spacesSecretAccessKey,
-    },
+    credentials: { accessKeyId, secretAccessKey },
     forcePathStyle: false, // DigitalOcean Spaces uses virtual-hosted-style URLs
     // SDK v3 ≥3.700 attaches x-amz-checksum-crc32 to every PutObject by default; DO Spaces
     // rejects it and the write 500s. Never surfaced before the feedback routes because the
@@ -46,6 +42,18 @@ const s3Client = spacesEndpoint && spacesAccessKeyId && spacesSecretAccessKey ? 
     requestChecksumCalculation: 'WHEN_REQUIRED',
     responseChecksumValidation: 'WHEN_REQUIRED',
 }) : null;
+
+// Main client (music library) — its key can and should be read-only.
+const s3Client = makeSpacesClient(spacesAccessKeyId, spacesSecretAccessKey);
+
+// Feedback storage is isolated in its own bucket with its own scoped read/write key, so the main
+// key stays read-only and a proxy-side bug can never touch music assets. Falls back to the main
+// config when the dedicated vars are unset (local dev, pre-migration deploys).
+const feedbackBucket = process.env.FEEDBACK_SPACES_BUCKET || spacesBucket;
+const feedbackS3Client = makeSpacesClient(
+    process.env.FEEDBACK_SPACES_ACCESS_KEY_ID,
+    process.env.FEEDBACK_SPACES_SECRET_ACCESS_KEY,
+) || s3Client;
 
 // Helper function to get target URL from request
 const getTargetUrl = (req) => req.headers['x-target-url'] || target;
@@ -96,10 +104,22 @@ app.use((req, res, next) => {
 // no exemption is needed. generateSignedUrl is wrapped in a closure because the const isn't
 // initialized until further down this module; by request time it is.
 app.use(createHinglishFeedbackRouter({
-    s3Client,
-    spacesBucket,
+    s3Client: feedbackS3Client,
+    spacesBucket: feedbackBucket,
     signedUrlExpiration,
-    generateSignedUrl: (key) => generateSignedUrl(key),
+    // Signs against the feedback bucket/key, unlike generateSignedUrl below which is bound to
+    // the main (music) bucket.
+    generateSignedUrl: async (key) => {
+        try {
+            return await getSignedUrl(feedbackS3Client, new GetObjectCommand({
+                Bucket: feedbackBucket,
+                Key: key,
+            }), { expiresIn: signedUrlExpiration });
+        } catch (error) {
+            console.error(`Error signing feedback media url for ${key}:`, error);
+            return key;
+        }
+    },
 }));
 
 // parse json bodies
