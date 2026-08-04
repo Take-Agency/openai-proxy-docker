@@ -114,11 +114,11 @@ const feedbackLimiter = rateLimit({
     message: { success: false, error: 'rate_limited' },
 });
 
-// The actual ceiling, since it's keyed on something the client can't choose. Kept well above
-// plausible CGNAT collision (only thumbs-down submits, and the app caps asks per user) but far
-// below the old 200 — an attacker with the app's secret is bounded by this, not by the limiter
-// above. Note x-feedback-secret ships in the app binary and is extractable; this is defense in
-// depth against casual abuse, not a hard security boundary. That would need App Attest.
+// The actual ceiling, since it's keyed on something the client can't choose. Kept above plausible
+// CGNAT collision (only thumbs-down submits, and the app caps asks per user) — an attacker with
+// the app's secret is bounded by this, not by the limiter above. Note x-feedback-secret ships in
+// the app binary and is extractable; this is defense in depth against casual abuse, not a hard
+// security boundary. That would need App Attest.
 const feedbackIpLimiter = rateLimit({
     windowMs: DAY_MS,
     limit: 50,
