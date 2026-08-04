@@ -39,11 +39,13 @@ serve (503) if the admin secret is unset or equal to the client secret.
 
 ### `POST /hinglish-feedback`
 
-Stores the record and returns a presigned PUT for the audio.
+Stores a thumbs-down record and returns a presigned PUT for the audio. Thumbs-up is an Amplitude
+event only and never reaches the backend — a record's existence means "confirmed problem", and
+Amplitude is the source of truth for overall rates.
 
 ```jsonc
 // request
-{ "rating": "down", "language": "hi", "issues": ["eng_in_hindi"],
+{ "language": "hi", "issues": ["eng_in_hindi"],
   "audioConsented": true, "audioBytes": 812340, "model": "elevenLabs", "transcript": { … },
   "appVersion": "3.6.1", "region": "IN", "locale": "hi_IN", "durationSec": 42.1 }
 
@@ -51,9 +53,10 @@ Stores the record and returns a presigned PUT for the audio.
 { "success": true, "feedbackId": "…", "mediaKey": "…", "putUrl": "…", "maxAudioBytes": 52428800 }
 ```
 
-`rating` ∈ `up|down`, `language` ∈ `hi|ur`, `issues` ⊆ `urdu_script|eng_in_hindi|missing_eng|other`
-— all allowlisted so a client can't invent object prefixes. `issues` is required when rating is
-`down` and forbidden when it is `up` (keeps the by-issue index meaning "confirmed problems").
+`language` ∈ `hi|ur`, `issues` ⊆ `urdu_script|eng_in_hindi|missing_eng|other` — allowlisted so a
+client can't invent object prefixes. `issues` is required and non-empty. Records are stored with
+or without consent (a declined-consent record still carries the transcript, which shows
+`eng_in_hindi` on its own); `mediaKey`/`putUrl` are null without it.
 When `audioConsented` is true, `audioBytes` is required, capped at
 `HINGLISH_FEEDBACK_MAX_AUDIO_BYTES` (413 above it), and **signed into the presigned PUT as
 `ContentLength`** — the upload only succeeds at exactly the declared size, so the size cap is

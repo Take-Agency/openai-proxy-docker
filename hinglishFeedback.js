@@ -1,5 +1,8 @@
 // Hinglish transcription feedback (see shorts-caption docs/hinglish_feedback_plan.md).
 // Collects real problem clips for Hindi/Urdu transcription, keyed by what the user said was wrong.
+// Thumbs-down submits only: thumbs-up is an Amplitude event and never reaches the backend, so a
+// record's existence means "confirmed problem". Amplitude is the source of truth for rates; this
+// bucket is the source of truth for fixtures (and transcript evidence when audio was declined).
 //
 // Storage is bucket-only:
 //   hinglish-feedback/records/<id>.json                  source of truth (full record + transcript)
@@ -25,7 +28,6 @@ const FEEDBACK_PREFIX = 'hinglish-feedback';
 // Allowlisted so a client can never invent prefixes and scatter objects through the bucket.
 const FEEDBACK_ISSUES = ['urdu_script', 'eng_in_hindi', 'missing_eng', 'other'];
 const FEEDBACK_LANGUAGES = ['hi', 'ur'];
-const FEEDBACK_RATINGS = ['up', 'down'];
 
 // The submit route carries its own daily budget (below) and must be exempted from the app's
 // global limiter, which ElevenLabs transcription would otherwise trip moments before a feedback
@@ -121,25 +123,19 @@ export function createHinglishFeedbackRouter({ s3Client, spacesBucket, signedUrl
         }
 
         const body = req.body || {};
-        const { rating, language } = body;
+        const { language } = body;
         const issues = Array.isArray(body.issues) ? [...new Set(body.issues)] : [];
 
-        if (!FEEDBACK_RATINGS.includes(rating)) {
-            return res.status(400).json({ success: false, error: 'invalid_rating' });
-        }
         if (!FEEDBACK_LANGUAGES.includes(language)) {
             return res.status(400).json({ success: false, error: 'invalid_language' });
         }
         if (issues.some((issue) => !FEEDBACK_ISSUES.includes(issue))) {
             return res.status(400).json({ success: false, error: 'invalid_issue' });
         }
-        if (rating === 'down' && issues.length === 0) {
+        // Submits are thumbs-down by definition — thumbs-up is an Amplitude event only and never
+        // reaches this endpoint — so a record without issues has nothing to say.
+        if (issues.length === 0) {
             return res.status(400).json({ success: false, error: 'issues_required' });
-        }
-        // Symmetric guard: pointers are only written for issues, and the by-issue index must mean
-        // "confirmed problems" — a thumbs-up carrying issues would quietly pollute it.
-        if (rating === 'up' && issues.length > 0) {
-            return res.status(400).json({ success: false, error: 'issues_forbidden_on_up' });
         }
 
         // Size is signed into the presigned PUT below, so the client must declare it up front.
@@ -172,7 +168,6 @@ export function createHinglishFeedbackRouter({ s3Client, spacesBucket, signedUrl
         const record = {
             feedbackId,
             createdAt: createdAt.toISOString(),
-            rating,
             issues,
             language,
             model: str(body.model, 64),
