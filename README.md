@@ -83,10 +83,9 @@ key is deterministic, so object existence *is* the status.
 
 ### Rate limits
 
-`POST /hinglish-feedback` (exact method + path) is exempt from the global 3/min limiter, which
-ElevenLabs transcription would otherwise trip moments before a feedback submit. `GET` deliberately
-stays under the global limiter so the admin secret can't be brute-forced faster than 3/min. The
-POST exemption is replaced by two 24h windows:
+Both routes ride the app's per-class `defaultLimiter` (10/min per IP) — with per-class buckets
+there is no shared limiter for a transcription to starve, so no exemption is needed, and the
+admin secret can't be brute-forced faster than 10/min. On top of that, POST has two 24h windows:
 
 | Limiter | Key | Limit |
 | ----- | ----- | ----- |

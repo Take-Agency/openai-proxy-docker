@@ -29,13 +29,6 @@ const FEEDBACK_PREFIX = 'hinglish-feedback';
 const FEEDBACK_ISSUES = ['urdu_script', 'eng_in_hindi', 'missing_eng', 'other'];
 const FEEDBACK_LANGUAGES = ['hi', 'ur'];
 
-// The submit route carries its own daily budget (below) and must be exempted from the app's
-// global limiter, which ElevenLabs transcription would otherwise trip moments before a feedback
-// POST. Exact match on method+path only: a prefix match would hand any /hinglish-feedback* path
-// an unlimited lane through the proxy catch-all, and GET must stay under the global limiter so
-// the admin secret can't be brute-forced faster than it allows.
-export const isFeedbackSubmit = (req) => req.method === 'POST' && req.path === '/hinglish-feedback';
-
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Politeness guard, NOT an abuse control: x-install-id is client-supplied and trivially rotated,
