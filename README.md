@@ -31,8 +31,11 @@ Collects real problem clips for Hindi/Urdu transcription from the Auto Caption a
 the user said was wrong, so they can become regression fixtures for `BatchProcessorCLI`.
 Full design: `shorts-caption/docs/hinglish_feedback_plan.md`.
 
-Both routes require the `x-feedback-secret` header. `GET` is operator-only and must never be
-reachable from the app.
+Auth is split on purpose. `POST` takes `x-feedback-secret`, which ships inside the app binary and
+is therefore extractable — treat it as a deterrent, not a boundary; abuse is bounded by the IP
+limiter and the signed size cap. `GET` returns full transcripts and presigned audio URLs, so it
+takes a separate `x-feedback-admin-secret` that must never ship in a client. The route refuses to
+serve (503) if the admin secret is unset or equal to the client secret.
 
 ### `POST /hinglish-feedback`
 
@@ -41,7 +44,7 @@ Stores the record and returns a presigned PUT for the audio.
 ```jsonc
 // request
 { "rating": "down", "language": "hi", "issues": ["eng_in_hindi"],
-  "audioConsented": true, "model": "elevenLabs", "transcript": { … },
+  "audioConsented": true, "audioBytes": 812340, "model": "elevenLabs", "transcript": { … },
   "appVersion": "3.6.1", "region": "IN", "locale": "hi_IN", "durationSec": 42.1 }
 
 // response
@@ -50,7 +53,12 @@ Stores the record and returns a presigned PUT for the audio.
 
 `rating` ∈ `up|down`, `language` ∈ `hi|ur`, `issues` ⊆ `urdu_script|eng_in_hindi|missing_eng|other`
 — all allowlisted so a client can't invent object prefixes. `issues` is required when rating is
-`down`. Send `x-install-id` so the daily budget is keyed per install rather than per IP.
+`down` and forbidden when it is `up` (keeps the by-issue index meaning "confirmed problems").
+When `audioConsented` is true, `audioBytes` is required, capped at
+`HINGLISH_FEEDBACK_MAX_AUDIO_BYTES` (413 above it), and **signed into the presigned PUT as
+`ContentLength`** — the upload only succeeds at exactly the declared size, so the size cap is
+enforced, not advisory. Send `x-install-id` so the daily budget is keyed per install rather than
+per IP.
 
 ### `GET /hinglish-feedback?issue=&from=&to=&limit=`
 
@@ -72,23 +80,29 @@ key is deterministic, so object existence *is* the status.
 
 ### Rate limits
 
-Exempt from the global 3/min limiter (ElevenLabs transcription proxies through here moments before
-a feedback POST and would otherwise 429 it). Instead, two 24h windows:
+`POST /hinglish-feedback` (exact method + path) is exempt from the global 3/min limiter, which
+ElevenLabs transcription would otherwise trip moments before a feedback submit. `GET` deliberately
+stays under the global limiter so the admin secret can't be brute-forced faster than 3/min. The
+POST exemption is replaced by two 24h windows:
 
 | Limiter | Key | Limit |
 | ----- | ----- | ----- |
 | per install | `x-install-id`, falling back to IP | 5 |
-| per IP | `do-connecting-ip` | 200 |
+| per IP | `do-connecting-ip` | 50 |
 
-The 5/day is **not** keyed on IP: India is heavily CGNAT'd on mobile carriers, so a per-IP cap
-would block legitimate feedback in the exact market this serves. The IP ceiling is only an abuse
-backstop. Note the limiter store is in-memory, so counters reset on redeploy.
+The per-install budget is a politeness guard for honest clients only — `x-install-id` is
+client-supplied and trivially rotated. The per-IP ceiling is the actual abuse bound, since it's
+keyed on something the client can't choose; it's kept above plausible CGNAT collision (India's
+mobile carriers share egress IPs heavily, and only thumbs-down submits reach this route) but low
+enough to bound a secret-extracting attacker. Note the limiter store is in-memory, so counters
+reset on redeploy.
 
 ### Environment
 
 | Parameter | Default |
 | ----- | ----- |
-| HINGLISH_FEEDBACK_SECRET | *(required — routes return 503 without it)* |
+| HINGLISH_FEEDBACK_SECRET | *(required — POST returns 503 without it)* |
+| HINGLISH_FEEDBACK_ADMIN_SECRET | *(required for GET — 503 if unset or equal to the client secret)* |
 | HINGLISH_FEEDBACK_MAX_AUDIO_BYTES | 52428800 |
 
 Reuses the existing `DO_SPACES_*` configuration.

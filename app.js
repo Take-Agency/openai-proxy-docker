@@ -43,7 +43,12 @@ const s3Client = spacesEndpoint && spacesAccessKeyId && spacesSecretAccessKey ? 
 
 // Hinglish transcription feedback (see shorts-caption docs/hinglish_feedback_plan.md).
 // Collects real problem clips for Hindi/Urdu transcription, keyed by what the user said was wrong.
+// Two credentials on purpose. The client secret ships inside the app binary and is extractable
+// with `strings`, so it only deters drive-by traffic — POST abuse is really bounded by the IP
+// limiter and the signed size cap. The admin secret gates listing (full transcripts + presigned
+// audio URLs) and must never ship in a client or share a value with the client secret.
 const feedbackSecret = process.env.HINGLISH_FEEDBACK_SECRET;
+const feedbackAdminSecret = process.env.HINGLISH_FEEDBACK_ADMIN_SECRET;
 const feedbackMaxAudioBytes = parseInt(process.env.HINGLISH_FEEDBACK_MAX_AUDIO_BYTES || '52428800', 10); // 50 MiB
 const FEEDBACK_PREFIX = 'hinglish-feedback';
 // Allowlisted so a client can never invent prefixes and scatter objects through the bucket.
@@ -95,10 +100,11 @@ app.use((req, res, next) => {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-// The real throttle for feedback submits. Keyed on install id, NOT IP: India is heavily CGNAT'd
-// on mobile carriers, so a per-IP daily cap would silently block legitimate feedback in exactly
-// the market this serves. The app also caps asks client-side; this is the server-side backstop.
-// The per-class defaultLimiter above still applies per-IP per-minute on top of these.
+// Politeness guard, NOT an abuse control: x-install-id is client-supplied and trivially rotated,
+// so this only bounds honest clients (e.g. a retry loop bug). Keyed on install id rather than IP
+// because India is heavily CGNAT'd on mobile carriers and a tight per-IP cap would block real
+// users. The app also caps asks via hinglish_feedback_max_asks_per_30d. The per-class
+// defaultLimiter above still applies per-IP per-minute on top of these.
 const feedbackLimiter = rateLimit({
     windowMs: DAY_MS,
     limit: 5,
@@ -108,10 +114,14 @@ const feedbackLimiter = rateLimit({
     message: { success: false, error: 'rate_limited' },
 });
 
-// Abuse ceiling only — deliberately loose so shared mobile egress IPs don't collide.
+// The actual ceiling, since it's keyed on something the client can't choose. Kept well above
+// plausible CGNAT collision (only thumbs-down submits, and the app caps asks per user) but far
+// below the old 200 — an attacker with the app's secret is bounded by this, not by the limiter
+// above. Note x-feedback-secret ships in the app binary and is extractable; this is defense in
+// depth against casual abuse, not a hard security boundary. That would need App Attest.
 const feedbackIpLimiter = rateLimit({
     windowMs: DAY_MS,
-    limit: 200,
+    limit: 50,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     keyGenerator: (req) => req.headers['do-connecting-ip'] || req.ip,
@@ -128,7 +138,7 @@ app.post(
     express.json({ limit: '2mb' }),
     postHinglishFeedback,
 );
-app.get('/hinglish-feedback', requireFeedbackSecret, listHinglishFeedback);
+app.get('/hinglish-feedback', requireFeedbackAdminSecret, listHinglishFeedback);
 
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
@@ -285,6 +295,18 @@ function requireFeedbackSecret(req, res, next) {
     next();
 }
 
+function requireFeedbackAdminSecret(req, res, next) {
+    // Refuse to run with a shared or missing admin secret — falling back to the client secret here
+    // would silently let anyone who extracted the app binary list user audio.
+    if (!feedbackAdminSecret || feedbackAdminSecret === feedbackSecret) {
+        return res.status(503).send({ success: false, error: 'feedback_admin_not_configured' });
+    }
+    if (!safeEqual(req.headers['x-feedback-admin-secret'], feedbackAdminSecret)) {
+        return res.status(401).send({ success: false, error: 'unauthorized' });
+    }
+    next();
+}
+
 const isDateString = (value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
 
 async function putJson(key, value) {
@@ -327,11 +349,34 @@ async function postHinglishFeedback(req, res) {
     if (rating === 'down' && issues.length === 0) {
         return res.status(400).json({ success: false, error: 'issues_required' });
     }
+    // Symmetric guard: pointers are only written for issues, and the by-issue index must mean
+    // "confirmed problems" — a thumbs-up carrying issues would quietly pollute it.
+    if (rating === 'up' && issues.length > 0) {
+        return res.status(400).json({ success: false, error: 'issues_forbidden_on_up' });
+    }
+
+    // Size is signed into the presigned PUT below, so the client must declare it up front. This is
+    // the only hard cap available: a presigned PUT can't carry a content-length-range policy the
+    // way a presigned POST can, and without it any holder of the app's secret could upload
+    // arbitrarily large objects onto our storage bill.
+    const audioConsented = body.audioConsented === true;
+    const audioBytes = body.audioBytes;
+    if (audioConsented) {
+        if (!Number.isInteger(audioBytes) || audioBytes <= 0) {
+            return res.status(400).json({ success: false, error: 'audio_bytes_required' });
+        }
+        if (audioBytes > feedbackMaxAudioBytes) {
+            return res.status(413).json({
+                success: false,
+                error: 'audio_too_large',
+                maxAudioBytes: feedbackMaxAudioBytes,
+            });
+        }
+    }
 
     const feedbackId = randomUUID();
     const createdAt = new Date();
     const date = createdAt.toISOString().slice(0, 10);
-    const audioConsented = body.audioConsented === true;
     // Deterministic, so object existence IS the upload status — no callback to lose, and no orphan
     // records if the app is killed mid-upload.
     const mediaKey = audioConsented ? `${FEEDBACK_PREFIX}/media/${date}/${feedbackId}.m4a` : null;
@@ -346,6 +391,7 @@ async function postHinglishFeedback(req, res) {
         model: str(body.model, 64),
         audioConsented,
         mediaKey,
+        audioBytes: audioConsented ? audioBytes : null,
         transcript: body.transcript ?? null,
         appVersion: str(body.appVersion, 32),
         region: str(body.region, 8),
@@ -362,11 +408,14 @@ async function postHinglishFeedback(req, res) {
             { feedbackId, createdAt: record.createdAt, mediaKey },
         )));
 
+        // ContentLength is part of the signature, so the upload only succeeds at exactly the size
+        // declared and validated above — the client can't inflate it after the fact.
         const putUrl = audioConsented
             ? await getSignedUrl(s3Client, new PutObjectCommand({
                 Bucket: spacesBucket,
                 Key: mediaKey,
                 ContentType: 'audio/m4a',
+                ContentLength: audioBytes,
             }), { expiresIn: signedUrlExpiration })
             : null;
 
@@ -375,8 +424,6 @@ async function postHinglishFeedback(req, res) {
             feedbackId,
             mediaKey,
             putUrl,
-            // Advisory: a presigned PUT can't enforce a size cap the way a POST policy can, so the
-            // client self-limits. Oversized objects are caught by the reaper, not at upload time.
             maxAudioBytes: feedbackMaxAudioBytes,
         });
     } catch (error) {
@@ -416,17 +463,20 @@ async function listHinglishFeedback(req, res) {
             }));
             for (const object of page.Contents || []) {
                 const parts = object.Key.slice(prefix.length).split('/');
+                // In by-issue mode the date is in the key; in scan mode fall back to LastModified
+                // so from/to filtering behaves the same either way.
+                const date = issue ? parts[0] : (object.LastModified?.toISOString().slice(0, 10) ?? '');
                 entries.push({
                     feedbackId: parts[parts.length - 1].replace(/\.json$/, ''),
-                    date: issue ? parts[0] : null,
-                    sortKey: issue ? parts[0] : (object.LastModified?.toISOString() ?? ''),
+                    date,
+                    sortKey: issue ? date : (object.LastModified?.toISOString() ?? ''),
                 });
             }
             token = page.IsTruncated ? page.NextContinuationToken : undefined;
         } while (token);
 
-        const matched = entries.filter((entry) => !issue
-            || ((!from || entry.date >= from) && (!to || entry.date <= to)));
+        const matched = entries.filter((entry) =>
+            (!from || entry.date >= from) && (!to || entry.date <= to));
         matched.sort((a, b) => b.sortKey.localeCompare(a.sortKey));
 
         const records = await Promise.all(matched.slice(0, limit).map(async (entry) => {
