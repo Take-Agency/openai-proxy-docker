@@ -39,6 +39,12 @@ const s3Client = spacesEndpoint && spacesAccessKeyId && spacesSecretAccessKey ? 
         secretAccessKey: spacesSecretAccessKey,
     },
     forcePathStyle: false, // DigitalOcean Spaces uses virtual-hosted-style URLs
+    // SDK v3 ≥3.700 attaches x-amz-checksum-crc32 to every PutObject by default; DO Spaces
+    // rejects it and the write 500s. Never surfaced before the feedback routes because the
+    // music route only presigns (offline crypto, no actual S3 request). WHEN_REQUIRED is the
+    // documented setting for S3-compatible providers.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED',
 }) : null;
 
 // Helper function to get target URL from request
