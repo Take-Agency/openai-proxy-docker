@@ -169,6 +169,8 @@ export function createHinglishFeedbackRouter({ s3Client, spacesBucket, signedUrl
             feedbackId,
             createdAt: createdAt.toISOString(),
             issues,
+            // Free text from the "Something else" option; capped, not validated further.
+            otherText: str(body.otherText, 500),
             language,
             model: str(body.model, 64),
             audioConsented,
