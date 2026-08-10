@@ -166,6 +166,9 @@ export function createHinglishFeedbackRouter({ s3Client, spacesBucket, signedUrl
         const record = {
             feedbackId,
             createdAt: createdAt.toISOString(),
+            // Which generation of the issue sheet produced these ids. Absent = v1 (pre-field
+            // clients); disambiguates records whose ids exist in both generations ("other").
+            sheetVersion: Number.isInteger(body.sheetVersion) ? body.sheetVersion : null,
             issues,
             // Free text from the "Something else" option; capped, not validated further.
             otherText: str(body.otherText, 500),
