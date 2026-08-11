@@ -26,7 +26,12 @@ const feedbackAdminSecret = process.env.HINGLISH_FEEDBACK_ADMIN_SECRET;
 const feedbackMaxAudioBytes = parseInt(process.env.HINGLISH_FEEDBACK_MAX_AUDIO_BYTES || '52428800', 10); // 50 MiB
 const FEEDBACK_PREFIX = 'hinglish-feedback';
 // Allowlisted so a client can never invent prefixes and scatter objects through the bucket.
-const FEEDBACK_ISSUES = ['urdu_script', 'eng_in_hindi', 'missing_eng', 'other'];
+// v2 sheet ids (want-statements) plus the v1 ids — 3.7.1 clients still send the old set,
+// so removing them would 400 live submits.
+const FEEDBACK_ISSUES = [
+    'want_translation', 'want_mixed', 'want_romanized', 'other',
+    'urdu_script', 'eng_in_hindi', 'missing_eng',
+];
 const FEEDBACK_LANGUAGES = ['hi', 'ur'];
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -161,6 +166,9 @@ export function createHinglishFeedbackRouter({ s3Client, spacesBucket, signedUrl
         const record = {
             feedbackId,
             createdAt: createdAt.toISOString(),
+            // Which generation of the issue sheet produced these ids. Absent = v1 (pre-field
+            // clients); disambiguates records whose ids exist in both generations ("other").
+            sheetVersion: Number.isInteger(body.sheetVersion) ? body.sheetVersion : null,
             issues,
             // Free text from the "Something else" option; capped, not validated further.
             otherText: str(body.otherText, 500),
