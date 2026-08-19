@@ -147,7 +147,7 @@ app.use('/', (req, res, next) => {
     }
 
     if (targetUrl.includes('openapi-proxy-zmg9c.ondigitalocean.app')) {
-        if (req.url === '/music') {
+        if (req.path === '/music') {
             return getMusic(req, res);
         }
         return res.status(404).send({ success: false, error: 'not found' });
@@ -205,6 +205,17 @@ const getMusic = async (req, res) => {
         // Read and parse the music index JSON
         const musicIndexJson = await readFile('./music_index.json', 'utf8');
         const musicData = JSON.parse(musicIndexJson);
+
+        // Release gating: tracks are tagged with a `release` number (default 1 if absent,
+        // meaning "always in the base library"). Clients opt in to newer content by passing
+        // ?minRelease=N — omitting it (today's app builds) is identical to ?minRelease=1, so
+        // existing installs see exactly what they see today. This is additive, never exclusive:
+        // a higher minRelease always includes everything from lower releases too.
+        const minRelease = Math.max(1, parseInt(req.query.minRelease, 10) || 1);
+        if (musicData.tracks) {
+            musicData.tracks = musicData.tracks.filter(track => (track.release || 1) <= minRelease);
+        }
+        musicData.total_tracks = musicData.tracks ? musicData.tracks.length : musicData.total_tracks;
 
         // If S3 client is configured, generate signed URLs for all tracks
         if (s3Client && spacesBucket && musicData.tracks) {
