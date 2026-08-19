@@ -1,7 +1,7 @@
 {
-  "generated_at": "2025-11-18T14:07:49.228113",
+  "generated_at": "2026-08-19T20:37:48.276483+00:00",
   "version": "1.0",
-  "total_tracks": 152,
+  "total_tracks": 242,
   "tracks": [
     {
       "track_id": "100101_v1",
@@ -3652,6 +3652,2028 @@
       "audio_url": "assets/102136_v2.mp3",
       "cover_url": "assets/102136_v2_cover.jpg",
       "release": 1
+    },
+    {
+      "track_id": "bw01_v1",
+      "prompt_id": "bw01",
+      "title": "Shaadi Ka Dhamaka",
+      "duration": 137.28,
+      "user_tags": [
+        "bollywood",
+        "wedding-dance",
+        "dhol"
+      ],
+      "suno_tags": [
+        "bright brass stabs",
+        "sitar riff hooks",
+        "reverse cymbal swells",
+        "loud",
+        "joyful",
+        "bright"
+      ],
+      "detail_url": "tracks/bw01_v1.json",
+      "audio_url": "assets/bw01_v1.mp3",
+      "cover_url": "assets/bw01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bw01_v2",
+      "prompt_id": "bw01",
+      "title": "Dhol Pe Nacho",
+      "duration": 109.96,
+      "user_tags": [
+        "bollywood",
+        "wedding-dance",
+        "dhol"
+      ],
+      "suno_tags": [
+        "bright brass stabs",
+        "sitar riff hooks",
+        "reverse cymbal swells",
+        "loud",
+        "joyful",
+        "bright"
+      ],
+      "detail_url": "tracks/bw01_v2.json",
+      "audio_url": "assets/bw01_v2.mp3",
+      "cover_url": "assets/bw01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bw02_v1",
+      "prompt_id": "bw02",
+      "title": "Raat Ka Bass",
+      "duration": 162.28,
+      "user_tags": [
+        "bollywood",
+        "edm-fusion",
+        "sitar"
+      ],
+      "suno_tags": [
+        "four-on-the-floor drive",
+        "wide and punchy mix.",
+        "electronic",
+        "edm"
+      ],
+      "detail_url": "tracks/bw02_v1.json",
+      "audio_url": "assets/bw02_v1.mp3",
+      "cover_url": "assets/bw02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bw02_v2",
+      "prompt_id": "bw02",
+      "title": "Tabla Drop Jalwa",
+      "duration": 182.0,
+      "user_tags": [
+        "bollywood",
+        "edm-fusion",
+        "sitar"
+      ],
+      "suno_tags": [
+        "four-on-the-floor drive",
+        "wide and punchy mix.",
+        "electronic",
+        "edm"
+      ],
+      "detail_url": "tracks/bw02_v2.json",
+      "audio_url": "assets/bw02_v2.mp3",
+      "cover_url": "assets/bw02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bw03_v1",
+      "prompt_id": "bw03",
+      "title": "Khamosh Harmonium",
+      "duration": 207.72,
+      "user_tags": [
+        "bollywood",
+        "ballad",
+        "harmonium"
+      ],
+      "suno_tags": [
+        "romantic",
+        "emotional",
+        "slow",
+        "ballad",
+        "gentle",
+        "heartfelt"
+      ],
+      "detail_url": "tracks/bw03_v1.json",
+      "audio_url": "assets/bw03_v1.mp3",
+      "cover_url": "assets/bw03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bw03_v2",
+      "prompt_id": "bw03",
+      "title": "Reshmi Taar Uthe",
+      "duration": 185.76,
+      "user_tags": [
+        "bollywood",
+        "ballad",
+        "harmonium"
+      ],
+      "suno_tags": [
+        "romantic",
+        "emotional",
+        "slow",
+        "ballad",
+        "gentle",
+        "heartfelt"
+      ],
+      "detail_url": "tracks/bw03_v2.json",
+      "audio_url": "assets/bw03_v2.mp3",
+      "cover_url": "assets/bw03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bw04_v1",
+      "prompt_id": "bw04",
+      "title": "Meendon Ka Raag",
+      "duration": 256.76,
+      "user_tags": [
+        "bollywood",
+        "classical",
+        "sitar"
+      ],
+      "suno_tags": [
+        "gentle room ambience",
+        "refined and luminous mix.",
+        "classical",
+        "vocal",
+        "light"
+      ],
+      "detail_url": "tracks/bw04_v1.json",
+      "audio_url": "assets/bw04_v1.mp3",
+      "cover_url": "assets/bw04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bw04_v2",
+      "prompt_id": "bw04",
+      "title": "Bansuri Ka Jawaab",
+      "duration": 324.92,
+      "user_tags": [
+        "bollywood",
+        "classical",
+        "sitar"
+      ],
+      "suno_tags": [
+        "gentle room ambience",
+        "refined and luminous mix.",
+        "classical",
+        "vocal",
+        "light"
+      ],
+      "detail_url": "tracks/bw04_v2.json",
+      "audio_url": "assets/bw04_v2.mp3",
+      "cover_url": "assets/bw04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm01_v1",
+      "prompt_id": "fm01",
+      "title": "tiny kazoo felony",
+      "duration": 64.76,
+      "user_tags": [
+        "funny",
+        "cartoon-chase",
+        "kazoo"
+      ],
+      "suno_tags": [
+        "Cartoon comedy score",
+        "honking kazoo lead",
+        "glossy",
+        "and mischievous.",
+        "theme",
+        "playful"
+      ],
+      "detail_url": "tracks/fm01_v1.json",
+      "audio_url": "assets/fm01_v1.mp3",
+      "cover_url": "assets/fm01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm01_v2",
+      "prompt_id": "fm01",
+      "title": "pizzicato tiptoe panic",
+      "duration": 74.52,
+      "user_tags": [
+        "funny",
+        "cartoon-chase",
+        "kazoo"
+      ],
+      "suno_tags": [
+        "Cartoon comedy score",
+        "honking kazoo lead",
+        "glossy",
+        "and mischievous.",
+        "theme",
+        "playful"
+      ],
+      "detail_url": "tracks/fm01_v2.json",
+      "audio_url": "assets/fm01_v2.mp3",
+      "cover_url": "assets/fm01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm02_v1",
+      "prompt_id": "fm02",
+      "title": "ukulele faceplant",
+      "duration": 104.84,
+      "user_tags": [
+        "funny",
+        "lofi-comedy",
+        "trombone"
+      ],
+      "suno_tags": [
+        "plucked ukulele",
+        "with tape hiss",
+        "soft vinyl crackle",
+        "slow",
+        "lo-fi",
+        "ukulele"
+      ],
+      "detail_url": "tracks/fm02_v1.json",
+      "audio_url": "assets/fm02_v1.mp3",
+      "cover_url": "assets/fm02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm02_v2",
+      "prompt_id": "fm02",
+      "title": "crackle then bonk",
+      "duration": 61.68,
+      "user_tags": [
+        "funny",
+        "lofi-comedy",
+        "trombone"
+      ],
+      "suno_tags": [
+        "plucked ukulele",
+        "with tape hiss",
+        "soft vinyl crackle",
+        "slow",
+        "lo-fi",
+        "ukulele"
+      ],
+      "detail_url": "tracks/fm02_v2.json",
+      "audio_url": "assets/fm02_v2.mp3",
+      "cover_url": "assets/fm02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm03_v1",
+      "prompt_id": "fm03",
+      "title": "muted trumpet side eye",
+      "duration": 67.0,
+      "user_tags": [
+        "funny",
+        "suspense-sting",
+        "xylophone"
+      ],
+      "suno_tags": [
+        "Quirky suspense sting",
+        "tiptoeing xylophone",
+        "crisp",
+        "slow"
+      ],
+      "detail_url": "tracks/fm03_v1.json",
+      "audio_url": "assets/fm03_v1.mp3",
+      "cover_url": "assets/fm03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm03_v2",
+      "prompt_id": "fm03",
+      "title": "awkward brass pause",
+      "duration": 66.72,
+      "user_tags": [
+        "funny",
+        "suspense-sting",
+        "xylophone"
+      ],
+      "suno_tags": [
+        "Quirky suspense sting",
+        "tiptoeing xylophone",
+        "crisp",
+        "slow"
+      ],
+      "detail_url": "tracks/fm03_v2.json",
+      "audio_url": "assets/fm03_v2.mp3",
+      "cover_url": "assets/fm03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm04_v1",
+      "prompt_id": "fm04",
+      "title": "tuba trip hazard",
+      "duration": 64.56,
+      "user_tags": [
+        "funny",
+        "circus",
+        "tuba"
+      ],
+      "suno_tags": [
+        "honking clarinet riffs",
+        "cheeky woodblock accents",
+        "calliope swells",
+        "cartoony",
+        "bassline",
+        "clarinet"
+      ],
+      "detail_url": "tracks/fm04_v1.json",
+      "audio_url": "assets/fm04_v1.mp3",
+      "cover_url": "assets/fm04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fm04_v2",
+      "prompt_id": "fm04",
+      "title": "clarinet panic",
+      "duration": 74.48,
+      "user_tags": [
+        "funny",
+        "circus",
+        "tuba"
+      ],
+      "suno_tags": [
+        "honking clarinet riffs",
+        "cheeky woodblock accents",
+        "calliope swells",
+        "cartoony",
+        "bassline",
+        "clarinet"
+      ],
+      "detail_url": "tracks/fm04_v2.json",
+      "audio_url": "assets/fm04_v2.mp3",
+      "cover_url": "assets/fm04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp01_v1",
+      "prompt_id": "gp01",
+      "title": "Chrome Plate Ritual",
+      "duration": 134.28,
+      "user_tags": [
+        "phonk",
+        "gym-anthem",
+        "808"
+      ],
+      "suno_tags": [
+        "sub",
+        "and a distant loop",
+        "metallic impacts",
+        "and tape-woosh transitions. Gritty",
+        "aggressive",
+        "motivating"
+      ],
+      "detail_url": "tracks/gp01_v1.json",
+      "audio_url": "assets/gp01_v1.mp3",
+      "cover_url": "assets/gp01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp01_v2",
+      "prompt_id": "gp01",
+      "title": "Subzero Grindset",
+      "duration": 92.0,
+      "user_tags": [
+        "phonk",
+        "gym-anthem",
+        "808"
+      ],
+      "suno_tags": [
+        "sub",
+        "and a distant loop",
+        "metallic impacts",
+        "and tape-woosh transitions. Gritty",
+        "aggressive",
+        "motivating"
+      ],
+      "detail_url": "tracks/gp01_v2.json",
+      "audio_url": "assets/gp01_v2.mp3",
+      "cover_url": "assets/gp01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp02_v1",
+      "prompt_id": "gp02",
+      "title": "Corrupted Cowbell Overload",
+      "duration": 97.44,
+      "user_tags": [
+        "phonk",
+        "hyperpop-phonk",
+        "glitch"
+      ],
+      "suno_tags": [
+        "punchy cowbell 808s",
+        "warped synth leads",
+        "crunchy distortion",
+        "chaotic",
+        "hyperpop",
+        "rapid"
+      ],
+      "detail_url": "tracks/gp02_v1.json",
+      "audio_url": "assets/gp02_v1.mp3",
+      "cover_url": "assets/gp02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp02_v2",
+      "prompt_id": "gp02",
+      "title": "Bitcrush Curse",
+      "duration": 89.96,
+      "user_tags": [
+        "phonk",
+        "hyperpop-phonk",
+        "glitch"
+      ],
+      "suno_tags": [
+        "punchy cowbell 808s",
+        "warped synth leads",
+        "crunchy distortion",
+        "chaotic",
+        "hyperpop",
+        "rapid"
+      ],
+      "detail_url": "tracks/gp02_v2.json",
+      "audio_url": "assets/gp02_v2.mp3",
+      "cover_url": "assets/gp02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp03_v1",
+      "prompt_id": "gp03",
+      "title": "Phantom Tape Haunt",
+      "duration": 136.76,
+      "user_tags": [
+        "phonk",
+        "dark-phonk",
+        "cowbell"
+      ],
+      "suno_tags": [
+        "reverse swells",
+        "cinematic",
+        "close-mic and heavy.",
+        "slow",
+        "moody"
+      ],
+      "detail_url": "tracks/gp03_v1.json",
+      "audio_url": "assets/gp03_v1.mp3",
+      "cover_url": "assets/gp03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp03_v2",
+      "prompt_id": "gp03",
+      "title": "Pitch Bent Coffin",
+      "duration": 114.96,
+      "user_tags": [
+        "phonk",
+        "dark-phonk",
+        "cowbell"
+      ],
+      "suno_tags": [
+        "reverse swells",
+        "cinematic",
+        "close-mic and heavy.",
+        "slow",
+        "moody"
+      ],
+      "detail_url": "tracks/gp03_v2.json",
+      "audio_url": "assets/gp03_v2.mp3",
+      "cover_url": "assets/gp03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp04_v1",
+      "prompt_id": "gp04",
+      "title": "Clutch Kick Venom",
+      "duration": 102.0,
+      "user_tags": [
+        "phonk",
+        "drift-phonk",
+        "memphis"
+      ],
+      "suno_tags": [
+        "swung drift groove",
+        "distorted cowbell 808 lead",
+        "hard trap hats",
+        "menacing",
+        "vocal",
+        "workout"
+      ],
+      "detail_url": "tracks/gp04_v1.json",
+      "audio_url": "assets/gp04_v1.mp3",
+      "cover_url": "assets/gp04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "gp04_v2",
+      "prompt_id": "gp04",
+      "title": "Brake Dust Phantom",
+      "duration": 85.6,
+      "user_tags": [
+        "phonk",
+        "drift-phonk",
+        "memphis"
+      ],
+      "suno_tags": [
+        "swung drift groove",
+        "distorted cowbell 808 lead",
+        "hard trap hats",
+        "menacing",
+        "vocal",
+        "workout"
+      ],
+      "detail_url": "tracks/gp04_v2.json",
+      "audio_url": "assets/gp04_v2.mp3",
+      "cover_url": "assets/gp04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ec01_v1",
+      "prompt_id": "ec01",
+      "title": "Silence Between Notes",
+      "duration": 129.88,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "solo-piano"
+      ],
+      "suno_tags": [
+        "intimate close-mic room sound",
+        "soft natural decay",
+        "slow"
+      ],
+      "detail_url": "tracks/ec01_v1.json",
+      "audio_url": "assets/ec01_v1.mp3",
+      "cover_url": "assets/ec01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ec02_v1",
+      "prompt_id": "ec02",
+      "title": "Ashen Choir Drift",
+      "duration": 184.44,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "choir-pad"
+      ],
+      "suno_tags": [
+        "hazy",
+        "memory-worn sheen.",
+        "soft",
+        "slow",
+        "low",
+        "breathy"
+      ],
+      "detail_url": "tracks/ec02_v1.json",
+      "audio_url": "assets/ec02_v1.mp3",
+      "cover_url": "assets/ec02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ec03_v1",
+      "prompt_id": "ec03",
+      "title": "Thunderhead March",
+      "duration": 177.4,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "taiko-percussion"
+      ],
+      "suno_tags": [
+        "marching percussion",
+        "brass stabs",
+        "choir-sized unison strings",
+        "reversed impacts",
+        "punchy",
+        "orchestral"
+      ],
+      "detail_url": "tracks/ec03_v1.json",
+      "audio_url": "assets/ec03_v1.mp3",
+      "cover_url": "assets/ec03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ec04_v1",
+      "prompt_id": "ec04",
+      "title": "Cellos Claim Dawn",
+      "duration": 159.36,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "string-anthem"
+      ],
+      "suno_tags": [
+        "subtle risers",
+        "polished",
+        "cinematic mix.",
+        "steady",
+        "soaring"
+      ],
+      "detail_url": "tracks/ec04_v1.json",
+      "audio_url": "assets/ec04_v1.mp3",
+      "cover_url": "assets/ec04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ec05_v1",
+      "prompt_id": "ec05",
+      "title": "Fret Dust Hymn",
+      "duration": 154.96,
+      "user_tags": [
+        "emotional",
+        "tender-intimate",
+        "acoustic-guitar"
+      ],
+      "suno_tags": [
+        "very close and human.",
+        "slow",
+        "acoustic",
+        "gentle",
+        "noise",
+        "warm"
+      ],
+      "detail_url": "tracks/ec05_v1.json",
+      "audio_url": "assets/ec05_v1.mp3",
+      "cover_url": "assets/ec05_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ec06_v1",
+      "prompt_id": "ec06",
+      "title": "Hushed Cello Vigil",
+      "duration": 234.04,
+      "user_tags": [
+        "emotional",
+        "tender-intimate",
+        "cello"
+      ],
+      "suno_tags": [
+        "close",
+        "faint",
+        "breathy",
+        "minimal",
+        "slow",
+        "cello"
+      ],
+      "detail_url": "tracks/ec06_v1.json",
+      "audio_url": "assets/ec06_v1.mp3",
+      "cover_url": "assets/ec06_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh01_v1",
+      "prompt_id": "uh01",
+      "title": "Soaring Euphoria",
+      "duration": 131.32,
+      "user_tags": [
+        "upbeat",
+        "festival-edm",
+        "drop"
+      ],
+      "suno_tags": [
+        "euphoric",
+        "and stadium-clean.",
+        "soaring",
+        "big room",
+        "edm",
+        "pop"
+      ],
+      "detail_url": "tracks/uh01_v1.json",
+      "audio_url": "assets/uh01_v1.mp3",
+      "cover_url": "assets/uh01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh01_v2",
+      "prompt_id": "uh01",
+      "title": "Lifted Alive",
+      "duration": 185.56,
+      "user_tags": [
+        "upbeat",
+        "festival-edm",
+        "drop"
+      ],
+      "suno_tags": [
+        "euphoric",
+        "and stadium-clean.",
+        "soaring",
+        "big room",
+        "edm",
+        "pop"
+      ],
+      "detail_url": "tracks/uh01_v2.json",
+      "audio_url": "assets/uh01_v2.mp3",
+      "cover_url": "assets/uh01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh02_v1",
+      "prompt_id": "uh02",
+      "title": "Glossy Freefall",
+      "duration": 139.0,
+      "user_tags": [
+        "upbeat",
+        "future-bass"
+      ],
+      "suno_tags": [
+        "glossy pluck arpeggios",
+        "stacked octave leads",
+        "reverse cymbal sweeps",
+        "glossy",
+        "bright"
+      ],
+      "detail_url": "tracks/uh02_v1.json",
+      "audio_url": "assets/uh02_v1.mp3",
+      "cover_url": "assets/uh02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh02_v2",
+      "prompt_id": "uh02",
+      "title": "Octave Glow",
+      "duration": 157.04,
+      "user_tags": [
+        "upbeat",
+        "future-bass"
+      ],
+      "suno_tags": [
+        "glossy pluck arpeggios",
+        "stacked octave leads",
+        "reverse cymbal sweeps",
+        "glossy",
+        "bright"
+      ],
+      "detail_url": "tracks/uh02_v2.json",
+      "audio_url": "assets/uh02_v2.mp3",
+      "cover_url": "assets/uh02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh03_v1",
+      "prompt_id": "uh03",
+      "title": "Crowd Static",
+      "duration": 144.96,
+      "user_tags": [
+        "upbeat",
+        "big-room-house",
+        "supersaw"
+      ],
+      "suno_tags": [
+        "massive supersaw stabs",
+        "vocal-chop hits",
+        "and crowd-size energy. Bright",
+        "wide",
+        "big room",
+        "noise"
+      ],
+      "detail_url": "tracks/uh03_v1.json",
+      "audio_url": "assets/uh03_v1.mp3",
+      "cover_url": "assets/uh03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh03_v2",
+      "prompt_id": "uh03",
+      "title": "Noise Horizon",
+      "duration": 154.96,
+      "user_tags": [
+        "upbeat",
+        "big-room-house",
+        "supersaw"
+      ],
+      "suno_tags": [
+        "massive supersaw stabs",
+        "vocal-chop hits",
+        "and crowd-size energy. Bright",
+        "wide",
+        "big room",
+        "noise"
+      ],
+      "detail_url": "tracks/uh03_v2.json",
+      "audio_url": "assets/uh03_v2.mp3",
+      "cover_url": "assets/uh03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh04_v1",
+      "prompt_id": "uh04",
+      "title": "War Drum",
+      "duration": 164.8,
+      "user_tags": [
+        "upbeat",
+        "stadium-rock",
+        "anthem"
+      ],
+      "suno_tags": [
+        "with pounding tom-led drums",
+        "stacked synth swells",
+        "bass",
+        "huge delay tails",
+        "crisp and punchy mix.",
+        "rock"
+      ],
+      "detail_url": "tracks/uh04_v1.json",
+      "audio_url": "assets/uh04_v1.mp3",
+      "cover_url": "assets/uh04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh04_v2",
+      "prompt_id": "uh04",
+      "title": "Battle Cry",
+      "duration": 191.96,
+      "user_tags": [
+        "upbeat",
+        "stadium-rock",
+        "anthem"
+      ],
+      "suno_tags": [
+        "with pounding tom-led drums",
+        "stacked synth swells",
+        "bass",
+        "huge delay tails",
+        "crisp and punchy mix.",
+        "rock"
+      ],
+      "detail_url": "tracks/uh04_v2.json",
+      "audio_url": "assets/uh04_v2.mp3",
+      "cover_url": "assets/uh04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh05_v1",
+      "prompt_id": "uh05",
+      "title": "Parade Salute",
+      "duration": 116.52,
+      "user_tags": [
+        "upbeat",
+        "marching-band",
+        "brass"
+      ],
+      "suno_tags": [
+        "punchy snare rolls",
+        "crisp parade percussion",
+        "layered cymbal swells",
+        "bright and punchy mix",
+        "uplifting"
+      ],
+      "detail_url": "tracks/uh05_v1.json",
+      "audio_url": "assets/uh05_v1.mp3",
+      "cover_url": "assets/uh05_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh05_v2",
+      "prompt_id": "uh05",
+      "title": "Brass Charge",
+      "duration": 104.4,
+      "user_tags": [
+        "upbeat",
+        "marching-band",
+        "brass"
+      ],
+      "suno_tags": [
+        "punchy snare rolls",
+        "crisp parade percussion",
+        "layered cymbal swells",
+        "bright and punchy mix",
+        "uplifting"
+      ],
+      "detail_url": "tracks/uh05_v2.json",
+      "audio_url": "assets/uh05_v2.mp3",
+      "cover_url": "assets/uh05_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh06_v1",
+      "prompt_id": "uh06",
+      "title": "Porch Sunlight",
+      "duration": 71.08,
+      "user_tags": [
+        "upbeat",
+        "indie-pop",
+        "jangle-guitar"
+      ],
+      "suno_tags": [
+        "warm",
+        "pop",
+        "bassline",
+        "bright",
+        "feel-good",
+        "warm"
+      ],
+      "detail_url": "tracks/uh06_v1.json",
+      "audio_url": "assets/uh06_v1.mp3",
+      "cover_url": "assets/uh06_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh06_v2",
+      "prompt_id": "uh06",
+      "title": "Sunday Porch",
+      "duration": 159.88,
+      "user_tags": [
+        "upbeat",
+        "indie-pop",
+        "jangle-guitar"
+      ],
+      "suno_tags": [
+        "warm",
+        "pop",
+        "bassline",
+        "bright",
+        "feel-good",
+        "warm"
+      ],
+      "detail_url": "tracks/uh06_v2.json",
+      "audio_url": "assets/uh06_v2.mp3",
+      "cover_url": "assets/uh06_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh07_v1",
+      "prompt_id": "uh07",
+      "title": "Postcard Summer",
+      "duration": 171.16,
+      "user_tags": [
+        "upbeat",
+        "synth-pop"
+      ],
+      "suno_tags": [
+        "nostalgic",
+        "bright",
+        "warm",
+        "bassline",
+        "pop",
+        "nostalgic"
+      ],
+      "detail_url": "tracks/uh07_v1.json",
+      "audio_url": "assets/uh07_v1.mp3",
+      "cover_url": "assets/uh07_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh07_v2",
+      "prompt_id": "uh07",
+      "title": "Cassette Daydream",
+      "duration": 141.48,
+      "user_tags": [
+        "upbeat",
+        "synth-pop"
+      ],
+      "suno_tags": [
+        "nostalgic",
+        "bright",
+        "warm",
+        "bassline",
+        "pop",
+        "nostalgic"
+      ],
+      "detail_url": "tracks/uh07_v2.json",
+      "audio_url": "assets/uh07_v2.mp3",
+      "cover_url": "assets/uh07_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh08_v1",
+      "prompt_id": "uh08",
+      "title": "Ukulele Saturday",
+      "duration": 81.2,
+      "user_tags": [
+        "upbeat",
+        "feel-good",
+        "ukulele"
+      ],
+      "suno_tags": [
+        "and glossy.",
+        "joyful",
+        "feel-good",
+        "bright",
+        "playful",
+        "ukulele"
+      ],
+      "detail_url": "tracks/uh08_v1.json",
+      "audio_url": "assets/uh08_v1.mp3",
+      "cover_url": "assets/uh08_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "uh08_v2",
+      "prompt_id": "uh08",
+      "title": "Handclap Picnic",
+      "duration": 67.84,
+      "user_tags": [
+        "upbeat",
+        "feel-good",
+        "ukulele"
+      ],
+      "suno_tags": [
+        "and glossy.",
+        "joyful",
+        "feel-good",
+        "bright",
+        "playful",
+        "ukulele"
+      ],
+      "detail_url": "tracks/uh08_v2.json",
+      "audio_url": "assets/uh08_v2.mp3",
+      "cover_url": "assets/uh08_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd01_v1",
+      "prompt_id": "bd01",
+      "title": "Tabla Ki Chingari",
+      "duration": 132.04,
+      "user_tags": [
+        "bollywood",
+        "bollywood-pop",
+        "dhol"
+      ],
+      "suno_tags": [
+        "punchy dhol percussion",
+        "bright synth hooks",
+        "crisp stereo percussion sparkles",
+        "glossy wide mix.",
+        "bright",
+        "pop"
+      ],
+      "detail_url": "tracks/bd01_v1.json",
+      "audio_url": "assets/bd01_v1.mp3",
+      "cover_url": "assets/bd01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd01_v2",
+      "prompt_id": "bd01",
+      "title": "Synth Sitara Drop",
+      "duration": 130.8,
+      "user_tags": [
+        "bollywood",
+        "bollywood-pop",
+        "dhol"
+      ],
+      "suno_tags": [
+        "punchy dhol percussion",
+        "bright synth hooks",
+        "crisp stereo percussion sparkles",
+        "glossy wide mix.",
+        "bright",
+        "pop"
+      ],
+      "detail_url": "tracks/bd01_v2.json",
+      "audio_url": "assets/bd01_v2.mp3",
+      "cover_url": "assets/bd01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd02_v1",
+      "prompt_id": "bd02",
+      "title": "Dhol Tabla Jashn",
+      "duration": 129.84,
+      "user_tags": [
+        "bollywood",
+        "bollywood-pop",
+        "dhol"
+      ],
+      "suno_tags": [
+        "brass hits",
+        "reverse cymbal swells",
+        "punchy",
+        "bright",
+        "filmi",
+        "pop"
+      ],
+      "detail_url": "tracks/bd02_v1.json",
+      "audio_url": "assets/bd02_v1.mp3",
+      "cover_url": "assets/bd02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd02_v2",
+      "prompt_id": "bd02",
+      "title": "Synth Hook Hungama",
+      "duration": 125.8,
+      "user_tags": [
+        "bollywood",
+        "bollywood-pop",
+        "dhol"
+      ],
+      "suno_tags": [
+        "brass hits",
+        "reverse cymbal swells",
+        "punchy",
+        "bright",
+        "filmi",
+        "pop"
+      ],
+      "detail_url": "tracks/bd02_v2.json",
+      "audio_url": "assets/bd02_v2.mp3",
+      "cover_url": "assets/bd02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd03_v1",
+      "prompt_id": "bd03",
+      "title": "Narm Bansuri",
+      "duration": 231.52,
+      "user_tags": [
+        "bollywood",
+        "ballad",
+        "harmonium"
+      ],
+      "suno_tags": [
+        "romantic",
+        "emotional",
+        "gentle",
+        "warm",
+        "heartfelt",
+        "slow"
+      ],
+      "detail_url": "tracks/bd03_v1.json",
+      "audio_url": "assets/bd03_v1.mp3",
+      "cover_url": "assets/bd03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd03_v2",
+      "prompt_id": "bd03",
+      "title": "Reshmi Taaron Ka Urooj",
+      "duration": 229.72,
+      "user_tags": [
+        "bollywood",
+        "ballad",
+        "harmonium"
+      ],
+      "suno_tags": [
+        "romantic",
+        "emotional",
+        "gentle",
+        "warm",
+        "heartfelt",
+        "slow"
+      ],
+      "detail_url": "tracks/bd03_v2.json",
+      "audio_url": "assets/bd03_v2.mp3",
+      "cover_url": "assets/bd03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd04_v1",
+      "prompt_id": "bd04",
+      "title": "Santoor Ki Dhadkan",
+      "duration": 213.88,
+      "user_tags": [
+        "bollywood",
+        "ballad",
+        "santoor"
+      ],
+      "suno_tags": [
+        "polished cinematic mix.",
+        "warm",
+        "romantic",
+        "slow",
+        "soft",
+        "theme"
+      ],
+      "detail_url": "tracks/bd04_v1.json",
+      "audio_url": "assets/bd04_v1.mp3",
+      "cover_url": "assets/bd04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd04_v2",
+      "prompt_id": "bd04",
+      "title": "Taaron Ka Noor",
+      "duration": 229.84,
+      "user_tags": [
+        "bollywood",
+        "ballad",
+        "santoor"
+      ],
+      "suno_tags": [
+        "polished cinematic mix.",
+        "warm",
+        "romantic",
+        "slow",
+        "soft",
+        "theme"
+      ],
+      "detail_url": "tracks/bd04_v2.json",
+      "audio_url": "assets/bd04_v2.mp3",
+      "cover_url": "assets/bd04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd05_v1",
+      "prompt_id": "bd05",
+      "title": "Bansuri Ki Udaan",
+      "duration": 187.84,
+      "user_tags": [
+        "bollywood",
+        "folk-fusion",
+        "bansuri"
+      ],
+      "suno_tags": [
+        "mid-fast pulse",
+        "call-and-response string figures",
+        "energetic",
+        "folk",
+        "acoustic",
+        "rhythmic"
+      ],
+      "detail_url": "tracks/bd05_v1.json",
+      "audio_url": "assets/bd05_v1.mp3",
+      "cover_url": "assets/bd05_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd05_v2",
+      "prompt_id": "bd05",
+      "title": "Taaliyon Ka Utsaav",
+      "duration": 156.84,
+      "user_tags": [
+        "bollywood",
+        "folk-fusion",
+        "bansuri"
+      ],
+      "suno_tags": [
+        "mid-fast pulse",
+        "call-and-response string figures",
+        "energetic",
+        "folk",
+        "acoustic",
+        "rhythmic"
+      ],
+      "detail_url": "tracks/bd05_v2.json",
+      "audio_url": "assets/bd05_v2.mp3",
+      "cover_url": "assets/bd05_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd06_v1",
+      "prompt_id": "bd06",
+      "title": "Mitti Ka Jashn",
+      "duration": 159.96,
+      "user_tags": [
+        "bollywood",
+        "folk-fusion",
+        "sarangi"
+      ],
+      "suno_tags": [
+        "brushed transitions",
+        "spacious",
+        "and celebratory",
+        "soaring",
+        "folk",
+        "acoustic"
+      ],
+      "detail_url": "tracks/bd06_v1.json",
+      "audio_url": "assets/bd06_v1.mp3",
+      "cover_url": "assets/bd06_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "bd06_v2",
+      "prompt_id": "bd06",
+      "title": "Sarangi Ki Chadhat",
+      "duration": 131.92,
+      "user_tags": [
+        "bollywood",
+        "folk-fusion",
+        "sarangi"
+      ],
+      "suno_tags": [
+        "brushed transitions",
+        "spacious",
+        "and celebratory",
+        "soaring",
+        "folk",
+        "acoustic"
+      ],
+      "detail_url": "tracks/bd06_v2.json",
+      "audio_url": "assets/bd06_v2.mp3",
+      "cover_url": "assets/bd06_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd01_v1",
+      "prompt_id": "fd01",
+      "title": "pizzicato side eye",
+      "duration": 95.72,
+      "user_tags": [
+        "funny",
+        "reaction-sting",
+        "pizzicato"
+      ],
+      "suno_tags": [
+        "rubbery gliss pops",
+        "dry",
+        "and crisp mix",
+        "playful"
+      ],
+      "detail_url": "tracks/fd01_v1.json",
+      "audio_url": "assets/fd01_v1.mp3",
+      "cover_url": "assets/fd01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd01_v2",
+      "prompt_id": "fd01",
+      "title": "slide whistle oops",
+      "duration": 61.32,
+      "user_tags": [
+        "funny",
+        "reaction-sting",
+        "pizzicato"
+      ],
+      "suno_tags": [
+        "rubbery gliss pops",
+        "dry",
+        "and crisp mix",
+        "playful"
+      ],
+      "detail_url": "tracks/fd01_v2.json",
+      "audio_url": "assets/fd01_v2.mp3",
+      "cover_url": "assets/fd01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd02_v1",
+      "prompt_id": "fd02",
+      "title": "marimba panic button",
+      "duration": 99.2,
+      "user_tags": [
+        "funny",
+        "fail-build",
+        "marimba"
+      ],
+      "suno_tags": [
+        "close-mic",
+        "sudden pauses",
+        "marimba",
+        "playful"
+      ],
+      "detail_url": "tracks/fd02_v1.json",
+      "audio_url": "assets/fd02_v1.mp3",
+      "cover_url": "assets/fd02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd02_v2",
+      "prompt_id": "fd02",
+      "title": "trombone gave up",
+      "duration": 84.0,
+      "user_tags": [
+        "funny",
+        "fail-build",
+        "marimba"
+      ],
+      "suno_tags": [
+        "close-mic",
+        "sudden pauses",
+        "marimba",
+        "playful"
+      ],
+      "detail_url": "tracks/fd02_v2.json",
+      "audio_url": "assets/fd02_v2.mp3",
+      "cover_url": "assets/fd02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd03_v1",
+      "prompt_id": "fd03",
+      "title": "woodblock getaway",
+      "duration": 80.76,
+      "user_tags": [
+        "funny",
+        "cartoon-chase",
+        "banjo"
+      ],
+      "suno_tags": [
+        "Cartoon chase instrumental",
+        "rubbery stop-time fills",
+        "punchy",
+        "wildly animated mix.",
+        "frantic",
+        "clarinet"
+      ],
+      "detail_url": "tracks/fd03_v1.json",
+      "audio_url": "assets/fd03_v1.mp3",
+      "cover_url": "assets/fd03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd03_v2",
+      "prompt_id": "fd03",
+      "title": "clarinet did it",
+      "duration": 81.88,
+      "user_tags": [
+        "funny",
+        "cartoon-chase",
+        "banjo"
+      ],
+      "suno_tags": [
+        "Cartoon chase instrumental",
+        "rubbery stop-time fills",
+        "punchy",
+        "wildly animated mix.",
+        "frantic",
+        "clarinet"
+      ],
+      "detail_url": "tracks/fd03_v2.json",
+      "audio_url": "assets/fd03_v2.mp3",
+      "cover_url": "assets/fd03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd04_v1",
+      "prompt_id": "fd04",
+      "title": "kazoo says maybe",
+      "duration": 9.88,
+      "user_tags": [
+        "funny",
+        "reaction-sting",
+        "kazoo"
+      ],
+      "suno_tags": [
+        "quick stop-start accents",
+        "pingy ear-candy transitions",
+        "bright punchy mix.",
+        "bassline"
+      ],
+      "detail_url": "tracks/fd04_v1.json",
+      "audio_url": "assets/fd04_v1.mp3",
+      "cover_url": "assets/fd04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "fd04_v2",
+      "prompt_id": "fd04",
+      "title": "handclap damage control",
+      "duration": 15.0,
+      "user_tags": [
+        "funny",
+        "reaction-sting",
+        "kazoo"
+      ],
+      "suno_tags": [
+        "quick stop-start accents",
+        "pingy ear-candy transitions",
+        "bright punchy mix.",
+        "bassline"
+      ],
+      "detail_url": "tracks/fd04_v2.json",
+      "audio_url": "assets/fd04_v2.mp3",
+      "cover_url": "assets/fd04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge01_v1",
+      "prompt_id": "ge01",
+      "title": "Coffin Tape Surge",
+      "duration": 120.88,
+      "user_tags": [
+        "phonk",
+        "dark-phonk",
+        "trap"
+      ],
+      "suno_tags": [
+        "distorted cowbell 808s",
+        "aggressive hi-hat rolls",
+        "tight stereo hat movement",
+        "and an abrasive",
+        "high-contrast mix",
+        "moody"
+      ],
+      "detail_url": "tracks/ge01_v1.json",
+      "audio_url": "assets/ge01_v1.mp3",
+      "cover_url": "assets/ge01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge01_v2",
+      "prompt_id": "ge01",
+      "title": "Redline Bass Slam",
+      "duration": 79.96,
+      "user_tags": [
+        "phonk",
+        "dark-phonk",
+        "trap"
+      ],
+      "suno_tags": [
+        "distorted cowbell 808s",
+        "aggressive hi-hat rolls",
+        "tight stereo hat movement",
+        "and an abrasive",
+        "high-contrast mix",
+        "moody"
+      ],
+      "detail_url": "tracks/ge01_v2.json",
+      "audio_url": "assets/ge01_v2.mp3",
+      "cover_url": "assets/ge01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge02_v1",
+      "prompt_id": "ge02",
+      "title": "Phantom Tape Loop",
+      "duration": 83.92,
+      "user_tags": [
+        "phonk",
+        "memphis-phonk",
+        "lofi"
+      ],
+      "suno_tags": [
+        "dusty swing",
+        "menacing",
+        "wide",
+        "and crushed.",
+        "lo-fi",
+        "deep"
+      ],
+      "detail_url": "tracks/ge02_v1.json",
+      "audio_url": "assets/ge02_v1.mp3",
+      "cover_url": "assets/ge02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge02_v2",
+      "prompt_id": "ge02",
+      "title": "Warped Bell Thumps",
+      "duration": 88.92,
+      "user_tags": [
+        "phonk",
+        "memphis-phonk",
+        "lofi"
+      ],
+      "suno_tags": [
+        "dusty swing",
+        "menacing",
+        "wide",
+        "and crushed.",
+        "lo-fi",
+        "deep"
+      ],
+      "detail_url": "tracks/ge02_v2.json",
+      "audio_url": "assets/ge02_v2.mp3",
+      "cover_url": "assets/ge02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge03_v1",
+      "prompt_id": "ge03",
+      "title": "Sigma Cowbell Circuit",
+      "duration": 107.08,
+      "user_tags": [
+        "phonk",
+        "gym-anthem",
+        "808"
+      ],
+      "suno_tags": [
+        "Phonk instrumental",
+        "punchy kick drums",
+        "short delay throws",
+        "risers",
+        "brutal",
+        "motivation"
+      ],
+      "detail_url": "tracks/ge03_v1.json",
+      "audio_url": "assets/ge03_v1.mp3",
+      "cover_url": "assets/ge03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge03_v2",
+      "prompt_id": "ge03",
+      "title": "Throttle Drop Ritual",
+      "duration": 121.76,
+      "user_tags": [
+        "phonk",
+        "gym-anthem",
+        "808"
+      ],
+      "suno_tags": [
+        "Phonk instrumental",
+        "punchy kick drums",
+        "short delay throws",
+        "risers",
+        "brutal",
+        "motivation"
+      ],
+      "detail_url": "tracks/ge03_v2.json",
+      "audio_url": "assets/ge03_v2.mp3",
+      "cover_url": "assets/ge03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge04_v1",
+      "prompt_id": "ge04",
+      "title": "Minor Clutch Bounce",
+      "duration": 125.64,
+      "user_tags": [
+        "phonk",
+        "gym-anthem",
+        "808"
+      ],
+      "suno_tags": [
+        "hard-hitting 808 bass",
+        "aggressive hi-hat rolls",
+        "motivating"
+      ],
+      "detail_url": "tracks/ge04_v1.json",
+      "audio_url": "assets/ge04_v1.mp3",
+      "cover_url": "assets/ge04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "ge04_v2",
+      "prompt_id": "ge04",
+      "title": "Reversed Riser Slam",
+      "duration": 137.08,
+      "user_tags": [
+        "phonk",
+        "gym-anthem",
+        "808"
+      ],
+      "suno_tags": [
+        "hard-hitting 808 bass",
+        "aggressive hi-hat rolls",
+        "motivating"
+      ],
+      "detail_url": "tracks/ge04_v2.json",
+      "audio_url": "assets/ge04_v2.mp3",
+      "cover_url": "assets/ge04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es01_v1",
+      "prompt_id": "es01",
+      "title": "Low Cello Procession",
+      "duration": 244.36,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "string-ensemble"
+      ],
+      "suno_tags": [
+        "delicate bow noise",
+        "distant hall bloom",
+        "low",
+        "violin",
+        "slow",
+        "somber"
+      ],
+      "detail_url": "tracks/es01_v1.json",
+      "audio_url": "assets/es01_v1.mp3",
+      "cover_url": "assets/es01_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es01_v2",
+      "prompt_id": "es01",
+      "title": "Last Viola Vigil",
+      "duration": 244.96,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "string-ensemble"
+      ],
+      "suno_tags": [
+        "delicate bow noise",
+        "distant hall bloom",
+        "low",
+        "violin",
+        "slow",
+        "somber"
+      ],
+      "detail_url": "tracks/es01_v2.json",
+      "audio_url": "assets/es01_v2.mp3",
+      "cover_url": "assets/es01_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es02_v1",
+      "prompt_id": "es02",
+      "title": "Hollow Chapel Toll",
+      "duration": 155.96,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "tolling-bell"
+      ],
+      "suno_tags": [
+        "reversed swell transitions",
+        "hollow",
+        "ambient",
+        "slow"
+      ],
+      "detail_url": "tracks/es02_v1.json",
+      "audio_url": "assets/es02_v1.mp3",
+      "cover_url": "assets/es02_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es02_v2",
+      "prompt_id": "es02",
+      "title": "Ghost Harmonic Undertow",
+      "duration": 134.2,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "tolling-bell"
+      ],
+      "suno_tags": [
+        "reversed swell transitions",
+        "hollow",
+        "ambient",
+        "slow"
+      ],
+      "detail_url": "tracks/es02_v2.json",
+      "audio_url": "assets/es02_v2.mp3",
+      "cover_url": "assets/es02_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es03_v1",
+      "prompt_id": "es03",
+      "title": "Two Breaths Apart",
+      "duration": 114.92,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "oboe-clarinet"
+      ],
+      "suno_tags": [
+        "little room reverb",
+        "soft tape hiss",
+        "intimate and desolate mix.",
+        "clarinet",
+        "faint",
+        "breathy"
+      ],
+      "detail_url": "tracks/es03_v1.json",
+      "audio_url": "assets/es03_v1.mp3",
+      "cover_url": "assets/es03_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es03_v2",
+      "prompt_id": "es03",
+      "title": "Low Strings Gather",
+      "duration": 177.88,
+      "user_tags": [
+        "emotional",
+        "grief-loss",
+        "oboe-clarinet"
+      ],
+      "suno_tags": [
+        "little room reverb",
+        "soft tape hiss",
+        "intimate and desolate mix.",
+        "clarinet",
+        "faint",
+        "breathy"
+      ],
+      "detail_url": "tracks/es03_v2.json",
+      "audio_url": "assets/es03_v2.mp3",
+      "cover_url": "assets/es03_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es04_v1",
+      "prompt_id": "es04",
+      "title": "Solitary Key Rising",
+      "duration": 138.08,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "piano-led-build"
+      ],
+      "suno_tags": [
+        "strings layering in waves",
+        "choir-like pads",
+        "glowing highs",
+        "orchestral",
+        "simple",
+        "theme"
+      ],
+      "detail_url": "tracks/es04_v1.json",
+      "audio_url": "assets/es04_v1.mp3",
+      "cover_url": "assets/es04_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es04_v2",
+      "prompt_id": "es04",
+      "title": "Brass Summit Impact",
+      "duration": 177.72,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "piano-led-build"
+      ],
+      "suno_tags": [
+        "strings layering in waves",
+        "choir-like pads",
+        "glowing highs",
+        "orchestral",
+        "simple",
+        "theme"
+      ],
+      "detail_url": "tracks/es04_v2.json",
+      "audio_url": "assets/es04_v2.mp3",
+      "cover_url": "assets/es04_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es05_v1",
+      "prompt_id": "es05",
+      "title": "Trumpet Crown Ascends",
+      "duration": 187.8,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "choir-orchestra"
+      ],
+      "suno_tags": [
+        "timpani",
+        "and distant horn calls",
+        "choir stacks",
+        "cymbal lifts",
+        "wide and polished",
+        "soaring"
+      ],
+      "detail_url": "tracks/es05_v1.json",
+      "audio_url": "assets/es05_v1.mp3",
+      "cover_url": "assets/es05_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es05_v2",
+      "prompt_id": "es05",
+      "title": "Choir in the Hall",
+      "duration": 254.96,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "choir-orchestra"
+      ],
+      "suno_tags": [
+        "timpani",
+        "and distant horn calls",
+        "choir stacks",
+        "cymbal lifts",
+        "wide and polished",
+        "soaring"
+      ],
+      "detail_url": "tracks/es05_v2.json",
+      "audio_url": "assets/es05_v2.mp3",
+      "cover_url": "assets/es05_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es06_v1",
+      "prompt_id": "es06",
+      "title": "Violas Before Thunder",
+      "duration": 182.44,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "hybrid-orchestral"
+      ],
+      "suno_tags": [
+        "sub-drop impacts",
+        "polished",
+        "and thunderous.",
+        "orchestral",
+        "electronic",
+        "contemporary"
+      ],
+      "detail_url": "tracks/es06_v1.json",
+      "audio_url": "assets/es06_v1.mp3",
+      "cover_url": "assets/es06_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es06_v2",
+      "prompt_id": "es06",
+      "title": "Braam Crown Breaks",
+      "duration": 169.56,
+      "user_tags": [
+        "cinematic",
+        "triumphant",
+        "hybrid-orchestral"
+      ],
+      "suno_tags": [
+        "sub-drop impacts",
+        "polished",
+        "and thunderous.",
+        "orchestral",
+        "electronic",
+        "contemporary"
+      ],
+      "detail_url": "tracks/es06_v2.json",
+      "audio_url": "assets/es06_v2.mp3",
+      "cover_url": "assets/es06_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es07_v1",
+      "prompt_id": "es07",
+      "title": "Hushed Harp Embrace",
+      "duration": 194.6,
+      "user_tags": [
+        "emotional",
+        "tender-intimate",
+        "solo-harp"
+      ],
+      "suno_tags": [
+        "faint finger noise",
+        "subtle resonance tails",
+        "silky and comforting mix",
+        "warm",
+        "harp",
+        "gentle"
+      ],
+      "detail_url": "tracks/es07_v1.json",
+      "audio_url": "assets/es07_v1.mp3",
+      "cover_url": "assets/es07_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es07_v2",
+      "prompt_id": "es07",
+      "title": "Silver Pedal Bloom",
+      "duration": 203.8,
+      "user_tags": [
+        "emotional",
+        "tender-intimate",
+        "solo-harp"
+      ],
+      "suno_tags": [
+        "faint finger noise",
+        "subtle resonance tails",
+        "silky and comforting mix",
+        "warm",
+        "harp",
+        "gentle"
+      ],
+      "detail_url": "tracks/es07_v2.json",
+      "audio_url": "assets/es07_v2.mp3",
+      "cover_url": "assets/es07_v2_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es08_v1",
+      "prompt_id": "es08",
+      "title": "Porcelain Bell Lullaby",
+      "duration": 134.44,
+      "user_tags": [
+        "emotional",
+        "tender-intimate",
+        "music-box"
+      ],
+      "suno_tags": [
+        "sparse chiming patterns",
+        "faint sustained pad underneath",
+        "gentle lullaby pulse",
+        "intimate close-mic feel",
+        "faint"
+      ],
+      "detail_url": "tracks/es08_v1.json",
+      "audio_url": "assets/es08_v1.mp3",
+      "cover_url": "assets/es08_v1_cover.jpg",
+      "release": 2
+    },
+    {
+      "track_id": "es08_v2",
+      "prompt_id": "es08",
+      "title": "Celesta Dust Halo",
+      "duration": 149.24,
+      "user_tags": [
+        "emotional",
+        "tender-intimate",
+        "music-box"
+      ],
+      "suno_tags": [
+        "sparse chiming patterns",
+        "faint sustained pad underneath",
+        "gentle lullaby pulse",
+        "intimate close-mic feel",
+        "faint"
+      ],
+      "detail_url": "tracks/es08_v2.json",
+      "audio_url": "assets/es08_v2.mp3",
+      "cover_url": "assets/es08_v2_cover.jpg",
+      "release": 2
     }
   ]
 }
