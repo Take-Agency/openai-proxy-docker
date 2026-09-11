@@ -182,6 +182,16 @@ export function createHinglishFeedbackRouter({ s3Client, spacesBucket, signedUrl
             region: str(body.region, 8),
             locale: str(body.locale, 32),
             durationSec: typeof body.durationSec === 'number' ? body.durationSec : null,
+            hindiCaptionOutput: language === 'hi'
+                && ['hinglish', 'romanizedHindi', 'english'].includes(body.hindiCaptionOutput?.output)
+                ? {
+                    output: body.hindiCaptionOutput.output,
+                    selectorOpened: body.hindiCaptionOutput.selectorOpened === true,
+                    selectorManuallyOpened: body.hindiCaptionOutput.selectorManuallyOpened === true,
+                }
+                : null,
+            hindiOutputConversionApplied: language === 'hi' && typeof body.hindiOutputConversionApplied === 'boolean'
+                ? body.hindiOutputConversionApplied : null,
         };
 
         try {
