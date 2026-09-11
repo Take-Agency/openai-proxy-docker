@@ -153,3 +153,32 @@ If everything is OK, check the docker by:
 ```
 docker build .
 ```
+
+## Hindi caption conversion
+
+Converts a Hindi (Devanagari) transcript's word list into romanized Hinglish or an English
+translation for the Auto Caption app's Hindi caption output selector. Word-aligned so the client
+can keep its per-word timings. Models: `HINDI_CONVERT_MODEL` (default `gpt-5.6-luna`) with one
+retry per chunk on `HINDI_CONVERT_FALLBACK_MODEL` (default `gpt-5.6-terra`) when the output
+fails alignment validation or times out (12s). Words are chunked server-side (~50, sentence
+aligned) and run in parallel (max 8).
+
+### `POST /hindi/convert`
+
+Headers: `content-type: application/json`, `x-install-id` (8–64 chars, required).
+Body: `{ "mode": "romanize" | "translate", "words": string[] }` — 1..1500 words, ≤64 chars each,
+256kb body cap.
+
+```jsonc
+// romanize → one Latin token per input word, Latin-script input returned verbatim
+{ "success": true, "mode": "romanize", "model": "gpt-5.6-luna", "words": ["aaj", "hum", …] }
+
+// translate → words are the translation split on spaces; src = 0-based input indices
+{ "success": true, "mode": "translate", "model": "gpt-5.6-luna",
+  "translation": "Today we will …", "words": [{ "en": "Today", "src": [0] }, …] }
+```
+
+Errors: 400 `install_id_required` / `invalid_mode` / `words_required`, 413 `too_many_words`,
+429 `rate_limited` (6/min per IP, 10/min and 60/day per install), 502 `conversion_failed`
+(both models failed — the app keeps Devanagari), 503 `not_configured` (no `OPENAI_API_KEY`).
+Logs one line per request (mode, models, chunks, words, latency, tokens); never transcript content.

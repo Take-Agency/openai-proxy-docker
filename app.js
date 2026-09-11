@@ -7,6 +7,7 @@ import { readFile } from 'fs/promises';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createHinglishFeedbackRouter } from './hinglishFeedback.js';
+import { createHindiConvertRouter } from './hindiConvert.js';
 
 const allowedTargets = [
     'https://api.openai.com/',
@@ -121,6 +122,12 @@ app.use(createHinglishFeedbackRouter({
         }
     },
 }));
+
+// Hindi caption conversion (romanize / translate). Mounted before the global parser for the
+// same 256kb body-cap reason, and before the OpenAI passthrough below because that hard-403s any
+// model other than gpt-4o — this route picks its own models server-side and uses the injected
+// key directly. Carries its own per-IP and per-install limiters.
+app.use(createHindiConvertRouter({ openaiApiKey }));
 
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
