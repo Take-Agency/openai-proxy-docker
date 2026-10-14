@@ -21,28 +21,30 @@ async function storedRecord(fields = {}) {
     return JSON.parse(writes.find((entry) => entry.Key.includes('/records/')).Body);
 }
 
-test('stores requested output and exposure without claiming conversion', async () => {
-    const selection = { output: 'romanizedHindi', selectorOpened: true, selectorManuallyOpened: false };
-    const record = await storedRecord({ hindiCaptionOutput: selection, hindiOutputConversionApplied: false });
-    assert.deepEqual(record.hindiCaptionOutput, selection);
-    assert.equal(record.hindiOutputConversionApplied, false);
+test('stores requested caption language and exposure without claiming conversion', async () => {
+    const selection = { primary: 'romanized', selectorOpened: true, selectorManuallyOpened: false };
+    const record = await storedRecord({ captionLanguages: selection, captionConversionApplied: false });
+    assert.deepEqual(record.captionLanguages, selection);
+    assert.equal(record.captionConversionApplied, false);
 });
 
 test('old clients remain distinguishable from an unopened selector', async () => {
     const oldRecord = await storedRecord();
-    assert.equal(oldRecord.hindiCaptionOutput, null);
-    assert.equal(oldRecord.hindiOutputConversionApplied, null);
-    const selection = { output: 'hinglish', selectorOpened: false, selectorManuallyOpened: false };
-    assert.deepEqual((await storedRecord({ hindiCaptionOutput: selection })).hindiCaptionOutput, selection);
+    assert.equal(oldRecord.captionLanguages, null);
+    assert.equal(oldRecord.captionConversionApplied, null);
+    const selection = { primary: 'asSpoken', selectorOpened: false, selectorManuallyOpened: false };
+    assert.deepEqual((await storedRecord({ captionLanguages: selection })).captionLanguages, selection);
 });
 
-test('ignores unknown output and Hindi fields on Urdu feedback', async () => {
-    assert.equal((await storedRecord({ hindiCaptionOutput: { output: 'unexpected' } })).hindiCaptionOutput, null);
-    const record = await storedRecord({
-        language: 'ur',
-        hindiCaptionOutput: { output: 'english', selectorOpened: true },
-        hindiOutputConversionApplied: false,
-    });
-    assert.equal(record.hindiCaptionOutput, null);
-    assert.equal(record.hindiOutputConversionApplied, null);
+test('accepts translated targets and urdu, rejects unknown caption languages', async () => {
+    const translated = { primary: 'translated:en', selectorOpened: true, selectorManuallyOpened: true };
+    const urdu = await storedRecord({ language: 'ur', captionLanguages: translated, captionConversionApplied: true });
+    assert.deepEqual(urdu.captionLanguages, translated);
+    assert.equal(urdu.captionConversionApplied, true);
+    assert.equal((await storedRecord({ captionLanguages: { primary: 'unexpected' } })).captionLanguages, null);
+    assert.equal((await storedRecord({ captionLanguages: { primary: 'translated:' } })).captionLanguages, null);
+    // Pre-rename clients sent `hindiCaptionOutput`; it is no longer read.
+    const legacy = await storedRecord({ hindiCaptionOutput: { output: 'english' }, hindiOutputConversionApplied: true });
+    assert.equal(legacy.captionLanguages, null);
+    assert.equal(legacy.captionConversionApplied, null);
 });
