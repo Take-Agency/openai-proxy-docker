@@ -161,7 +161,9 @@ translation for the Auto Caption app's Hindi caption output selector. Word-align
 can keep its per-word timings. Models: `HINDI_CONVERT_MODEL` (default `gpt-5.6-luna`) with one
 retry per chunk on `HINDI_CONVERT_FALLBACK_MODEL` (default `gpt-5.6-terra`) when the output
 fails alignment validation or times out (12s). Words are chunked server-side (~50, sentence
-aligned) and run in parallel (max 8).
+aligned) and run in parallel (max 8). Auth uses `HINDI_CONVERT_OPENAI_API_KEY` (a key from the
+dedicated "Romanization & Translation" OpenAI project, restricted to chat completions, so spend
+and budget limits are tracked apart from passthrough) and falls back to `OPENAI_API_KEY` when unset.
 
 ### `POST /hindi/convert`
 
@@ -180,5 +182,5 @@ Body: `{ "mode": "romanize" | "translate", "words": string[] }` — 1..1500 word
 
 Errors: 400 `install_id_required` / `invalid_mode` / `words_required`, 413 `too_many_words`,
 429 `rate_limited` (6/min per IP, 10/min and 60/day per install), 502 `conversion_failed`
-(both models failed — the app keeps Devanagari), 503 `not_configured` (no `OPENAI_API_KEY`).
+(both models failed — the app keeps Devanagari), 503 `not_configured` (no key configured).
 Logs one line per request (mode, models, chunks, words, latency, tokens); never transcript content.
