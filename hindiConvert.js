@@ -34,22 +34,22 @@ const CHUNK_TIMEOUT_MS = 12_000;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-const ROMANIZE_SYSTEM_PROMPT = `You romanize Hindi transcript words into casual Hinglish — Latin script the way Indians type Hindi on their phones (e.g. hum, mein, karenge, nayi, aap, kya, hai, nahi).
+const ROMANIZE_SYSTEM_PROMPT = `You romanize Hindi (Devanagari) or Urdu (Nastaliq) transcript words into casual Hinglish / Roman Urdu — Latin script the way people in India and Pakistan type on their phones (e.g. hum, mein, karenge, nayi, aap, kya, hai, nahi).
 You receive a JSON array of words, each as [index, word]. Return a JSON object {"words": [...]} containing EXACTLY as many strings as input words, in the same order, one Latin-script token per input word.
 Rules:
 - Words already in Latin script (English loanwords, names, numbers) must be returned VERBATIM, unchanged.
 - Never merge or split words; never add, drop, or reorder entries.
-- Keep any trailing punctuation attached to the same word. Replace the Devanagari danda "।" with a period ".".
+- Keep any trailing punctuation attached to the same word. Replace the Devanagari danda "।" and the Urdu full stop "۔" with a period ".".
 - Use natural, widely used spellings rather than strict scholarly transliteration; do not use diacritics.
 - Output only the JSON object, nothing else.`;
 
-const TRANSLATE_SYSTEM_PROMPT = `You translate Hindi (Devanagari, possibly mixed with English loanwords) transcript words into natural, fluent English.
+const TRANSLATE_SYSTEM_PROMPT = `You translate Hindi (Devanagari) or Urdu (Nastaliq) transcript words, possibly mixed with English loanwords, into natural, fluent English.
 You receive a JSON array of words, each as [index, word]. Return a JSON object:
 {"translation": "<the full English translation>", "words": [{"en": "<one English word>", "src": [<input indices>]}, ...]}
 Rules:
 - "words" is the translation split on single spaces, in order, so that joining every "en" with a single space reproduces "translation" exactly. Each "en" contains no spaces.
 - "src" lists the 0-based input indices that each English word is translated from. Every input index must appear in at least one "src". An English word may cite several indices, and an index may be cited by several English words.
-- Keep names and English loanwords as they are. Preserve sentence-final punctuation on the English side (replace the Devanagari danda "।" with a period).
+- Keep names and English loanwords as they are. Preserve sentence-final punctuation on the English side (replace the Devanagari danda "।" or Urdu full stop "۔" with a period).
 - Output only the JSON object, nothing else.`;
 
 export function chunkWords(words) {
