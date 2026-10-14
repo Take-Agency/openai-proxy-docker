@@ -63,12 +63,12 @@ When `audioConsented` is true, `audioBytes` is required, capped at
 enforced, not advisory. Send `x-install-id` so the daily budget is keyed per install rather than
 per IP.
 
-Hindi clients may also send `hindiCaptionOutput` with `output` (`hinglish`,
-`romanizedHindi`, or `english`), `selectorOpened`, and `selectorManuallyOpened`.
-`hindiOutputConversionApplied` records whether conversion actually ran; the initial
-client-only selector sends `false`. These fields are stored with the record without
-changing questions or eligibility. Missing fields remain null for older clients;
-explicit false distinguishes an unopened selector. Urdu ignores Hindi metadata.
+Hindi and Urdu clients may also send `captionLanguages` with `primary` (`asSpoken`,
+`romanized`, or `translated:<code>`, e.g. `translated:en`), `selectorOpened`, and
+`selectorManuallyOpened`. `captionConversionApplied` records whether conversion actually
+ran. These fields are stored with the record without changing questions or eligibility.
+Missing fields remain null for older clients; explicit false distinguishes an unopened
+selector. The pre-rename `hindiCaptionOutput` fields are no longer read.
 
 Run the storage compatibility tests with `node --test hinglishFeedback.test.js`.
 

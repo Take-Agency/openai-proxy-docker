@@ -25,6 +25,8 @@ const feedbackSecret = process.env.HINGLISH_FEEDBACK_SECRET;
 const feedbackAdminSecret = process.env.HINGLISH_FEEDBACK_ADMIN_SECRET;
 const feedbackMaxAudioBytes = parseInt(process.env.HINGLISH_FEEDBACK_MAX_AUDIO_BYTES || '52428800', 10); // 50 MiB
 const FEEDBACK_PREFIX = 'hinglish-feedback';
+const CAPTION_LANGUAGE_SOURCES = new Set(['hi', 'ur']);
+const CAPTION_LANGUAGE_PATTERN = /^(asSpoken|romanized|translated:[a-z]{2,3})$/;
 // Allowlisted so a client can never invent prefixes and scatter objects through the bucket.
 // v2 sheet ids (want-statements) plus the v1 ids — 3.7.1 clients still send the old set,
 // so removing them would 400 live submits.
@@ -182,16 +184,19 @@ export function createHinglishFeedbackRouter({ s3Client, spacesBucket, signedUrl
             region: str(body.region, 8),
             locale: str(body.locale, 32),
             durationSec: typeof body.durationSec === 'number' ? body.durationSec : null,
-            hindiCaptionOutput: language === 'hi'
-                && ['hinglish', 'romanizedHindi', 'english'].includes(body.hindiCaptionOutput?.output)
+            // Caption language the user asked for (iOS `CaptionLanguages`): `primary` is a
+            // transform relative to the spoken language — asSpoken | romanized | translated:<code>.
+            // Only languages the selector exists for (hi, ur); null for older clients.
+            captionLanguages: CAPTION_LANGUAGE_SOURCES.has(language)
+                && CAPTION_LANGUAGE_PATTERN.test(body.captionLanguages?.primary ?? '')
                 ? {
-                    output: body.hindiCaptionOutput.output,
-                    selectorOpened: body.hindiCaptionOutput.selectorOpened === true,
-                    selectorManuallyOpened: body.hindiCaptionOutput.selectorManuallyOpened === true,
+                    primary: body.captionLanguages.primary,
+                    selectorOpened: body.captionLanguages.selectorOpened === true,
+                    selectorManuallyOpened: body.captionLanguages.selectorManuallyOpened === true,
                 }
                 : null,
-            hindiOutputConversionApplied: language === 'hi' && typeof body.hindiOutputConversionApplied === 'boolean'
-                ? body.hindiOutputConversionApplied : null,
+            captionConversionApplied: CAPTION_LANGUAGE_SOURCES.has(language) && typeof body.captionConversionApplied === 'boolean'
+                ? body.captionConversionApplied : null,
         };
 
         try {
