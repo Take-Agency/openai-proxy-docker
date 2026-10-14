@@ -156,7 +156,7 @@ docker build .
 
 ## Hindi caption conversion
 
-Converts a Hindi (Devanagari) transcript's word list into romanized Hinglish or an English
+Converts a Hindi (Devanagari) or Urdu (Nastaliq) transcript's word list into romanized Hinglish or an English
 translation for the Auto Caption app's Hindi caption output selector. Word-aligned so the client
 can keep its per-word timings. Models: `HINDI_CONVERT_MODEL` (default `gpt-5.6-luna`) with one
 retry per chunk on `HINDI_CONVERT_FALLBACK_MODEL` (default `gpt-5.6-terra`) when the output
