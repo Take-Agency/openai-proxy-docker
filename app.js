@@ -20,6 +20,8 @@ const app = express();
 const port = process.env.PORT || 9017;
 const target = process.env.TARGET || 'https://api.openai.com';
 const openaiApiKey = process.env.OPENAI_API_KEY;
+// Hindi conversion bills to its own OpenAI project so its spend/budget is tracked separately.
+const hindiConvertApiKey = process.env.HINDI_CONVERT_OPENAI_API_KEY || openaiApiKey;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
 const cleanvoiceApiKey = process.env.CLEANVOICE_API_KEY;
 
@@ -127,7 +129,7 @@ app.use(createHinglishFeedbackRouter({
 // same 256kb body-cap reason, and before the OpenAI passthrough below because that hard-403s any
 // model other than gpt-4o — this route picks its own models server-side and uses the injected
 // key directly. Carries its own per-IP and per-install limiters.
-app.use(createHindiConvertRouter({ openaiApiKey }));
+app.use(createHindiConvertRouter({ openaiApiKey: hindiConvertApiKey }));
 
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
