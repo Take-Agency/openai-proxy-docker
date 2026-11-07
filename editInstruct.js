@@ -25,7 +25,8 @@ const MAX_REPAIR_ERRORS = 20;
 const MAX_REPAIR_ERROR_CHARS = 500;
 const MAX_TOOL_CALLS = 50;
 const MAX_OUTPUT_TOKENS = 4096;
-const ATTEMPT_TIMEOUT_MS = 12_000;
+// Two attempts must fit inside the app's 15 s client timeout (worst case ~14 s).
+const ATTEMPT_TIMEOUT_MS = 7_000;
 const LOCALE = /^[A-Za-z]{2,3}([-_][A-Za-z0-9]{2,8}){0,3}$/;
 
 const DAY_MS = 24 * 60 * 60 * 1000;

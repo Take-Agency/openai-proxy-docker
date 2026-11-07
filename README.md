@@ -192,7 +192,8 @@ calls that the Auto Caption app validates against its caption snapshot and appli
 transaction (design: shorts-caption `docs/instruction_editing_plan.md`). Uses the Responses API
 with the 15 strict function tools in `editInstructTools.js`, `reasoning: none`,
 `tool_choice: required` and `store: false`. Models: `EDIT_INSTRUCT_MODEL` (default `gpt-6-luna`)
-with one retry on `EDIT_INSTRUCT_FALLBACK_MODEL` (default `gpt-5.6-luna`) on a timeout (12s), an
+with one retry on `EDIT_INSTRUCT_FALLBACK_MODEL` (default `gpt-5.6-luna`) on a timeout (7s, so both
+attempts fit the app's 15s client timeout), an
 upstream error or a failed check. Auth uses `EDIT_INSTRUCT_OPENAI_API_KEY` only (a key from its own
 OpenAI project with a budget); there is no fallback to `OPENAI_API_KEY`, so the route 503s until it is set.
 
