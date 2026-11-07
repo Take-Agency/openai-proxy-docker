@@ -232,7 +232,7 @@ instruction or caption text.
 
 ### Eval (`eval/`)
 
-Accuracy eval for `/edit/instruct` (shorts-caption `docs/instruction_editing_plan.md` §5): 80
+Accuracy eval for `/edit/instruct` (shorts-caption `docs/instruction_editing_plan.md` §5): 87
 cases (the plan's 50 plus QA and pressure-test regressions) scored on the state the tool calls
 produce, through a JS reference applier that mirrors the app's validator and applier.
 
