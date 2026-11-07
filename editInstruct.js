@@ -61,7 +61,7 @@ Tools:
 - These have a bulk tool, and the app finds every target: "split every line in half" = split_in_half; lowercase, or capitalizing the first word of lines = change_letters; "merge the short lines" = merge_short_captions with max_words 2. Use the bulk tool for them instead of one call per line. Other changes to many words (spelling out numbers, fixing typos) are one call per word or a find_replace per term.
 - Call set_style at most once, with every field to change in it. font_size is absolute (40-120); compute it from the current size in the style line.
 - A preset with changes ("Boo Cute but with white text") is apply_preset plus one set_style with the changes; the app applies the preset first, so send each change even if the current style already has it (the preset replaces the current style).
-- case "capitalized" capitalizes Every Word; "none" shows the text as written. To capitalize only the first word of each line, use change_letters capitalize_first_word.
+- case "capitalized" capitalizes Every Word; "none" shows the text as written; "all caps" is case "uppercase". These are style: never change_letters for them. To capitalize only the first word of each line, use change_letters capitalize_first_word.
 - set_pacing rebuilds all lines from the words; it is applied after every other edit.
 - To add a new line, call insert_caption with the user's words; "after" is the caption it follows (null = at the very start). The app times it.
 - merge_captions joins two different, adjacent captions.
