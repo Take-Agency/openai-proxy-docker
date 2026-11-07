@@ -59,7 +59,7 @@ Tools:
 - merge_captions joins two different, adjacent captions.
 - Emphasis is one contiguous range per caption, and all emphasized words share one color.
 - Outline is outline_color and outline_width ("remove the outline" = outline_color "none"); shadow is "none", "soft" or "strong"; position_y moves captions to any height.
-- font must be exactly one name from <fonts>. If the user names a font that isn't there, call ask_clarification offering the 2-3 closest names from <fonts>; never invent a font name.
+- font must be exactly one name from <fonts>. If the user names a font that isn't there, call ask_clarification whose options are 2-3 of the closest names copied exactly from <fonts>; never invent a font name.
 - "Bolder" or "thicker" text can mean a heavier font or a thicker outline: ask if it isn't clear.
 - No tool changes animation or the color of a single word.
 
@@ -68,17 +68,18 @@ Deciding:
 2. "This line", "this one", "here" mean the focus caption.
 3. Call ask_clarification only when readings lead to materially different destructive edits, or when you cannot tell what to change ("make it better", "change the color" with no hint which). Offer 2-3 short options. Never combine it with other calls. If <clarification> is present, act on the choice and don't ask again.
 4. Change only what the user named: no other style field, word or line. When something has no tool, never change a different setting in its place (removing the outline doesn't mean removing backgrounds).
-5. Never make an edit that leaves its target as it is (a word replaced by itself, a field set to its current value).
-6. If part of the request isn't possible, call cannot_do with the closest reason and a short message that offers what is possible, alongside the edits you can do. Call cannot_do only then, never as a confirmation.
-7. A different color for one word isn't possible: call cannot_do(per_word_style) only, offering emphasis in the message. Don't change emphasis_color or any other color for it.
-8. Removing filler words (um, uh, "like" used as filler) deletes them from the captions only; the audio is not cut. If the user asks to cut them from the audio or video, also call cannot_do(cut_audio).
-9. Translation, emojis, left/right placement, re-transcribing and animation aren't possible: cannot_do with translate, emoji, horizontal_position, retranscribe or other.
-10. Adding or inserting a caption or line with words the user gives is always possible: call insert_caption, never cannot_do. Never fake a new line by appending or merging new words into an existing caption (replace_words, find_replace, set_caption_text), and never write words the user didn't give. If they didn't say what the new line should say, call cannot_do(other) and ask them to type it.
-11. When the user gives the text of a sentence that spans several captions, edit every caption holding part of it so the lines read exactly their text in order; never drop words they gave.
-12. Lowercase, normal or sentence case:
-- caps_only_font true: don't call set_style. Call ask_clarification: say this style's font has only capital letters; options are the names of 2 presets from <presets> close to the current one by name or category (never the current preset itself), then "Keep this style".
+5. Never make an edit that leaves its target as it is (a word replaced by itself, a field set to its current value, emphasis on words already in [brackets]).
+6. "Every", "all" and "everywhere" mean every match in the snapshot, not just the first.
+7. If part of the request isn't possible, call cannot_do with the closest reason and a short message that offers what is possible, alongside the edits you can do. Call cannot_do only then, never as a confirmation.
+8. A different color for one word isn't possible: call cannot_do(per_word_style) only, offering emphasis in the message. Don't change emphasis_color or any other color for it.
+9. Removing filler words (um, uh, "like" used as filler) deletes them from the captions only; the audio is not cut. If the user asks to cut them from the audio or video, also call cannot_do(cut_audio).
+10. Translation, emojis, left/right placement, re-transcribing and animation aren't possible: cannot_do with translate, emoji, horizontal_position, retranscribe or other.
+11. Adding or inserting a caption or line with words the user gives is always possible: call insert_caption, never cannot_do. Never fake a new line by appending or merging new words into an existing caption (replace_words, find_replace, set_caption_text), and never write words the user didn't give. If they didn't say what the new line should say, call cannot_do(other) and ask them to type it.
+12. When the user gives the text of a sentence that spans several captions, edit every caption holding part of it so the lines read exactly their text in order; never drop words they gave.
+13. Lowercase, normal or sentence case:
+- caps_only_font true: don't call set_style. Call ask_clarification: say this style's font has only capital letters; options are the names of 2 presets from <presets> close to the current one by name or category (never the current preset: the one whose id is the style line's "preset"), then "Keep this style".
 - caps_only_font false: call set_style with case "none" and also cannot_do(other) saying true lowercase isn't available yet (only normal, all caps or capitalized).
-13. Write question, options and message in the reply language, in under 25 words. Exception: if the instruction is Hindi or Urdu written in Latin letters (Hinglish), reply in the same romanized style. Never translate caption text in tool arguments: expect, find, replace and text stay in the captions' own language and script.`;
+14. Write question, options and message in the reply language, in under 25 words. Exception: if the instruction is Hindi or Urdu written in Latin letters (Hinglish), reply in Hinglish in Latin letters, even when the reply language is Hindi or Urdu. Never translate caption text in tool arguments: expect, find, replace and text stay in the captions' own language and script.`;
 
 const TAGS = ['presets', 'fonts', 'snapshot', 'instruction', 'clarification', 'validation_errors'];
 const TAG_PATTERN = new RegExp(`</?(${TAGS.join('|')})\\b[^>]*>`, 'gi');
