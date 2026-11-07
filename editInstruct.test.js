@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import express from 'express';
-import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, languageName } from './editInstruct.js';
+import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, languageName, cleanFontOptions, INTENT_PROMPT } from './editInstruct.js';
 import { EDIT_TOOLS, TOOL_NAMES } from './editInstructTools.js';
 
 const INSTALL_ID = 'test-install-0001';
@@ -92,11 +92,13 @@ test('happy path returns parsed tool calls, the revision and the model', async (
                 { name: 'set_style', arguments: JSON.parse(setStyle.arguments) },
             ],
         });
-        assert.equal(calls.length, 1);
+        // find_replace + set_style is a mixed batch: the intent check ran, failed to answer and kept it
+        assert.equal(calls.length, 2);
+        assert.equal(calls[1].request.instructions, INTENT_PROMPT);
         const { url, request, headers } = calls[0];
         assert.equal(url, 'https://api.openai.com/v1/responses');
         assert.equal(headers.authorization, 'Bearer sk-test');
-        assert.deepEqual(request.reasoning, { effort: 'none' });
+        assert.deepEqual(request.reasoning, { effort: 'low' });
         assert.equal(request.tool_choice, 'required');
         assert.equal(request.parallel_tool_calls, true);
         assert.equal(request.store, false);
@@ -328,10 +330,11 @@ test('the locale is rendered as a named reply language', () => {
     assert.equal(languageName('en', 'make it bigger'), 'English (en)');
 });
 
-test('tool schemas are strict: all 16 tools, every property required, no extra properties', () => {
+test('tool schemas are strict: all 21 tools, every property required, no extra properties', () => {
     assert.deepEqual(TOOL_NAMES, [
         'set_style', 'apply_preset', 'set_pacing', 'replace_words', 'delete_words', 'find_replace', 'set_caption_text',
         'split_caption', 'merge_captions', 'delete_captions', 'insert_caption', 'shift_timing', 'set_caption_timing', 'set_emphasis',
+        'split_in_half', 'change_letters', 'merge_short_captions', 'delete_all', 'rewrite_sentence',
         'ask_clarification', 'cannot_do',
     ]);
     const checkObject = (schema, path) => {
@@ -365,6 +368,50 @@ test('logs counts only, never instruction or caption text', async () => {
         console.log = original;
     }
     assert.equal(lines.length, 1);
-    assert.match(lines[0], /^edit\/instruct ok model=gpt-5\.6-luna calls=1 tools=find_replace .*inputTokens=3000 cachedTokens=2500 outputTokens=80 failures=gpt-6-luna:bad_arguments$/);
+    assert.match(lines[0], /^edit\/instruct ok model=gpt-5\.6-luna calls=1 tools=find_replace .*inputTokens=3000 cachedTokens=2500 outputTokens=80 intentCheck=- failures=gpt-6-luna:bad_arguments$/);
     assert.ok(!lines[0].includes('SECRET'));
+});
+
+test('font question options become exact catalog names', () => {
+    const fonts = 'System\nChalkboardSE-Bold\nFredoka One\nFredokaOne-Regular\nMontserrat-Black';
+    const ask = (options) => [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options } }];
+    const options = (calls) => cleanFontOptions(calls, fonts)[0].arguments.options;
+    assert.deepEqual(options(ask(['ChalkboardSE-Bold', 'Comic-style option: Comic Sans not listed'])), ['ChalkboardSE-Bold']);
+    assert.deepEqual(options(ask(['Comic Sans?', 'FredokaOne-Regular', 'Keep current font'])), ['FredokaOne-Regular']);
+    assert.deepEqual(options(ask(['Comic Sans unavailable; choose Fredoka One', 'Comic Sans unavailable; choose ChalkboardSE-Bold', 'Keep current font'])), ['Fredoka One', 'ChalkboardSE-Bold']);
+    // other questions pass through
+    assert.deepEqual(options(ask(['Text', 'Highlight', 'Background box'])), ['Text', 'Highlight', 'Background box']);
+    assert.deepEqual(cleanFontOptions(ask(['A', 'B']), null)[0].arguments.options, ['A', 'B']);
+});
+
+test('the bulk tools are strict and in the tool list', () => {
+    for (const name of ['split_in_half', 'change_letters', 'merge_short_captions', 'delete_all', 'rewrite_sentence']) {
+        const entry = EDIT_TOOLS.find((tool) => tool.name === name);
+        assert.ok(entry, name);
+        assert.equal(entry.strict, true);
+        assert.deepEqual(entry.parameters.required, Object.keys(entry.parameters.properties));
+    }
+});
+
+test('a style request that also rewords text keeps only the style when the user asked for none', async () => {
+    const deleteAll = { type: 'function_call', name: 'delete_all', arguments: JSON.stringify({ word: 'um', occurrences: null }) };
+    const intent = (changesText) => [{ type: 'function_call', name: 'report_intent', arguments: JSON.stringify({ changes_text: changesText }) }];
+    for (const [changesText, expected] of [[false, ['set_style']], [true, ['set_style', 'delete_all']]]) {
+        const { fetch, calls } = fakeFetch(({ request }) => (request.instructions === INTENT_PROMPT ? intent(changesText) : [setStyle, deleteAll]));
+        await withServer({ fetch }, async (post) => {
+            const { status, body } = await post(validBody({ instruction: 'pon los subtítulos en amarillo' }));
+            assert.equal(status, 200);
+            assert.deepEqual(body.tool_calls.map((call) => call.name), expected);
+            // the check sees the instruction only, never the snapshot
+            assert.ok(!JSON.stringify(calls[1].request.input).includes('<snapshot>'));
+        });
+    }
+});
+
+test('a batch with no style tool skips the intent check', async () => {
+    const { fetch, calls } = fakeFetch(() => [findReplace]);
+    await withServer({ fetch }, async (post) => {
+        assert.equal((await post(validBody())).status, 200);
+        assert.equal(calls.length, 1);
+    });
 });

@@ -1,4 +1,4 @@
-// The 16 strict function tools for /edit/instruct, as Responses API function tools.
+// The 21 strict function tools for /edit/instruct, as Responses API function tools.
 // Source of truth: shorts-caption docs/instruction_editing_plan.md §3.2, plus insert_caption. Kept as plain data in its
 // own module so it can be diffed against (or exported to) the iOS decoder's fixture.
 //
@@ -17,6 +17,16 @@ const wordId = { type: 'string', pattern: WORD_ID };
 const nullableCapId = { type: ['string', 'null'], pattern: CAP_ID };
 const nullableWordId = { type: ['string', 'null'], pattern: WORD_ID };
 const nullableEnum = (values) => ({ type: ['string', 'null'], enum: [...values, null] });
+const nullableCaptionList = { type: ['array', 'null'], items: capId };
+const wordRefs = {
+    type: 'array',
+    items: {
+        type: 'object',
+        properties: { id: wordId, expect: { type: 'string' } },
+        required: ['id', 'expect'],
+        additionalProperties: false,
+    },
+};
 
 function tool(name, description, properties) {
     return {
@@ -122,7 +132,29 @@ export const EDIT_TOOLS = [
         from: nullableWordId,
         to: nullableWordId,
     }),
-    tool('ask_clarification', 'Ask the user to choose between 2-3 readings of the instruction. Never combined with other calls.', {
+    // Bulk tools: the model says what to change; the app finds every target, so it can't skip,
+    // miscount or add one.
+    tool('split_in_half', 'Split captions into two lines each, near the middle. null = every caption with 2 or more words. Use for "split every line in half" instead of one split_caption per line.', {
+        captions: nullableCaptionList,
+    }),
+    tool('change_letters', 'Change the letters of the caption text itself (a text edit the user reviews). lowercase = every letter lowercase; capitalize_first_word = capitalize the first letter of the first word of each caption. null = every caption. Words that already look like that are left alone.', {
+        captions: nullableCaptionList,
+        mode: { type: 'string', enum: ['lowercase', 'capitalize_first_word'] },
+    }),
+    tool('merge_short_captions', 'Merge every caption with max_words words or fewer into a neighbour (the caption before it, unless that one ends a sentence). "Merge the short lines" = max_words 2. The app counts the words.', {
+        max_words: { type: 'integer' },
+    }),
+    tool('delete_all', 'Delete one word (case and punctuation ignored) from the captions: every occurrence (occurrences null), or only the listed occurrences of it. Only that word can be deleted, so use it whenever the user names the word ("remove every like", "remove the ums"). For a word that is only sometimes a filler ("like"), list the filler occurrences. Captions only; the audio is not cut.', {
+        word: { type: 'string' },
+        occurrences: { ...wordRefs, type: ['array', 'null'] },
+    }),
+    tool('rewrite_sentence', 'Replace the text of consecutive captions first..last (a sentence that runs across lines) with new text. The app spreads the new words over those captions in order, keeping each caption\'s time. expect is the current text of those captions joined by spaces.', {
+        first: capId,
+        last: capId,
+        expect: { type: 'string' },
+        text: { type: 'string' },
+    }),
+    tool('ask_clarification', 'Ask the user to choose between 2-3 readings of the instruction. The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. When the question is which font to use, options are 1-3 font names copied exactly from <fonts>. Never combined with other calls.', {
         question: { type: 'string' },
         options: { type: 'array', items: { type: 'string' } },
     }),
