@@ -4,7 +4,8 @@
 //
 // Strict mode: every property is required, optional ones are nullable (`["X", "null"]`), and
 // every object has `additionalProperties: false`. Numeric ranges and array lengths (font size
-// 40–120, offset ±5000 ms, 2–3 options) are left to the app's validator, as §3.2 specifies.
+// 40–120, offset ±5000 ms, 2–3 options, position_y, outline width, font names in the catalog)
+// are left to the app's validator, as §3.2 specifies.
 
 const CAP_ID = '^c\\d+$';
 const WORD_ID = '^c\\d+\\.\\d+$';
@@ -33,7 +34,7 @@ function tool(name, description, properties) {
 }
 
 export const EDIT_TOOLS = [
-    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. case: "capitalized" = Every Word Capitalized, "none" = as written.', {
+    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. case: "capitalized" = Every Word Capitalized, "none" = as written. position is one of three presets; position_y is any height.', {
         fill_color: { type: ['string', 'null'], pattern: HEX },
         emphasis_color: { type: ['string', 'null'], pattern: HEX },
         caption_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
@@ -43,6 +44,11 @@ export const EDIT_TOOLS = [
         case: nullableEnum(['none', 'uppercase', 'capitalized']),
         highlight: nullableEnum(['none', 'static', 'spoken_word']),
         overflow: nullableEnum(['none', 'resize_to_fit', 'wrap']),
+        position_y: { type: ['number', 'null'], description: 'Vertical position, 0 = bottom edge, 1 = top edge (the style line\'s y; the bottom/center/top presets are about 0.2/0.5/0.9). For "a bit higher/lower" move 0.08-0.12 from the current y. Keep within 0.05-0.95.' },
+        outline_color: { type: ['string', 'null'], pattern: HEX_OR_NONE, description: '"none" removes the outline.' },
+        outline_width: { type: ['number', 'null'], description: 'Thin about 2, medium about 4, thick about 8.' },
+        shadow: nullableEnum(['none', 'soft', 'strong']),
+        font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
     }),
     tool('apply_preset', 'Apply a style preset by its id from the presets list. Resets style overrides, so it is applied before set_style.', {
         preset_id: { type: 'string' },
