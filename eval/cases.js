@@ -231,6 +231,15 @@ export const CASES = [
     },
     { id: 85, group: 'defaults', fixture: 'P2', instruction: "shorten the captions, there's too much text", accept: [{ calls: [['set_pacing', { pacing: 'fast' }]] }] },
     {
+        // outline width 8 and a strong shadow already: "thick" must go past 8, and the shadow
+        // switches intensity or a note says it's already there
+        id: 87, group: 'style2', fixture: 'F1o', instruction: 'add a thick black outline and a drop shadow', cannotOptional: ['other'],
+        accept: [
+            { calls: [['set_style', { outline_width: 14, shadow: 'soft' }]], style: { outline: { outline: { color: '#000000', minWidth: 11, maxWidth: 18 } } } },
+            { calls: [['set_style', { outline_width: 14 }]], cannot: ['other'], style: { outline: { outline: { color: '#000000', minWidth: 11, maxWidth: 18 } } } },
+        ],
+    },
+    {
         id: 86, group: 'defaults', fixture: 'F1u', instruction: 'capitalize the first word of every line', cannotOptional: ['other'],
         accept: [{ calls: [['c1', 'um', 'Um'], ['c2', 'how', 'How'], ['c3', 'so', 'So'], ['c4', 'post', 'Post'], ['c5', 'and', 'And']].map(([caption, expect, text]) => ['replace_words', { from: `${caption}.0`, to: `${caption}.0`, expect, text }]) }],
     },

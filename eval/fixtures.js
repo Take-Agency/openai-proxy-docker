@@ -52,6 +52,8 @@ export const FIXTURES = {
     F1u: variant('F1u', {}, { case: 'uppercase', caps_only_font: true }),
     F1uc: variant('F1uc', {}, { case: 'uppercase' }),
     F1s: variant('F1s', {}, { shadow: 'soft' }),
+    // an outline and a shadow already set (case 87: intensity words are relative)
+    F1o: variant('F1o', {}, { outline: { color: '#000000', width: 8 }, shadow: 'strong' }),
     // the staging pressure-test fixtures: English with numbers, Devanagari, Hinglish
     P2: read('P2.json'),
     P3: read('P3.json'),
