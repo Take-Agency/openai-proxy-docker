@@ -61,7 +61,7 @@ export const CASES = [
     { id: 6, group: 'style', instruction: 'move them to the top', accept: [{ calls: [['set_style', { position: 'top' }]] }] },
     { id: 7, group: 'style', instruction: 'all caps', accept: [{ calls: [['set_style', { case: 'uppercase' }]] }] },
     { id: 8, group: 'style', instruction: 'highlight the word being spoken in green', accept: [{ calls: [['set_style', { emphasis_color: '#00C853' }]], style: { emphasis: GREEN } }] },
-    { id: 9, group: 'style', instruction: 'add a black box behind the captions', accept: [{ calls: [['set_style', { caption_background_color: '#000000' }]], style: { caption_bg: DARK } }] },
+    { id: 9, group: 'style', fixture: 'F1cb', instruction: 'add a black box behind the captions', accept: [{ calls: [['set_style', { caption_background_color: '#000000' }]], style: { caption_bg: DARK } }] },
     { id: 10, group: 'style', instruction: 'turn off the highlight', accept: [{ calls: [['set_style', { highlight: 'none' }]] }] },
 
     // Presets and pacing
@@ -255,6 +255,14 @@ export const CASES = [
     { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, accept: [{ clarify: true }] },
     { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, optionsMatch: /box|background/i, accept: [{ clarify: true }] },
     { id: 99, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Yellow text' }, accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW } }] },
+    // Parts named the way they look (the snapshot's "looks" line)
+    { id: 100, group: 'looks', instruction: 'add a black box behind the captions', cannotOptional: ['other'],
+        // Mosy can't draw a caption box: say so (a preset with one is fine too), never a color that shows nothing
+        accept: [{ calls: [], cannot: ['other'] }, { clarify: true }] },
+    { id: 101, group: 'looks', fixture: 'F1pw', instruction: 'make the highlight brighter', cannotOptional: ['other'],
+        accept: [{ calls: [['set_style', { word_background_color: '#A970FF' }]], style: { word_bg: { hue: [250, 300], minSaturation: 0.3 } } }, { clarify: true }] },
+    { id: 102, group: 'looks', fixture: 'F1pw', instruction: 'make the purple brighter', cannotOptional: ['other'],
+        accept: [{ calls: [['set_style', { word_background_color: '#A970FF' }]], style: { word_bg: { hue: [250, 300], minSaturation: 0.3 } } }] },
     // Style-only requests in other languages on captions full of fillers: no word may change
     // (case 78 deleted um/uh/like in 3 of 5 runs before reasoning "low").
     { id: 88, group: 'style-only', locale: 'pt', reply: 'pt', instruction: 'deixa as legendas amarelas e maiores', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },

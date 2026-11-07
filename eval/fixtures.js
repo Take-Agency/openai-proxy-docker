@@ -27,10 +27,11 @@ function timedWords(text, start, end) {
     });
 }
 
-function variant(id, replacements, style = {}) {
+function variant(id, replacements, style = {}, boxes = undefined) {
     const fixture = structuredClone(golden.fixture);
     fixture.id = id;
     fixture.styleOverrides = style;
+    if (boxes) fixture.boxes = boxes;
     for (const [index, text] of Object.entries(replacements)) {
         const caption = fixture.captions[index];
         caption.words = timedWords(text, caption.words[0][1], caption.words.at(-1)[2]);
@@ -52,7 +53,11 @@ export const FIXTURES = {
     F1u: variant('F1u', {}, { case: 'uppercase', caps_only_font: true }),
     F1uc: variant('F1uc', {}, { case: 'uppercase' }),
     F1s: variant('F1s', {}, { shadow: 'soft' }),
-    F1bg: variant('F1bg', {}, { caption_bg: '#000000' }),
+    F1bg: variant('F1bg', {}, { caption_bg: '#000000' }, { word: true, caption: true }),
+    // a style that can draw a box behind the captions, with none yet (case 9)
+    F1cb: variant('F1cb', {}, {}, { word: true, caption: true }),
+    // a purple box behind the spoken word and no colored letters: "the highlight" is the box (case 101)
+    F1pw: variant('F1pw', {}, { word_bg: '#8E3BFF', highlight: 'none' }),
     // an outline and a shadow already set (case 87: intensity words are relative)
     F1o: variant('F1o', {}, { outline: { color: '#000000', width: 8 }, shadow: 'strong' }),
     // the staging pressure-test fixtures: English with numbers, Devanagari, Hinglish
