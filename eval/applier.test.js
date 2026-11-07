@@ -123,4 +123,6 @@ test('a replacement keeps trailing punctuation its expect left out', async () =>
     // the model's own punctuation wins
     assert.equal(captionText(run(call('Number 1:', 'Number one'), p2, presets, FONTS).state.captions[2]), 'Number one hooks, hooks, hooks!');
     assert.equal(captionText(run(call('Number 1', 'Number one -'), p2, presets, FONTS).state.captions[2]), 'Number one - hooks, hooks, hooks!');
+    // removing the punctuation itself is left alone
+    assert.equal(captionText(run(call('Number 1', 'Number 1'), p2, presets, FONTS).state.captions[2]), 'Number 1 hooks, hooks, hooks!');
 });
