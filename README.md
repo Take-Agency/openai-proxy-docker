@@ -190,8 +190,11 @@ Logs one line per request (mode, models, chunks, words, latency, tokens); never 
 Turns a typed instruction ("fix Denis to Dennis everywhere and make it bigger") into strict tool
 calls that the Auto Caption app validates against its caption snapshot and applies as one
 transaction (design: shorts-caption `docs/instruction_editing_plan.md`). Uses the Responses API
-with the 16 strict function tools in `editInstructTools.js` (§3.2's 15 plus `insert_caption`), `reasoning: none`,
-`tool_choice: required` and `store: false`. Models: `EDIT_INSTRUCT_MODEL` (default `gpt-6-luna`)
+with the 21 strict function tools in `editInstructTools.js` (§3.2's 15, `insert_caption`, and five bulk tools
+whose targets the app finds itself), `reasoning: low` (`EDIT_INSTRUCT_REASONING` = `none` / `low` / `medium`),
+`tool_choice: required` and `store: false`. A batch that mixes a style change with a text change gets a second,
+instruction-only call (`report_intent`, 3s, skipped past 11s); when the user asked for no text change, the text
+changes are dropped. Font-question options are reduced to exact names from `fonts`. Models: `EDIT_INSTRUCT_MODEL` (default `gpt-6-luna`)
 with one retry on `EDIT_INSTRUCT_FALLBACK_MODEL` (default `gpt-5.6-luna`) on a timeout (7s, so both
 attempts fit the app's 15s client timeout), an
 upstream error or a failed check. Auth uses `EDIT_INSTRUCT_OPENAI_API_KEY` only (a key from its own
