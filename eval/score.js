@@ -247,7 +247,8 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
         if (check === 'fontOptions' && (edit.clarification?.options || []).filter((option) => FONTS.includes(option)).length < 2) failures.push(check);
     }
     if (wrongLanguage(edit, replyLanguage(testCase))) failures.push('replyLanguage');
-    return failures.map((check) => `failed check ${check}`).concat(noOpEdits(calls, fixture).map((entry) => `no-op edit: ${entry}`));
+    const noOps = testCase.allowNoOp ? [] : noOpEdits(calls, fixture);
+    return failures.map((check) => `failed check ${check}`).concat(noOps.map((entry) => `no-op edit: ${entry}`));
 }
 
 // ---------------------------------------------------------------- scoring
