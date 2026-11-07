@@ -1,166 +1,175 @@
-Lovelo Line Bold
-The Bold Font Bold
-Montserrat Black
-Montserrat Black Italic
-Montserrat ExtraBold
-Montserrat ExtraBold Italic
-RuneScape UF Regular
-Press Start 2P Regular
-Rubik Mono One Regular
-Creepster
-Fredericka the Great
-Special Elite Regular
-Luckiest Guy Regular
-Panton Black Caps
-Poppins Thin
-Poppins Thin Italic
-Poppins ExtraLight
-Poppins ExtraLight Italic
-Poppins Light
-Poppins Light Italic
-Poppins Regular
-Poppins Italic
-Poppins Medium
-Poppins Medium Italic
-Poppins SemiBold
-Poppins SemiBold Italic
-Poppins Bold
-Poppins Bold Italic
-Poppins ExtraBold
-Poppins ExtraBold Italic
-Poppins Black
-Poppins Black Italic
-Universal Serif
-Truculenta Bold
-Fredoka One
-GoldenSans-Black
-HelveticaNeueLTStd-Bd
-Sahir Yesta
-Silkscreen Regular
-Rubik Black
-Fredoka Medium
-Bangers
-Instrument Sans SemiBold
-Fraunces 72pt Black
-Fraunces 72pt Soft Italic
-DM Mono Regular
-DM Mono Medium Italic
-DM Mono Medium
-Sen ExtraBold
-Mulish ExtraBold Italic
-BioRhyme SemiExpanded Bold
-BioRhyme Medium
-Roboto ExtraBold
-Roboto Black
-Abhaya Libre Regular
-Barriecito Regular
-Jua Regular
-Montserrat SemiBold
-Sour Gummy ExtraBold
-Amarante Regular
-Capriola Regular
-DK Magical Brush Regular
-Darumadrop One Regular
-Delius Swash Caps
-DynaPuff Regular Regular
-Elsie Swash Caps Black
-Elsie Swash Caps Regular
-Gasoek One Regular
-Gorditas Bold
-Gorditas
-Happy Monkey
-Inclusive Sans Bold
-Inclusive Sans Bold Italic
-Inclusive Sans Italic
-Inclusive Sans Light
-Inclusive Sans Light Italic
-Inclusive Sans Medium
-Inclusive Sans Medium Italic
-Inclusive Sans Regular
-Inclusive Sans SemiBold
-Inclusive Sans SemiBold Italic
-Dynalight
-Rammetto One Regular
-Righteous
-Rosmatika Regular
-Rowdies Bold
-Rowdies Light
-Rowdies Regular
-Saturdate
-Staatliches Regular
-Steelworks Vintage Demo
-ChineseRocksRg-Regular
-Bebas Neue Regular
-Halloween Bones
-Halloween Guises
-Halloween Guises Italic
-Halloween Plaque
-Halloween Spooky Regular
-Halloween Whispers
-Qindret
-AvenirNext-Bold
-.System-100
-Avenir-Heavy
-Avenir-Book
-Futura-Bold
-GillSans-Bold
-Futura-CondensedExtraBold
-AvenirNextCondensed-Bold
-SavoyeLetPlain
-TamilSangamMN
-Impact
-HoeflerText-Regular
-Avenir-Medium
-HiraginoSans-W8
-Avenir-Light
-Charter-Bold
-AvenirNext-Regular
-Arial-ItalicMT
-AvenirNextCondensed-MediumItalic
-Optima-Regular
-ArialHebrew
-AvenirNextCondensed-Italic
-Helvetica
-SnellRoundhand
-STIXTwoText-Italic_Medium-Italic
-AmericanTypewriter-Semibold
-AmericanTypewriter
-HelveticaNeue-Medium
-AvenirNext-Heavy
-HelveticaNeue-Bold
-Avenir-Black
-AlNile-Bold
-AppleSDGothicNeo-Bold
-GillSans-UltraBold
-ChalkboardSE-Bold
-ArialRoundedMTBold
-Baskerville-Bold
-Optima-ExtraBlack
-AvenirNext-HeavyItalic
-HoeflerText-BlackItalic
-Baskerville-SemiBoldItalic
-Optima-Italic
-SnellRoundhand-Black
-TimesNewRomanPS-BoldItalicMT
-Rockwell-Bold
-CourierNewPS-BoldMT
-AmericanTypewriter-Bold
-Baskerville
+System
+AbhayaLibre-Regular
 AcademyEngravedLetPlain
-BodoniSvtyTwoSCITCTT-Book
-Charter-Roman
-Didot
-Copperplate-Bold
-AvenirNext-UltraLight
-AvenirNextCondensed-UltraLight
-EuphemiaUCAS
-GillSans-Light
-HiraMinProN-W3
-BradleyHandITCTT-Bold
-ChalkDuster
-MarkerFelt-Thin
-Noteworthy-Light
-PartyLetPlain
-Papyrus
-AvenirNextCondensed-DemiBold
+AlNile-Bold
+Amarante-Regular
+AmericanTypewriter
+AmericanTypewriter-Bold
+AmericanTypewriter-Semibold
+AppleSDGothicNeo-Bold
+Arial-ItalicMT
+ArialHebrew
+ArialRoundedMTBold
+Avenir-Black
+Avenir-Book
+Avenir-Heavy
+Avenir-Light
+Avenir-Medium
+AvenirNext-Bold
 AvenirNext-BoldItalic
+AvenirNext-Heavy
+AvenirNext-HeavyItalic
+AvenirNext-Regular
+AvenirNext-UltraLight
+AvenirNextCondensed-Bold
+AvenirNextCondensed-DemiBold
+AvenirNextCondensed-Italic
+AvenirNextCondensed-MediumItalic
+AvenirNextCondensed-UltraLight
+Bangers
+Bangers-Regular
+Barriecito-Regular
+Baskerville
+Baskerville-Bold
+Baskerville-SemiBoldItalic
+BebasNeue-Regular
+BioRhyme-Medium
+BioRhymeSemiExpanded-Bold
+BodoniSvtyTwoSCITCTT-Book
+BradleyHandITCTT-Bold
+Capriola-Regular
+ChalkDuster
+ChalkboardSE-Bold
+Charter-Bold
+Charter-Roman
+ChineseRocksRg-Regular
+Copperplate-Bold
+CourierNewPS-BoldMT
+Creepster-Regular
+DKMagicalBrush-Regular
+DMMono-Medium
+DMMono-MediumItalic
+DMMono-Regular
+DarumadropOne-Regular
+DeliusSwashCaps-Regular
+Didot
+DynaPuff-Regular
+Dynalight-Regular
+ElsieSwashCaps-Black
+ElsieSwashCaps-Regular
+EuphemiaUCAS
+Fraunces72pt-Black
+Fraunces72ptSoft-Italic
+FrederickatheGreat-Regular
+Fredoka One
+Fredoka-Medium
+FredokaOne-Regular
+Futura-Bold
+Futura-CondensedExtraBold
+GasoekOne-Regular
+GillSans-Bold
+GillSans-Light
+GillSans-UltraBold
+GoldenSans-Black
+Gorditas-Bold
+Gorditas-Regular
+HalloweenBonesRegular
+HalloweenGuises
+HalloweenGuises-Italic
+HalloweenPlaque
+HalloweenSpooky-Regular
+HalloweenWhispers
+HappyMonkey-Regular
+Helvetica
+Helvetica Neue LT Std
+HelveticaNeue-Bold
+HelveticaNeue-Medium
+HelveticaNeueLTStd-Bd
+HiraMinProN-W3
+HiraginoSans-W8
+HoeflerText-BlackItalic
+HoeflerText-Regular
+Impact
+InclusiveSans-Bold
+InclusiveSans-BoldItalic
+InclusiveSans-Italic
+InclusiveSans-Light
+InclusiveSans-LightItalic
+InclusiveSans-Medium
+InclusiveSans-MediumItalic
+InclusiveSans-Regular
+InclusiveSans-SemiBold
+InclusiveSans-SemiBoldItalic
+Instrument Sans
+InstrumentSans-SemiBold
+Jua-Regular
+Lovelo-LineBold
+LuckiestGuy-Regular
+MarkerFelt-Thin
+Montserrat-Black
+Montserrat-BlackItalic
+Montserrat-ExtraBold
+Montserrat-ExtraBoldItalic
+Montserrat-SemiBold
+Montserrat-Thin
+Mulish-ExtraBoldItalic
+Noteworthy-Light
+Optima-ExtraBlack
+Optima-Italic
+Optima-Regular
+Panton
+Panton-BlackCaps
+Papyrus
+PartyLetPlain
+Poppins-Black
+Poppins-BlackItalic
+Poppins-Bold
+Poppins-BoldItalic
+Poppins-ExtraBold
+Poppins-ExtraBoldItalic
+Poppins-ExtraLight
+Poppins-ExtraLightItalic
+Poppins-Italic
+Poppins-Light
+Poppins-LightItalic
+Poppins-Medium
+Poppins-MediumItalic
+Poppins-Regular
+Poppins-SemiBold
+Poppins-SemiBoldItalic
+Poppins-Thin
+Poppins-ThinItalic
+PressStart2P-Regular
+Qindret
+RammettoOne-Regular
+Righteous-Regular
+Roboto-Black
+Roboto-ExtraBold
+Rockwell-Bold
+Rosmatika-Regular
+Rowdies-Bold
+Rowdies-Light
+Rowdies-Regular
+Rubik-Black
+RubikMonoOne-Regular
+RuneScape-UF
+STIXTwoText-Italic_Medium-Italic
+Sahir Yesta
+SahirYesta
+Saturdate
+SavoyeLetPlain
+Sen-ExtraBold
+Silkscreen-Regular
+SnellRoundhand
+SnellRoundhand-Black
+SourGummy-ExtraBold
+SpecialElite-Regular
+Staatliches-Regular
+SteelworksVintageDemo
+TamilSangamMN
+The Bold Font
+TheBoldFont-Bold
+TimesNewRomanPS-BoldItalicMT
+Truculenta-Bold
+Universal Serif
+UniversalSerif

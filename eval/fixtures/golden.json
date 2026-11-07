@@ -17,7 +17,15 @@
    "case": "none",
    "highlight": "spoken_word",
    "pacing": "standard",
-   "overflow": "resize_to_fit"
+   "overflow": "resize_to_fit",
+   "y": 0.2,
+   "outline": {
+    "color": "#000000",
+    "width": 8
+   },
+   "shadow": "strong",
+   "font": "The Bold Font",
+   "preset_name": "Mosy"
   },
   "captions": [
    {
@@ -276,7 +284,8 @@
    ],
    "expect": {
     "style": {
-     "position": "center"
+     "position": "center",
+     "y": 0.5
     }
    }
   },
@@ -315,7 +324,10 @@
      "case": "capitalized",
      "highlight": "spoken_word",
      "pacing": "fast",
-     "overflow": "wrap"
+     "overflow": "wrap",
+     "font": "HalloweenGuises",
+     "shadow": "none",
+     "preset_name": "Boo Cute 👻"
     },
     "captions": "repaced"
    }
@@ -344,7 +356,10 @@
      "case": "capitalized",
      "highlight": "spoken_word",
      "pacing": "fast",
-     "overflow": "wrap"
+     "overflow": "wrap",
+     "font": "HalloweenGuises",
+     "shadow": "none",
+     "preset_name": "Boo Cute 👻"
     },
     "captions": "repaced"
    }
@@ -830,6 +845,191 @@
      "cut_audio"
     ]
    }
+  },
+  {
+   "case": "insert-1",
+   "instruction": "add a last line saying thanks for watching",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": \"c5\", \"text\": \"thanks for watching\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     {
+      "text": "and the second thing is consistency you know",
+      "start": 7.8,
+      "end": 9.2
+     },
+     {
+      "text": "thanks for watching",
+      "start": 9.2,
+      "end": 10.2
+     }
+    ]
+   }
+  },
+  {
+   "case": "insert-2",
+   "instruction": "after \"grow your channel\" add a line saying this is huge",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": \"c2\", \"text\": \"this is huge\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     {
+      "text": "how to like grow your channel",
+      "start": 2.6,
+      "end": 3.1,
+      "emphasis": "channel"
+     },
+     {
+      "text": "this is huge",
+      "start": 3.1,
+      "end": 4.1
+     },
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "insert-3",
+   "instruction": "add a first line saying welcome back",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": null, \"text\": \"welcome back\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     {
+      "text": "welcome back",
+      "start": 0.0,
+      "end": 0.9
+     },
+     {
+      "text": "Hey guys it's Denis",
+      "start": 0.9,
+      "end": 1.2
+     },
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "style-y",
+   "instruction": "move the captions a bit higher",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": 0.35, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "y": 0.35,
+     "position": "custom"
+    }
+   }
+  },
+  {
+   "case": "style-outline",
+   "instruction": "add a thick red outline",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": \"#FF0000\", \"outline_width\": 16, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "outline": {
+      "color": "#FF0000",
+      "width": 16
+     }
+    }
+   }
+  },
+  {
+   "case": "style-outline-clamped",
+   "instruction": "make the outline as thick as possible",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": 80, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "outline": {
+      "color": "#000000",
+      "width": 50
+     }
+    }
+   }
+  },
+  {
+   "case": "style-no-outline",
+   "instruction": "remove the outline",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": \"none\", \"outline_width\": null, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "outline": "none"
+    }
+   }
+  },
+  {
+   "case": "style-shadow",
+   "instruction": "make the shadow softer",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": null, \"shadow\": \"soft\", \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "shadow": "soft"
+    }
+   }
+  },
+  {
+   "case": "style-font",
+   "instruction": "use Avenir Next",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": \"AvenirNext-Bold\"}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "font": "AvenirNext-Bold"
+    }
+   }
   }
  ],
  "invalid": [
@@ -992,6 +1192,50 @@
     }
    ],
    "error": "c0 is changed by both set_emphasis and replace_words"
+  },
+  {
+   "name": "insert next to a merged line",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": \"c1\", \"text\": \"hello\"}"
+    },
+    {
+     "name": "merge_captions",
+     "arguments": "{\"first\": \"c1\", \"second\": \"c2\"}"
+    }
+   ],
+   "error": "c1 is changed by both insert_caption and merge_captions; do one or the other"
+  },
+  {
+   "name": "merge a caption with itself",
+   "calls": [
+    {
+     "name": "merge_captions",
+     "arguments": "{\"first\": \"c3\", \"second\": \"c3\"}"
+    }
+   ],
+   "error": "first and second are both c3"
+  },
+  {
+   "name": "position_y out of range",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": 1.5, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "error": "position_y 1.5 is out of range"
+  },
+  {
+   "name": "font not in the list",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": \"Comic Sans Forever\"}"
+    }
+   ],
+   "error": "isn't in the fonts list"
   }
  ]
 }

@@ -5,7 +5,9 @@
 //   node eval/build-presets.js ~/dev/take-agency/shorts-caption/ShortsCaption/Model/TextStyleDefinitions.swift
 //
 // Per preset: id, name, first category, and the style fields it brings (presetColors,
-// presetFontSize, presetPacing, presetOverflowMode, caseTransform, highlightType). A field the
+// presetFontSize, presetPacing, presetOverflowMode, caseTransform, highlightType, fontName, and
+// shadow as the snapshot names it: nil none, Shadow.default soft, Shadow.spread strong, else
+// custom). A field the
 // preset leaves out is omitted; the applier then keeps the current value, as the app's
 // `currentStyle ?? preset ?? project` resolution falls through to the project override.
 
@@ -35,7 +37,10 @@ function parseStyle(block) {
         // TextStyle's init defaults: caseTransform .none, highlightType .static
         case: field('caseTransform')?.replace('.', '') || 'none',
         highlight: HIGHLIGHT[field('highlightType')?.replace('.', '') || 'static'],
+        font: block.match(/fontName:\s*"([^"]+)"/)?.[1],
     };
+    const shadow = block.match(/\n\s*shadow:\s*([^\n]+)/)?.[1].replace(/,$/, '').trim();
+    if (shadow != null) preset.shadow = { nil: 'none', '.none': 'none', '.default': 'soft', '.spread': 'strong' }[shadow] || 'custom';
     const colors = block.match(/presetColors:\s*\[([^\n]*)\]/)?.[1] || '';
     for (const match of colors.matchAll(/\.(\w+):\s*UIColor\(red:\s*([\d.]+),\s*green:\s*([\d.]+),\s*blue:\s*([\d.]+),\s*alpha:\s*([\d.]+)\)/g)) {
         const [, role, red, green, blue, alpha] = match;

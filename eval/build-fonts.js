@@ -1,12 +1,13 @@
-// Builds eval/fonts.txt, the `fonts` catalog the eval sends: one display name per line, from the
-// app's bundled fonts (FontRegistryService.fontFiles) plus the fonts the presets use, deduped.
+// Builds eval/fonts.txt, the `fonts` catalog the eval sends, as the app builds it
+// (EditSnapshot.fontCatalog): "System", then the sorted set of the bundled fonts' names
+// (FontRegistryService.registeredFontNames: every face of each bundled family) and every preset's
+// fontName.
 //
 //   node eval/build-fonts.js <FontRegistryService.swift> <TextStyleDefinitions.swift> <names.txt>
 //
 // names.txt maps font files to names, one "file|postscript|full name|family" per line, from
 // CoreText (CGFont.postScriptName, CTFontCopyFullName, CTFontCopyFamilyName) over
-// Resources/Fonts. Display name = the full name. A preset font is matched to a bundled file by
-// PostScript, full or family name; one that isn't bundled (a system font) is listed as written.
+// Resources/Fonts. UIFont lists a family's faces by PostScript name, so those are used.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -25,15 +26,10 @@ const byFile = new Map(names.map((entry) => [entry.file, entry]));
 const registered = [...readFileSync(registry, 'utf8').matchAll(/^\s*"([^"]+\.(?:ttf|otf))"/gm)].map((match) => match[1]);
 const presetFonts = [...new Set([...readFileSync(definitions, 'utf8').matchAll(/fontName:\s*"([^"]+)"/g)].map((match) => match[1]))];
 
-const out = [];
-const add = (name) => {
-    if (name && !out.includes(name)) out.push(name);
-};
-for (const file of registered) add(byFile.get(file)?.full);
-for (const font of presetFonts) {
-    const match = names.find((entry) => [entry.postscript, entry.full, entry.family].includes(font));
-    add(match ? match.full : font);
-}
+const families = new Set(registered.map((file) => byFile.get(file)?.family).filter(Boolean));
+const faces = names.filter((entry) => families.has(entry.family)).map((entry) => entry.postscript);
+const display = (name) => (name.startsWith('.System-') ? 'System' : name);
+const out = ['System', ...[...new Set([...faces, ...presetFonts].map(display))].filter((name) => name !== 'System').sort()];
 
 const path = fileURLToPath(new URL('./fonts.txt', import.meta.url));
 writeFileSync(path, `${out.join('\n')}\n`);
