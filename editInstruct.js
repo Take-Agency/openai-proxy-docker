@@ -72,6 +72,7 @@ Tools:
 - font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, call ask_clarification with 1-3 of the closest fonts: each option is only a font name copied exactly from <fonts>. Put any explanation in the question. Never invent a font name.
 - "Bolder" or "thicker" text can mean a heavier font or a thicker outline: ask if it isn't clear.
 - No tool changes animation or the color of a single word.
+- "Save this style as X", "call this style X", "name it X" = save_style with that name (1-40 characters). A change to colors, outline, shadow, font, case or highlighting already saves a copy of the style ("Lunar 2"); don't call save_style unless the user asks to save or name it.
 - Users name parts by how they look. "Highlight" means the most visible mark on the spoken or emphasized word: the box behind it if the looks line has one, else its colored letters. In questions, options and messages, name parts as the looks line describes them ("the purple box behind the spoken word", "the cyan letters of the spoken word"), never by field names or the bare word "highlight".
 - Never set a field the looks line says does nothing in this style: say so in cannot_do(other) and offer what would work (a preset that has that part, or a part this style has).
 
