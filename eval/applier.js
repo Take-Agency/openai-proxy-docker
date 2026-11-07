@@ -83,18 +83,27 @@ export function snapshotText(state) {
     return [header, ...lines, `looks ${looksText(state.style, state.boxes)}`, `style ${JSON.stringify(style)}`].join('\n');
 }
 
-// StyleChangeRow.colorName: the nearest of a few plain names
-const NAMED_COLORS = [
-    ['white', 255, 255, 255], ['black', 0, 0, 0], ['gray', 128, 128, 128], ['red', 229, 57, 53],
-    ['orange', 255, 140, 0], ['yellow', 255, 214, 0], ['green', 46, 184, 75], ['cyan', 0, 229, 255],
-    ['blue', 30, 91, 255], ['purple', 142, 59, 255], ['pink', 255, 79, 163],
-];
+// StyleChangeRow.colorName in English: a hue name from hue and lightness ("dark purple")
 export function colorName(hex) {
     if (!hex || hex === 'none') return 'none';
     const value = Number.parseInt(hex.slice(1), 16);
-    const [r, g, b] = [(value >> 16) & 255, (value >> 8) & 255, value & 255];
-    const distance = ([, cr, cg, cb]) => (cr - r) ** 2 + (cg - g) ** 2 + (cb - b) ** 2;
-    return NAMED_COLORS.reduce((best, color) => (distance(color) < distance(best) ? color : best))[0];
+    const [r, g, b] = [(value >> 16) & 255, (value >> 8) & 255, value & 255].map((channel) => channel / 255);
+    const high = Math.max(r, g, b);
+    const low = Math.min(r, g, b);
+    const lightness = (high + low) / 2;
+    const delta = high - low;
+    const saturation = delta === 0 ? 0 : delta / (1 - Math.abs(2 * lightness - 1));
+    if (saturation < 0.18 || delta < 0.08) return lightness > 0.88 ? 'white' : lightness < 0.13 ? 'black' : 'gray';
+    let hue;
+    if (high === r) hue = 60 * (((g - b) / delta) % 6);
+    else if (high === g) hue = 60 * ((b - r) / delta + 2);
+    else hue = 60 * ((r - g) / delta + 4);
+    if (hue < 0) hue += 360;
+    const name = hue < 15 ? 'red' : hue < 40 ? 'orange' : hue < 65 ? 'yellow' : hue < 170 ? 'green' : hue < 200 ? 'cyan'
+        : hue < 255 ? 'blue' : hue < 290 ? 'purple' : hue < 335 ? 'pink' : 'red';
+    // a light red is pink
+    if (name === 'red' && lightness > 0.7) return 'pink';
+    return lightness < 0.3 ? `dark ${name}` : lightness > 0.78 ? `light ${name}` : name;
 }
 
 // EditSnapshot.looks: what the user sees, part by part, with the field that sets each
