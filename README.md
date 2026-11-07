@@ -208,7 +208,7 @@ limiting only, never sent to OpenAI). 64kb body cap.
   "snapshot": "rev 7f3a · duration 10.2s · focus c2\nc0 0.00-1.20 | 0 Hey 1 guys …\nstyle {…}",
   "presets": "mosy|Mosy|minimal\n…",          // the app's catalog, one id|name|category per line
   "revision": "7f3a",                          // echoed back, ≤64 chars
-  "locale": "hi-IN",                           // optional
+  "locale": "hi-IN",                           // optional: the instruction's detected language; the prompt names it as the reply language
   "clarification": { "question": "…", "choice": "…" },                       // optional follow-up
   "repair": { "tool_calls": [{ "name": "…", "arguments": {} }], "errors": ["…"] } // optional, once
 }

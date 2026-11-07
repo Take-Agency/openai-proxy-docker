@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import express from 'express';
-import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT } from './editInstruct.js';
+import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, languageName } from './editInstruct.js';
 import { EDIT_TOOLS, TOOL_NAMES } from './editInstructTools.js';
 
 const INSTALL_ID = 'test-install-0001';
@@ -120,8 +120,8 @@ test('prompt puts presets before the snapshot and fences untrusted text', async 
         assert.equal(input[1].role, 'user');
         const user = input[1].content;
         assert.ok(user.startsWith('<snapshot>\nrev 7f3a'));
-        assert.ok(user.indexOf('</snapshot>') < user.indexOf('Locale: hi-IN'));
-        assert.ok(user.indexOf('Locale: hi-IN') < user.indexOf('<instruction>'));
+        assert.ok(user.indexOf('</snapshot>') < user.indexOf('Reply language: Hindi (hi)'));
+        assert.ok(user.indexOf('Reply language: Hindi (hi)') < user.indexOf('<instruction>'));
         assert.ok(user.endsWith('<instruction>\nfix Denis to Dennis and make it bigger\n</instruction>'));
         // Caption text can't close the snapshot block or open an instruction block of its own.
         assert.equal(user.split('</snapshot>').length, 2);
@@ -303,6 +303,13 @@ test('per-IP limiter allows 20/min across installs', async () => {
         const { status } = await post(validBody(), { 'x-install-id': 'install-9999' });
         assert.equal(status, 429);
     });
+});
+
+test('the locale is rendered as a named reply language', () => {
+    assert.equal(languageName('hi-IN'), 'Hindi (hi)');
+    assert.equal(languageName('es'), 'Spanish (es)');
+    assert.equal(languageName('ur_PK'), 'Urdu (ur)');
+    assert.equal(languageName('zz'), 'zz');
 });
 
 test('tool schemas are strict: all 16 tools, every property required, no extra properties', () => {
