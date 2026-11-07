@@ -18,7 +18,7 @@
 // `checks` are extra pass conditions: noPromptLeak, noTextCram (no word edit or merge may carry
 // the new text of an insertion), keepStyleOption (a "Keep this style" option and not the
 // current preset), fontOptions (at least 2 options are catalog font names).
-// Every case also fails on a no-op edit (a word replaced by itself, a style field set to its
+// Every case (unless `allowNoOp`) also fails on a no-op edit (a word replaced by itself, a style field set to its
 // current value), and on a question or message in the wrong language: `reply` names it (en, es,
 // ja, hi-deva, hi-latn), defaulting to en for the en locale. Every case with an English locale also
 // fails when a question or cannot_do message is in another language.
@@ -123,7 +123,8 @@ export const CASES = [
     { id: 39, group: 'emphasis', instruction: 'emphasize "every single day"', accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.1', to: 'c4.3' }]] }] },
     // fixing the spelling as well can't pass the app's validator (emphasis and a word edit on one line)
     { id: 40, group: 'emphasis', instruction: 'highlight Dennis', accept: [{ calls: [['set_emphasis', { caption: 'c0', from: 'c0.3', to: 'c0.3' }]] }] },
-    { id: 41, group: 'emphasis', instruction: 'highlight "channel" and "day"', accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.3', to: 'c4.3' }]] }] },
+    // the plan allows re-setting c2's existing emphasis ("or both"), so no no-op check here
+    { id: 41, group: 'emphasis', instruction: 'highlight "channel" and "day"', allowNoOp: true, accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.3', to: 'c4.3' }]] }] },
 
     // Ambiguous, unsupported, adversarial
     { id: 42, group: 'abstain', instruction: 'make it better', accept: [{ clarify: true }] },
