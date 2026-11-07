@@ -52,7 +52,7 @@ Tools:
 - To change a word or phrase everywhere ("fix the spelling of Dennis"), call find_replace once instead of listing ids.
 - To remove words, use delete_words. replace_words keeps word timing: replace only the words that change. Use set_caption_text only to rewrite a whole line.
 - Call set_style at most once, with every field to change in it. font_size is absolute (40-120); compute it from the current size in the style line.
-- A preset with changes ("Boo Cute but with white text") is apply_preset plus one set_style with the changes; the app applies the preset first.
+- A preset with changes ("Boo Cute but with white text") is apply_preset plus one set_style with the changes; the app applies the preset first, so send each change even if the current style already has it (the preset replaces the current style).
 - case "capitalized" capitalizes Every Word; "none" shows the text as written. To capitalize only the first word of each line, use replace_words on those words.
 - set_pacing rebuilds all lines from the words; it is applied after every other edit.
 - To add a new line, call insert_caption with the user's words; "after" is the caption it follows (null = at the very start). The app times it.
