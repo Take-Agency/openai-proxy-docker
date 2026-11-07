@@ -249,6 +249,12 @@ export const CASES = [
             { calls: [['set_style', { outline_width: 14 }]], style: { outline: { outline: { color: '#000000', minWidth: 11, maxWidth: 18 } } } },
         ],
     },
+    // "Make captions pop" (a starter chip): ask with concrete options, and when the answer is
+    // still a quality ("brighter colors"), ask which part, in the context of the current style
+    { id: 96, group: 'pop', instruction: 'Make captions pop', accept: [{ clarify: true }] },
+    { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, accept: [{ clarify: true }] },
+    { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, optionsMatch: /box|background/i, accept: [{ clarify: true }] },
+    { id: 99, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Yellow text' }, accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW } }] },
     // Style-only requests in other languages on captions full of fillers: no word may change
     // (case 78 deleted um/uh/like in 3 of 5 runs before reasoning "low").
     { id: 88, group: 'style-only', locale: 'pt', reply: 'pt', instruction: 'deixa as legendas amarelas e maiores', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },

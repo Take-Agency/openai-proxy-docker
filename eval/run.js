@@ -330,6 +330,8 @@ async function main() {
                 revision: String(fixture.revision),
                 locale: testCase.locale || 'en',
             };
+            // a follow-up turn: the user's answer to the model's earlier question
+            if (testCase.clarification) body.clarification = testCase.clarification;
             const { response, request } = await send(body, { caseId: testCase.id, run: runIndex, repair: false });
             const calls = response.json.tool_calls || [];
             let result = response.status === 200 ? run(calls, fixture, presets) : { errors: [`http ${response.status}`] };
