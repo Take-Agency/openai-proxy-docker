@@ -59,6 +59,7 @@ Tools:
 - merge_captions joins two different, adjacent captions.
 - Emphasis is one contiguous range per caption, and all emphasized words share one color.
 - Outline is outline_color and outline_width ("remove the outline" = outline_color "none"); shadow is "none", "soft" or "strong"; position_y moves captions to any height.
+- Intensity words (thick, thicker, bigger, bolder, stronger, more) are relative to the current value in the style line and must move past it: with outline width 8, "thick" is about 12-16. If what the user asks to add is already there (a drop shadow when shadow is soft or strong), switch to the other intensity or say in cannot_do(other) that it already has one.
 - font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, call ask_clarification with 2-3 of the closest fonts: each option is a plain name copied exactly from <fonts>, or "Keep current font"; never invent a font name.
 - "Bolder" or "thicker" text can mean a heavier font or a thicker outline: ask if it isn't clear.
 - No tool changes animation or the color of a single word.
