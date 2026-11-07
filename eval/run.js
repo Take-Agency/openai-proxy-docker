@@ -245,6 +245,7 @@ function report(args, results, requests, startedAt, finishedAt = Date.now()) {
     lines.push(`- Batches with more than one set_style: ${multiStyle}`);
     lines.push(`- Runs failed by an unexpected cannot_do: ${spurious}`);
     lines.push(`- Runs whose question or message was in the wrong language: ${results.filter((entry) => entry.reasons.includes('failed check replyLanguage')).length}`);
+    lines.push(`- Runs with no-op edits (dropped by the app, not failed): ${results.filter((entry) => entry.noOps?.length).length}`);
     lines.push(`- Runs that needed the repair turn: ${results.filter((entry) => !entry.validFirst).length} (fixed by it: ${results.filter((entry) => !entry.validFirst && entry.validFinal).length})`, '');
 
     // per case

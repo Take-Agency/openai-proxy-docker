@@ -16,11 +16,11 @@
 //   deleting anything else is collateral, except `lowPrecision` words, which only lower precision.
 // Cases whose accept list has no `clarify` count an ask_clarification as over-asking.
 // `checks` are extra pass conditions: noPromptLeak, noTextCram (no word edit or merge may carry
-// the new text of an insertion), keepStyleOption (a "Keep this style" option and not the
-// current preset), fontOptions (every option is a plain catalog font name or a "keep" option,
-// with at least 2 font names).
-// Every case (unless `allowNoOp`) also fails on a no-op edit (a word replaced by itself, a style field set to its
-// current value), and on a question or message in the wrong language: `reply` names it (en, es,
+// the new text of an insertion), keepStyleOption (presets other than the current one, and no
+// keep option: the app adds "Keep as is" to every question), fontOptions (every option is an exact catalog font name; the app adds its own
+// "Keep current font").
+// No-op edits (a word replaced by itself, a style field set to its current value) are reported,
+// not failed: the app drops them. Every case fails on a question or message in the wrong language: `reply` names it (en, es,
 // ja, hi-deva, hi-latn), defaulting to en for the en locale. Every case with an English locale also
 // fails when a question or cannot_do message is in another language.
 
@@ -32,6 +32,9 @@ const presetId = (name) => presets.find((preset) => preset.name.startsWith(name)
 const category = (id) => presets.filter((preset) => preset.category === id).map((preset) => preset.id);
 
 const SENTENCE = ['today', 'we', 'talk', 'about', 'growth'];
+const FIRST_WORDS = [['change_letters', { mode: 'capitalize_first_word' }]];
+const FIRST_WORDS_AFTER_FILLER = [['c1', 'today', 'Today', 1], ['c2', 'how', 'How', 0], ['c3', 'so', 'So', 0], ['c4', 'post', 'Post', 0], ['c5', 'and', 'And', 0]]
+    .map(([caption, expect, text, word]) => ['replace_words', { from: `${caption}.${word}`, to: `${caption}.${word}`, expect, text }]);
 const YELLOW = { hue: [45, 60], minSaturation: 0.6 };
 const GREEN = { hue: [90, 150], minSaturation: 0.5 };
 const DARK = { maxChannel: 0x22 };
@@ -124,8 +127,7 @@ export const CASES = [
     { id: 39, group: 'emphasis', instruction: 'emphasize "every single day"', accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.1', to: 'c4.3' }]] }] },
     // fixing the spelling as well can't pass the app's validator (emphasis and a word edit on one line)
     { id: 40, group: 'emphasis', instruction: 'highlight Dennis', accept: [{ calls: [['set_emphasis', { caption: 'c0', from: 'c0.3', to: 'c0.3' }]] }] },
-    // the plan allows re-setting c2's existing emphasis ("or both"), so no no-op check here
-    { id: 41, group: 'emphasis', instruction: 'highlight "channel" and "day"', allowNoOp: true, accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.3', to: 'c4.3' }]] }] },
+    { id: 41, group: 'emphasis', instruction: 'highlight "channel" and "day"', accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.3', to: 'c4.3' }]] }] },
 
     // Ambiguous, unsupported, adversarial
     { id: 42, group: 'abstain', instruction: 'make it better', accept: [{ clarify: true }] },
@@ -166,7 +168,8 @@ export const CASES = [
 
     // Case, outline, shadow, position and font (PR #15)
     { id: 55, group: 'style2', fixture: 'F1u', instruction: 'make them all lowercase', checks: ['keepStyleOption'], accept: [{ clarify: true }] },
-    { id: 56, group: 'style2', fixture: 'F1uc', instruction: 'make them all lowercase', accept: [{ calls: [['set_style', { case: 'none' }]], cannot: ['other'] }] },
+    // the font has lowercase letters: the words become lowercase and the style stops forcing capitals
+    { id: 56, group: 'style2', fixture: 'F1uc', instruction: 'make them all lowercase', cannotOptional: ['other'], accept: [{ calls: [['change_letters', { mode: 'lowercase' }], ['set_style', { case: 'none' }]] }] },
     { id: 57, group: 'style2', instruction: 'remove the outline', accept: [{ calls: [['set_style', { outline_color: 'none' }]] }] },
     { id: 58, group: 'style2', instruction: 'add a thick black outline', accept: [{ calls: [['set_style', { outline_color: '#000000', outline_width: 8 }]], style: { outline: { outline: { color: '#000000', minWidth: 6, maxWidth: 12 } } } }] },
     { id: 59, group: 'style2', instruction: 'add a drop shadow', accept: [{ calls: [['set_style', { shadow: 'soft' }]], style: { shadow: { oneOf: ['soft', 'strong'] } } }] },
@@ -179,7 +182,8 @@ export const CASES = [
     { id: 65, group: 'style2', instruction: 'make the text bolder', accept: [{ clarify: true }, { calls: [['set_style', { outline_width: 8 }]], style: { outline: { outline: { color: '#000000', minWidth: 5, maxWidth: 12 } } } }] },
     {
         id: 69, group: 'style2', instruction: 'capitalize the first word of every line',
-        accept: [{ calls: [['c1', 'um', 'Um'], ['c2', 'how', 'How'], ['c3', 'so', 'So'], ['c4', 'post', 'Post'], ['c5', 'and', 'And']].map(([caption, expect, text]) => ['replace_words', { from: `${caption}.0`, to: `${caption}.0`, expect, text }]) }],
+        // "um" counts as the first word, or the first real word after it
+        accept: [{ calls: FIRST_WORDS }, { calls: FIRST_WORDS_AFTER_FILLER }],
     },
     { id: 70, group: 'style2', locale: 'hi', instruction: 'captions thoda bada karo aur yellow', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },
     { id: 71, group: 'style2', fixture: 'P3', locale: 'hi', instruction: 'कैप्शन पीले और बड़े करो', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },
@@ -237,10 +241,22 @@ export const CASES = [
         accept: [
             { calls: [['set_style', { outline_width: 14, shadow: 'soft' }]], style: { outline: { outline: { color: '#000000', minWidth: 11, maxWidth: 18 } } } },
             { calls: [['set_style', { outline_width: 14 }]], cannot: ['other'], style: { outline: { outline: { color: '#000000', minWidth: 11, maxWidth: 18 } } } },
+            // the shadow it asks for is already there (strong): leaving it is right too
+            { calls: [['set_style', { outline_width: 14 }]], style: { outline: { outline: { color: '#000000', minWidth: 11, maxWidth: 18 } } } },
         ],
     },
+    // Style-only requests in other languages on captions full of fillers: no word may change
+    // (case 78 deleted um/uh/like in 3 of 5 runs before reasoning "low").
+    { id: 88, group: 'style-only', locale: 'pt', reply: 'pt', instruction: 'deixa as legendas amarelas e maiores', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },
+    { id: 89, group: 'style-only', locale: 'id', reply: 'id', instruction: 'buat teksnya kuning dan lebih besar', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },
+    { id: 90, group: 'style-only', locale: 'ja', reply: 'ja', instruction: '字幕を黄色にして大きくして', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },
+    { id: 91, group: 'style-only', locale: 'hi', reply: 'hi-deva', instruction: 'कैप्शन पीले और बड़े करो', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },
+    { id: 92, group: 'style-only', locale: 'es', reply: 'es', instruction: 'sube un poco los subtítulos', accept: [{ calls: [['set_style', { position_y: 0.3 }]], style: { y: { min: 0.27, max: 0.33 } } }] },
+    { id: 93, group: 'style-only', locale: 'pt', reply: 'pt', instruction: 'coloca as legendas no meio', accept: [{ calls: [['set_style', { position: 'center' }]] }] },
+    { id: 94, group: 'style-only', locale: 'es', reply: 'es', instruction: 'subtítulos más pequeños', accept: [{ calls: [['set_style', { font_size: 77 }]], style: { size: { min: 72, max: 85 } } }] },
+    { id: 95, group: 'style-only', locale: 'id', reply: 'id', instruction: 'pindahkan teks ke atas', accept: [{ calls: [['set_style', { position: 'top' }]] }] },
     {
         id: 86, group: 'defaults', fixture: 'F1u', instruction: 'capitalize the first word of every line', cannotOptional: ['other'],
-        accept: [{ calls: [['c1', 'um', 'Um'], ['c2', 'how', 'How'], ['c3', 'so', 'So'], ['c4', 'post', 'Post'], ['c5', 'and', 'And']].map(([caption, expect, text]) => ['replace_words', { from: `${caption}.0`, to: `${caption}.0`, expect, text }]) }],
+        accept: [{ calls: FIRST_WORDS }, { calls: FIRST_WORDS_AFTER_FILLER }],
     },
 ];

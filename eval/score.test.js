@@ -97,11 +97,11 @@ test('insertions pass; cramming the new text into a caption fails', () => {
     assert.equal(score(52, [cram]).success, false);
 });
 
-test('a no-op edit fails even when the state is right', () => {
+test('a no-op edit is reported, not failed (the app drops it)', () => {
     const noop = { name: 'replace_words', arguments: { from: 'c0.0', to: 'c0.0', expect: 'Hey', text: 'Hey' } };
     const result = score(26, [{ name: 'replace_words', arguments: { from: 'c0.3', to: 'c0.3', expect: 'Denis', text: 'Dennis' } }, noop]);
-    assert.equal(result.success, false);
-    assert.match(result.reasons.join(), /no-op edit/);
+    assert.equal(result.success, true);
+    assert.deepEqual(result.noOps, ['replace_words "Hey" -> itself']);
 });
 
 test('reply language follows the case: Devanagari, Hinglish, Japanese', () => {
@@ -122,10 +122,13 @@ test('outline, shadow, position and font', () => {
     assert.equal(score(61, style({ position: 'top' })).success, false);
     assert.equal(score(62, style({ font: 'Montserrat-ExtraBold' })).success, true);
     assert.equal(score(62, style({ font: 'Montserrat' })).success, false);
-    const ask = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available. Which of these?', options: ['Bangers-Regular', 'LuckiestGuy-Regular', 'Keep current font'] } }];
+    // the proxy reduces font options to catalog names; the app adds "Keep current font"
+    const ask = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available. Which of these?', options: ['Bangers-Regular', 'LuckiestGuy-Regular'] } }];
     assert.equal(score(63, ask).success, true);
-    const plain = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Fredoka One', 'ChalkboardSE-Bold', 'Keep current font'] } }];
-    assert.equal(score(63, plain).success, true);
-    const worded = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Bangers-Regular', 'Comic-style Fredoka One', 'Keep current font'] } }];
+    const one = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Fredoka One'] } }];
+    assert.equal(score(63, one).success, true);
+    const withKeep = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Fredoka One', 'Keep current font'] } }];
+    assert.equal(score(63, withKeep).success, false);
+    const worded = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Bangers-Regular', 'Comic-style Fredoka One'] } }];
     assert.equal(score(63, worded).success, false);
 });

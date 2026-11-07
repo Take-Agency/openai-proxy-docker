@@ -242,20 +242,20 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
         if (check === 'keepStyleOption') {
             const options = edit.clarification?.options || [];
             const current = presets.find((preset) => preset.id === fixture.style.preset)?.name;
-            if (!options.some((option) => /keep/i.test(option)) || options.some((option) => current && option.startsWith(current))) failures.push(check);
+            // presets other than the current one; the app adds "Keep as is"
+            if (!options.length || options.some((option) => /keep/i.test(option)) || options.some((option) => current && option.startsWith(current))) failures.push(check);
         }
         if (check === 'fontOptions') {
             // plain font names (a catalog name, or a family name the next turn can map), no
             // descriptions or prefixes, plus an optional "keep" option
-            const options = (edit.clarification?.options || []).filter((option) => !/^keep\b/i.test(option));
-            const plain = (option) => FONTS.includes(option)
-                || (/^[\p{L}\p{N} .'-]+$/u.test(option) && !/\b(style|like|alternative|similar|closest|choose|font)\b/i.test(option));
-            if (options.length < 2 || !options.every(plain)) failures.push(check);
+            // only exact catalog names: the app applies them as they are and adds its own
+            // localized "Keep current font"
+            const options = edit.clarification?.options || [];
+            if (!options.length || !options.every((option) => FONTS.includes(option))) failures.push(check);
         }
     }
     if (wrongLanguage(edit, replyLanguage(testCase))) failures.push('replyLanguage');
-    const noOps = testCase.allowNoOp ? [] : noOpEdits(calls, fixture);
-    return failures.map((check) => `failed check ${check}`).concat(noOps.map((entry) => `no-op edit: ${entry}`));
+    return failures.map((check) => `failed check ${check}`);
 }
 
 // ---------------------------------------------------------------- scoring
@@ -304,6 +304,8 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
     if (result.errors.length) return { success: false, collateral: [], reasons: ['invalid'] };
     const { edit, state } = result;
     const checkFailures = failedChecks(testCase, edit, calls, fixture, presets, systemPrompt);
+    // the app drops edits that change nothing, so they cost tokens, not correctness
+    const noOps = noOpEdits(calls, fixture);
     const reasons = (edit.cannotDo || []).map((entry) => entry.reason);
     const optional = new Set(testCase.cannotOptional || []);
 
@@ -317,7 +319,7 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
             ...extraCannot.map((reason) => `unexpected cannot_do(${reason})`),
             ...scored.collateral.map((entry) => `collateral: ${entry}`),
         ];
-        return { success: failures.length === 0, overAsked: Boolean(edit.clarification), collateral: scored.collateral, reasons: failures, precision: scored.precision, recall: scored.recall };
+        return { success: failures.length === 0, overAsked: Boolean(edit.clarification), collateral: scored.collateral, reasons: failures, precision: scored.precision, recall: scored.recall, noOps };
     }
 
     let best = null;
@@ -339,5 +341,6 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
         success: best.failures.length === 0 && best.collateral.length === 0,
         collateral: best.collateral,
         reasons: [...best.failures, ...best.collateral.map((location) => `collateral: ${location}`)],
+        noOps,
     };
 }

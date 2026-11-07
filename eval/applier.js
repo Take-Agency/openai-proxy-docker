@@ -1,4 +1,4 @@
-// Reference applier for the eval: the 15 edit tools applied to a plain-JSON caption state, with
+// Reference applier for the eval: the 21 edit tools applied to a plain-JSON caption state, with
 // the semantics of the app's EditValidator / EditApplier (shorts-caption,
 // ShortsCaption/Service/InstructionEditing, branch instruction-edit/5-edit-validator).
 // eval/applier.test.js runs the app's own golden cases (eval/fixtures/golden.json) through it.
@@ -106,6 +106,12 @@ export const SCHEMAS = {
     set_caption_timing: { caption: 'string', start_s: 'number?', end_s: 'number?' },
     set_emphasis: { caption: 'string', from: 'string?', to: 'string?' },
     ask_clarification: { question: 'string', options: 'strings' },
+    // bulk tools: the model names what to change, the app finds every target
+    split_in_half: { captions: 'ids?' },
+    change_letters: { captions: 'ids?', mode: ['lowercase', 'capitalize_first_word'] },
+    merge_short_captions: { max_words: 'int' },
+    delete_all: { word: 'string', occurrences: 'refs?' },
+    rewrite_sentence: { first: 'string', last: 'string', expect: 'string', text: 'string' },
     cannot_do: { reason: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'], message: 'string' },
 };
 export const TOOL_NAMES = Object.keys(SCHEMAS);
@@ -119,7 +125,8 @@ function typeOk(type, value) {
     case 'int': return Number.isInteger(value);
     case 'number': return typeof value === 'number' && Number.isFinite(value);
     case 'bool': return typeof value === 'boolean';
-    case 'strings': return Array.isArray(value) && value.every((item) => typeof item === 'string');
+    case 'strings':
+    case 'ids': return Array.isArray(value) && value.every((item) => typeof item === 'string');
     case 'refs': return Array.isArray(value) && value.every((item) => item && typeof item.id === 'string' && typeof item.expect === 'string');
     default: return false;
     }
@@ -172,6 +179,70 @@ function wordIndex(state, id) {
 
 const spanText = (caption, from, to) => caption.words.slice(from, to + 1).map((word) => word.text).join(' ');
 
+// Constants.Behavior.languagesWithoutWordSpaces
+export const NO_SPACE_LANGUAGES = new Set(['zh', 'ja', 'th', 'km', 'lo', 'my', 'jw', 'bo']);
+const hasWordSpaces = (state) => !NO_SPACE_LANGUAGES.has(state.language);
+const pieces = (text) => text.trim().split(/\s+/).filter(Boolean);
+export const MAX_REWRITE_CAPTIONS = 6;
+export const MAX_SHORT_WORDS = 5;
+const SENTENCE_END = /[.!?…。！？]["'”’)\]]*$/u;
+
+// replace_words whose ids are off: the one span of the same caption whose text is `expect`.
+function snapSpan(state, caption, expect) {
+    const size = pieces(expect).length;
+    const target = normalized(expect);
+    if (!hasWordSpaces(state) || !size || !target) return null;
+    const found = [];
+    for (let from = 0; from + size <= caption.words.length; from += 1) {
+        if (normalized(spanText(caption, from, from + size - 1)) === target) found.push(from);
+    }
+    return found.length === 1 ? { from: found[0], to: found[0] + size - 1 } : null;
+}
+
+// delete_words with an id that's off: the word of the same caption that is `expect`, nearest the id.
+function snapWord(caption, word, expect) {
+    const target = normalized(expect);
+    if (!target) return null;
+    const found = caption.words.map((entry, index) => index).filter((index) => normalized(caption.words[index].text) === target);
+    if (!found.length) return null;
+    const distance = (index) => Math.abs(index - word);
+    const nearest = Math.min(...found.map(distance));
+    const closest = found.filter((index) => distance(index) === nearest);
+    return closest.length === 1 ? closest[0] : null;
+}
+
+// A replacement that only drops words ("every single" -> "every"): the dropped words' offsets,
+// so they're deleted and the kept words keep their timing. null for any other replacement.
+function droppedWords(words, text) {
+    const kept = pieces(text);
+    if (!kept.length || kept.length >= words.length) return null;
+    const keep = new Set();
+    let next = 0;
+    words.forEach((word, index) => {
+        if (next < kept.length && word.text === kept[next]) {
+            keep.add(index);
+            next += 1;
+        }
+    });
+    return next === kept.length ? words.map((_, index) => index).filter((index) => !keep.has(index)) : null;
+}
+
+const capitalizeFirstLetter = (text) => text.replace(/\p{L}/u, (letter) => letter.toUpperCase());
+
+// rewrite_sentence: the new text's words (characters without word spaces) spread over the
+// captions in proportion to how many each held, so each line keeps its own time.
+export function distribute(text, counts, spaced = true) {
+    const units = spaced ? pieces(text) : [...segmenter.segment(text.trim())].map((segment) => segment.segment);
+    const total = Math.max(counts.reduce((sum, count) => sum + count, 0), 1);
+    const bounds = [0];
+    let cumulative = 0;
+    counts.forEach((count, index) => {
+        cumulative += count;
+        bounds.push(index === counts.length - 1 ? units.length : Math.max(Math.round(units.length * cumulative / total), bounds.at(-1)));
+    });
+    return counts.map((_, index) => units.slice(bounds[index], bounds[index + 1]).join(spaced ? ' ' : ''));
+}
+
 // find_replace as the app runs it: each match is a run of whole words (shortest first), and its
 // replacement keeps the punctuation around the matched text.
 function findMatches(state, find, replace, wholeWord, matchCase) {
@@ -210,6 +281,12 @@ const CONFLICTS = [
     ['insert_caption', 'split_caption'], ['insert_caption', 'merge_captions'], ['insert_caption', 'set_caption_timing'],
 ];
 
+// Bulk tools resolve into the primitives above and conflict as them.
+const CATEGORY = {
+    split_in_half: 'split_caption', change_letters: 'replace_words', merge_short_captions: 'merge_captions',
+    delete_all: 'delete_words', rewrite_sentence: 'set_caption_text',
+};
+
 // Returns { errors: [] , edit } like EditValidator.validate. `presets` is the catalog array.
 // `fonts` is the font catalog (array of names); without it set_style font is rejected.
 export function validate(calls, state, presets, fonts = []) {
@@ -234,7 +311,7 @@ export function validate(calls, state, presets, fonts = []) {
     const wordOwners = new Map();
     const captionUses = new Map();
     const merged = new Set();
-    const use = (caption, name) => captionUses.set(caption, [...(captionUses.get(caption) || []), name]);
+    const use = (caption, name) => captionUses.set(caption, [...(captionUses.get(caption) || []), CATEGORY[name] || name]);
     const touch = (caption, word, name) => {
         const key = `c${caption}.${word}`;
         if (wordOwners.has(key)) errors.push(`${name}: word ${key} is already edited by ${wordOwners.get(key)}; edit each word once`);
@@ -288,8 +365,8 @@ export function validate(calls, state, presets, fonts = []) {
             edit.pacing = args.pacing;
             break;
         case 'replace_words': {
-            const start = wordIndex(state, args.from);
-            const end = wordIndex(state, args.to);
+            let start = wordIndex(state, args.from);
+            let end = wordIndex(state, args.to);
             if (!start || !end) {
                 errors.push(`${name}: no word ${start ? args.to : args.from}`);
                 break;
@@ -298,8 +375,26 @@ export function validate(calls, state, presets, fonts = []) {
                 errors.push(`${name}: ${args.from}…${args.to} must be one caption, first word first`);
                 break;
             }
-            checkExpect(args.expect, spanText(state.captions[start.caption], start.word, end.word), `${args.from}…${args.to}`, name);
+            const caption = state.captions[start.caption];
+            if (normalized(args.expect) !== normalized(spanText(caption, start.word, end.word))) {
+                const snapped = snapSpan(state, caption, args.expect);
+                if (snapped) {
+                    start = { caption: start.caption, word: snapped.from };
+                    end = { caption: start.caption, word: snapped.to };
+                }
+            }
+            // no change: dropped, not an error (EditValidator)
+            if (args.text.trim() === spanText(caption, start.word, end.word)) break;
+            checkExpect(args.expect, spanText(caption, start.word, end.word), `${args.from}…${args.to}`, name);
             if (!args.text.trim()) errors.push(`${name}: text is empty; use delete_words to remove words`);
+            const dropped = hasWordSpaces(state) ? droppedWords(caption.words.slice(start.word, end.word + 1), args.text) : null;
+            if (dropped) {
+                for (const offset of dropped) {
+                    touch(start.caption, start.word + offset, name);
+                    addWordEdit(start.caption, { type: 'delete', word: start.word + offset });
+                }
+                break;
+            }
             for (let word = start.word; word <= end.word; word += 1) touch(start.caption, word, name);
             addWordEdit(start.caption, { type: 'replace', from: start.word, to: end.word, text: args.text });
             break;
@@ -312,7 +407,12 @@ export function validate(calls, state, presets, fonts = []) {
                     errors.push(`${name}: no word ${ref.id}`);
                     continue;
                 }
-                checkExpect(ref.expect, state.captions[index.caption].words[index.word].text, ref.id, name);
+                const caption = state.captions[index.caption];
+                if (normalized(ref.expect) !== normalized(caption.words[index.word].text)) {
+                    const snapped = snapWord(caption, index.word, ref.expect);
+                    if (snapped != null) index.word = snapped;
+                }
+                checkExpect(ref.expect, caption.words[index.word].text, ref.id, name);
                 touch(index.caption, index.word, name);
                 addWordEdit(index.caption, { type: 'delete', word: index.word });
             }
@@ -338,6 +438,7 @@ export function validate(calls, state, presets, fonts = []) {
                 break;
             }
             const caption = state.captions[index];
+            if (args.text.trim() === captionText(caption).trim()) break;
             checkExpect(args.expect, captionText(caption), args.caption, name);
             if (!args.text.trim()) errors.push(`${name}: text is empty; use delete_captions to remove a caption`);
             caption.words.forEach((_, word) => touch(index, word, name));
@@ -438,6 +539,8 @@ export function validate(calls, state, presets, fonts = []) {
                 if (value < 0 || value > state.duration) errors.push(`${name}: ${value}s is outside the video (0–${state.duration}s)`);
             }
             if (args.start_s != null && args.end_s != null && args.start_s >= args.end_s) errors.push(`${name}: start_s must be before end_s`);
+            const current = state.captions[index];
+            if (Math.abs((args.start_s ?? current.start) - current.start) < 0.005 && Math.abs((args.end_s ?? current.end) - current.end) < 0.005) break;
             if (edit.timings.some((timing) => timing.caption === index)) errors.push(`${name}: ${args.caption} is retimed twice`);
             use(index, name);
             edit.timings.push({ caption: index, start: args.start_s, end: args.end_s });
@@ -450,6 +553,13 @@ export function validate(calls, state, presets, fonts = []) {
                 break;
             }
             if (edit.emphasis.has(index)) errors.push(`${name}: ${args.caption} has one emphasized range; set it once`);
+            // already emphasized like that (or already clear): dropped
+            const currentEmphasis = Array.isArray(state.captions[index].emphasis) ? state.captions[index].emphasis : null;
+            if (args.from == null && args.to == null && !currentEmphasis) break;
+            const fromWord = wordIndex(state, args.from);
+            const toWord = wordIndex(state, args.to);
+            if (fromWord && toWord && fromWord.caption === index && toWord.caption === index && currentEmphasis
+                && currentEmphasis[0] === fromWord.word && currentEmphasis[1] === Math.max(fromWord.word, toWord.word)) break;
             use(index, name);
             if (args.from == null && args.to == null) {
                 edit.emphasis.set(index, null);
@@ -466,9 +576,139 @@ export function validate(calls, state, presets, fonts = []) {
             }
             break;
         }
+        case 'split_in_half': {
+            if (args.captions && !args.captions.length) errors.push(`${name}: no captions given`);
+            const ids = args.captions ?? state.captions.map((_, index) => `c${index}`);
+            for (const id of ids) {
+                const index = captionIndex(state, id);
+                if (index == null) {
+                    errors.push(`${name}: no caption ${id}`);
+                    continue;
+                }
+                const count = state.captions[index].words.length;
+                if (count < 2) {
+                    if (args.captions) errors.push(`${name}: ${id} has one word`);
+                    continue;
+                }
+                const middle = Math.floor((count + 1) / 2);
+                if (edit.splits.get(index)?.includes(middle)) errors.push(`${name}: ${id} is already split there`);
+                use(index, name);
+                edit.splits.set(index, [...(edit.splits.get(index) || []), middle]);
+            }
+            break;
+        }
+        case 'change_letters': {
+            if (args.captions && !args.captions.length) errors.push(`${name}: no captions given`);
+            const ids = args.captions ?? state.captions.map((_, index) => `c${index}`);
+            for (const id of ids) {
+                const index = captionIndex(state, id);
+                if (index == null) {
+                    errors.push(`${name}: no caption ${id}`);
+                    continue;
+                }
+                const words = state.captions[index].words;
+                const targets = args.mode === 'lowercase' ? words.map((_, word) => word) : (words.length ? [0] : []);
+                for (const word of targets) {
+                    const text = words[word].text;
+                    const changed = args.mode === 'lowercase' ? text.toLowerCase() : capitalizeFirstLetter(text);
+                    if (changed === text) continue;
+                    touch(index, word, name);
+                    addWordEdit(index, { type: 'replace', from: word, to: word, text: changed });
+                }
+            }
+            break;
+        }
+        case 'merge_short_captions': {
+            if (args.max_words < 1 || args.max_words > MAX_SHORT_WORDS) {
+                errors.push(`${name}: max_words must be 1–${MAX_SHORT_WORDS}`);
+                break;
+            }
+            const count = state.captions.length;
+            const free = (index) => index >= 0 && index < count && !merged.has(index);
+            const endsSentence = (index) => SENTENCE_END.test(state.captions[index].words.at(-1)?.text ?? '');
+            for (let index = 0; index < count; index += 1) {
+                if (merged.has(index) || state.captions[index].words.length > args.max_words) continue;
+                // the line before, unless it ends a sentence; else the line after
+                let pair = null;
+                if (free(index - 1) && !endsSentence(index - 1)) pair = [index - 1, index];
+                else if (free(index + 1)) pair = [index, index + 1];
+                else if (free(index - 1)) pair = [index - 1, index];
+                if (!pair) continue;
+                for (const caption of pair) {
+                    merged.add(caption);
+                    use(caption, name);
+                }
+                edit.merges.push(pair);
+            }
+            break;
+        }
+        case 'delete_all': {
+            const target = normalized(args.word);
+            if (!target || pieces(args.word).length !== 1) {
+                errors.push(`${name}: word must be one word`);
+                break;
+            }
+            const isTarget = (caption, word) => normalized(state.captions[caption].words[word].text) === target;
+            const targets = [];
+            if (args.occurrences == null) {
+                state.captions.forEach((caption, c) => caption.words.forEach((_, w) => {
+                    if (isTarget(c, w)) targets.push([c, w]);
+                }));
+                if (!targets.length) errors.push(`${name}: "${args.word}" not found`);
+            } else {
+                // only that word can go: an id one word off moves to the nearest occurrence in its
+                // caption, any other id is dropped
+                for (const ref of args.occurrences) {
+                    const index = wordIndex(state, ref.id);
+                    if (!index) continue;
+                    const word = isTarget(index.caption, index.word) ? index.word : snapWord(state.captions[index.caption], index.word, args.word);
+                    if (word != null && !targets.some(([c, w]) => c === index.caption && w === word)) targets.push([index.caption, word]);
+                }
+            }
+            if (targets.length > MAX_REPLACEMENTS) errors.push(`${name}: ${targets.length} matches; the limit is ${MAX_REPLACEMENTS}`);
+            for (const [caption, word] of targets) {
+                touch(caption, word, name);
+                addWordEdit(caption, { type: 'delete', word });
+            }
+            break;
+        }
+        case 'rewrite_sentence': {
+            const first = captionIndex(state, args.first);
+            const last = captionIndex(state, args.last);
+            if (first == null || last == null) {
+                errors.push(`${name}: no caption ${first == null ? args.first : args.last}`);
+                break;
+            }
+            if (last < first || last - first + 1 > MAX_REWRITE_CAPTIONS) {
+                errors.push(`${name}: ${args.first}…${args.last} must be 1–${MAX_REWRITE_CAPTIONS} captions in order`);
+                break;
+            }
+            const indexes = Array.from({ length: last - first + 1 }, (_, offset) => first + offset);
+            const spaced = hasWordSpaces(state);
+            const current = indexes.map((index) => captionText(state.captions[index])).join(spaced ? ' ' : '');
+            if (args.text.trim() === current.trim()) break;
+            checkExpect(args.expect, current, `${args.first}…${args.last}`, name);
+            if (!args.text.trim()) {
+                errors.push(`${name}: text is empty; use delete_captions to remove captions`);
+                break;
+            }
+            const counts = indexes.map((index) => (spaced ? state.captions[index].words.length : length(captionText(state.captions[index]))));
+            const texts = distribute(args.text, counts, spaced);
+            indexes.forEach((index, offset) => {
+                const caption = state.captions[index];
+                caption.words.forEach((_, word) => touch(index, word, name));
+                if (!texts[offset]) {
+                    edit.deletions.add(index);
+                } else if (texts[offset] !== captionText(caption)) {
+                    addWordEdit(index, { type: 'setText', text: texts[offset] });
+                }
+            });
+            break;
+        }
         case 'ask_clarification':
             if (!args.question.trim()) errors.push(`${name}: question is empty`);
-            if (args.options.length < 2 || args.options.length > 3) errors.push(`${name}: give 2 or 3 options`);
+            // the app adds its own "Keep as is", so one option (a font, say) is enough
+            if (args.options.length < 1 || args.options.length > 3) errors.push(`${name}: give 1 to 3 options`);
             edit.clarification = { question: args.question, options: args.options };
             break;
         case 'cannot_do':
@@ -478,6 +718,12 @@ export function validate(calls, state, presets, fonts = []) {
         default:
             break;
         }
+    }
+
+    // lowercase letters only show once the style stops forcing capitals
+    const lowercases = tools.some((tool) => tool.name === 'change_letters' && tool.args.mode === 'lowercase');
+    if (lowercases && state.style.case && state.style.case !== 'none' && !edit.styles.some((style) => style.case != null)) {
+        edit.styles.push({ case: 'none' });
     }
 
     // a caption can't be edited by two tools that would make each other's ids stale
