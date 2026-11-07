@@ -121,9 +121,9 @@ test('prompt puts presets before the snapshot and fences untrusted text', async 
         assert.equal(input[1].role, 'user');
         const user = input[1].content;
         assert.ok(user.startsWith('<snapshot>\nrev 7f3a'));
-        assert.ok(user.indexOf('</snapshot>') < user.indexOf('Reply language: Hindi (hi)'));
-        assert.ok(user.indexOf('Reply language: Hindi (hi)') < user.indexOf('<instruction>'));
-        assert.ok(user.endsWith('<instruction>\nfix Denis to Dennis and make it bigger\n</instruction>'));
+        assert.ok(user.indexOf('</snapshot>') < user.indexOf('<instruction>'));
+        assert.ok(user.includes('<instruction>\nfix Denis to Dennis and make it bigger\n</instruction>'));
+        assert.ok(user.endsWith('Reply language: Hindi (hi). Write every question, option and message in it.'));
         // Caption text can't close the snapshot block or open an instruction block of its own.
         assert.equal(user.split('</snapshot>').length, 2);
         assert.equal(user.split('<instruction>').length, 2);
