@@ -1,0 +1,1713 @@
+[
+ {
+  "id": "6voux0",
+  "name": "Mosy",
+  "category": "signature",
+  "case": "none",
+  "highlight": "none",
+  "font": "The Bold Font",
+  "shadow": "strong"
+ },
+ {
+  "id": "uzvhzk",
+  "name": "Clean Bold",
+  "category": "signature",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "AvenirNext-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "j4zf4f",
+  "name": "Sway",
+  "category": "signature",
+  "case": "none",
+  "highlight": "static",
+  "font": "Helvetica Neue LT Std",
+  "shadow": "custom"
+ },
+ {
+  "id": "wv2rex",
+  "name": "Swirl",
+  "category": "signature",
+  "case": "none",
+  "highlight": "static",
+  "font": "Helvetica Neue LT Std",
+  "shadow": "custom"
+ },
+ {
+  "id": "wh0sil",
+  "name": "Lunar",
+  "category": "signature",
+  "case": "none",
+  "highlight": "none",
+  "font": "Instrument Sans",
+  "shadow": "custom"
+ },
+ {
+  "id": "f7xsde",
+  "name": "U Up?",
+  "category": "signature",
+  "case": "none",
+  "highlight": "none",
+  "font": ".System-100",
+  "shadow": "none",
+  "overflow": "wrap"
+ },
+ {
+  "id": "DC784E7D-2B7F-4E95-BA96-A29AF2A5D001",
+  "name": "Viral",
+  "category": "signature",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Avenir-Heavy",
+  "shadow": "none"
+ },
+ {
+  "id": "AAFCBD41-EE74-493A-9FF8-7EE3A707DA42",
+  "name": "Keynote",
+  "category": "signature",
+  "case": "none",
+  "highlight": "none",
+  "font": "Avenir-Book",
+  "shadow": "custom"
+ },
+ {
+  "id": "3C8FBD99-0237-409C-BEEC-4FF594306790",
+  "name": "Blue Bubble",
+  "category": "signature",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "Futura-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "93DEBF04-0D52-45B5-BB76-5DFF115B4707",
+  "name": "Y2K Diva",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "TheBoldFont-Bold",
+  "shadow": "none",
+  "word_bg": "#3ED8FD",
+  "fill": "#C284FF",
+  "emphasis": "#FFFF9A"
+ },
+ {
+  "id": "6C53E44C-3CFA-417D-BA4A-C11F4BE653B2",
+  "name": "Kitty 2",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "SourGummy-ExtraBold",
+  "shadow": "custom",
+  "word_bg": "#FF005C",
+  "emphasis": "#FFFFFF",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "B3DA9FB9-46C2-4215-B7F8-0900B58BB781",
+  "name": "Yellow Press",
+  "category": "bold",
+  "case": "capitalized",
+  "highlight": "static",
+  "font": "Poppins-Medium",
+  "shadow": "custom",
+  "fill": "#FEE900"
+ },
+ {
+  "id": "5A186B04-1DD7-4A7D-BDC5-9CA8609BC23C",
+  "name": "Bolt",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Montserrat-SemiBold",
+  "shadow": "custom"
+ },
+ {
+  "id": "1137D9F0-7F93-486F-AD8B-A0218FD9F95A",
+  "name": "Ignite",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "GillSans-Bold",
+  "shadow": "custom",
+  "emphasis": "#FCEA74"
+ },
+ {
+  "id": "6A58715B-1C8A-4D4C-A11A-5E30E6A71688",
+  "name": "Header",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Futura-CondensedExtraBold",
+  "shadow": "none"
+ },
+ {
+  "id": "7EFC1A9F-06F1-4DA0-9388-3483556A3C4C",
+  "name": "Bold Core",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Roboto-Black",
+  "shadow": "custom"
+ },
+ {
+  "id": "D59E5B91-95F1-45F9-809B-CB9B20E3B8EF",
+  "name": "Power",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "AvenirNextCondensed-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "8F8717E7-8F15-4DC3-82CA-A770F91A7CE8",
+  "name": "Rouge",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Sen-ExtraBold",
+  "shadow": "custom"
+ },
+ {
+  "id": "0BFE5DB6-5802-4CDD-9B4D-42AF1FFD20AB",
+  "name": "Energetic",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Roboto-Black",
+  "shadow": "none"
+ },
+ {
+  "id": "C4A5A2C6-6328-42C9-9BBE-D21FC568852F",
+  "name": "Circuit",
+  "category": "bold",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Fredoka-Medium",
+  "shadow": "custom",
+  "emphasis": "#00EA00"
+ },
+ {
+  "id": "0AF6DE4F-80F2-43CE-A3B2-7D9FB9A86D77",
+  "name": "Silent Night",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "SavoyeLetPlain",
+  "shadow": "custom",
+  "fill": "#FFFFFF",
+  "emphasis": "#FFFFC3"
+ },
+ {
+  "id": "9172EBC5-468F-4BEE-87AD-8A5E8F814313",
+  "name": "December",
+  "category": "playful",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Panton-BlackCaps",
+  "shadow": "none",
+  "fill": "#00DC73",
+  "emphasis": "#FF2400",
+  "word_bg": "#FFFFFF"
+ },
+ {
+  "id": "2ACA772E-1AC2-41C6-955A-461C0D5769BC",
+  "name": "Candy Bar",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "TamilSangamMN",
+  "shadow": "custom",
+  "fill": "#FFFFFF",
+  "caption_bg": "#9D5FFF",
+  "word_bg": "#FFFFFF",
+  "emphasis": "#FF0006"
+ },
+ {
+  "id": "73B8F3B5-CA9D-4EBD-A8F7-109E8C83C6D7",
+  "name": "Kitty",
+  "category": "playful",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "SourGummy-ExtraBold",
+  "shadow": "custom",
+  "fill": "#FF87C2",
+  "word_bg": "#3ED8FD",
+  "emphasis": "#FFFFFF"
+ },
+ {
+  "id": "8506EE56-896F-431E-8897-3EB70ED4A876",
+  "name": "Dream Sparkle",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Montserrat-Black",
+  "shadow": "custom",
+  "emphasis": "#FFFFFF",
+  "word_bg": "#FF58C5",
+  "caption_bg": "#00BD96",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "8B8DC8E9-8B9A-4602-9D69-105BA40A7797",
+  "name": "Sweet Monster",
+  "category": "playful",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "SourGummy-ExtraBold",
+  "shadow": "custom",
+  "caption_bg": "#EDECD4",
+  "emphasis": "#FFFFFF",
+  "word_bg": "#FF29BD",
+  "fill": "#FFE1FF"
+ },
+ {
+  "id": "bbyz8z",
+  "name": "Monster",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Truculenta-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "B9D7331F-7818-408A-85F2-9DAD021E1B36",
+  "name": "Pastel",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Jua-Regular",
+  "shadow": "custom"
+ },
+ {
+  "id": "ED76CCAC-6244-4A01-B433-3C1EEC7E47BD",
+  "name": "Choco Treat",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "InclusiveSans-BoldItalic",
+  "shadow": "none",
+  "emphasis": "#F7CFD4",
+  "caption_bg": "#7F4A31",
+  "fill": "#7F4A31"
+ },
+ {
+  "id": "ndgw4w",
+  "name": "Cartoony",
+  "category": "playful",
+  "case": "none",
+  "highlight": "static",
+  "font": "FredokaOne-Regular",
+  "shadow": "custom"
+ },
+ {
+  "id": "48ql8z",
+  "name": "Disconnected",
+  "category": "playful",
+  "case": "none",
+  "highlight": "none",
+  "font": "Fredoka One",
+  "shadow": "custom"
+ },
+ {
+  "id": "F01875B1-4226-4081-9A28-9504210F042C",
+  "name": "Dollhouse",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Impact",
+  "shadow": "custom"
+ },
+ {
+  "id": "92886BB8-3455-49D0-8F63-169EF1999E1F",
+  "name": "Bubblegum",
+  "category": "playful",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "SourGummy-ExtraBold",
+  "shadow": "custom",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "w45mgp1",
+  "name": "Valentine",
+  "category": "playful",
+  "case": "none",
+  "highlight": "none",
+  "font": "Sahir Yesta",
+  "shadow": "custom"
+ },
+ {
+  "id": "bvskbp",
+  "name": "Comic Hero",
+  "category": "playful",
+  "case": "none",
+  "highlight": "static",
+  "font": "Bangers",
+  "shadow": "custom"
+ },
+ {
+  "id": "59D5271F-DF13-48B9-9611-87ECE02C40DB",
+  "name": "Spookspire",
+  "category": "playful",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Creepster-Regular",
+  "shadow": "none",
+  "emphasis": "#FFB300",
+  "word_bg": "#FF2D55",
+  "fill": "#FF6A00",
+  "caption_bg": "#000000"
+ },
+ {
+  "id": "CF05933C-17AA-4C61-9074-7526140146B4",
+  "name": "Skyglen",
+  "category": "basics",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "Panton-BlackCaps",
+  "shadow": "custom",
+  "word_bg": "#003749",
+  "caption_bg": "#160056",
+  "fill": "#EBF3EF"
+ },
+ {
+  "id": "998B2EA5-D707-4715-8F5D-A90C6761E4C1",
+  "name": "Timeless",
+  "category": "basics",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "Panton-BlackCaps",
+  "shadow": "none",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "6b8tbg",
+  "name": "Glow",
+  "category": "basics",
+  "case": "none",
+  "highlight": "none",
+  "font": "Universal Serif",
+  "shadow": "custom"
+ },
+ {
+  "id": "k3rowe",
+  "name": "U-Bank",
+  "category": "basics",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "Poppins-ExtraBold",
+  "shadow": "custom"
+ },
+ {
+  "id": "21A5E4F6-02D6-4FA4-A001-49E817676C19",
+  "name": "Academic",
+  "category": "basics",
+  "case": "none",
+  "highlight": "none",
+  "font": "HoeflerText-Regular",
+  "shadow": "none"
+ },
+ {
+  "id": "gjfh7r",
+  "name": "Ghost",
+  "category": "basics",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "GoldenSans-Black",
+  "shadow": "none"
+ },
+ {
+  "id": "AE4B19A3-83C7-48A2-9C72-B786FA322690",
+  "name": "Woods",
+  "category": "basics",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Avenir-Medium",
+  "shadow": "none"
+ },
+ {
+  "id": "AF7D9ECC-6A87-4277-9DEE-4AD80E002712",
+  "name": "Paperback",
+  "category": "basics",
+  "case": "none",
+  "highlight": "none",
+  "font": "Fraunces72pt-Black",
+  "shadow": "custom"
+ },
+ {
+  "id": "5eoff7",
+  "name": "Youtuber",
+  "category": "basics",
+  "case": "none",
+  "highlight": "none",
+  "font": "The Bold Font",
+  "shadow": "custom"
+ },
+ {
+  "id": "D22D67DB-71BD-4E44-A1F2-D7E1C995E32B",
+  "name": "Sunshine",
+  "category": "basics",
+  "case": "uppercase",
+  "highlight": "static",
+  "font": "HelveticaNeueLTStd-Bd",
+  "shadow": "custom",
+  "emphasis": "#FFE200"
+ },
+ {
+  "id": "D232E940-844F-45A3-83B7-99397A55F65E",
+  "name": "Apple",
+  "category": "basics",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Mulish-ExtraBoldItalic",
+  "shadow": "custom"
+ },
+ {
+  "id": "5B85A1ED-F2EB-4543-A5E0-10508A725278",
+  "name": "Valentines",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Fredoka-Medium",
+  "shadow": "custom",
+  "caption_bg": "#160056",
+  "emphasis": "#FF94AB",
+  "fill": "#FFFFFF",
+  "word_bg": "#003749"
+ },
+ {
+  "id": "27216C66-E407-4A58-99ED-9D7F9C83CAEB",
+  "name": "Showgirl",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Rubik-Black",
+  "shadow": "none",
+  "emphasis": "#FFFFFF",
+  "word_bg": "#00BD96",
+  "fill": "#FF4800",
+  "caption_bg": "#00BD96"
+ },
+ {
+  "id": "DBC04809-C4C5-48EE-AA9B-C1604E54DC63",
+  "name": "Memoir",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "none",
+  "font": "Jua-Regular",
+  "shadow": "custom",
+  "word_bg": "#FFFFFF",
+  "fill": "#FFFFFF",
+  "caption_bg": "#9D5FFF"
+ },
+ {
+  "id": "4E3913DB-F18A-4B81-862F-7591797DF05E",
+  "name": "Electra",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "HiraginoSans-W8",
+  "shadow": "none",
+  "fill": "#38EAFF",
+  "word_bg": "#FF2D55"
+ },
+ {
+  "id": "82A8BCD6-9B09-4D61-9C61-0DDA19D63820",
+  "name": "Blush",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Avenir-Light",
+  "shadow": "none",
+  "emphasis": "#FFFFFF",
+  "caption_bg": "#FF2D55",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "38672650-954A-4021-9BA7-1D692425BDD6",
+  "name": "Power Sweet",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Bangers-Regular",
+  "shadow": "none",
+  "fill": "#FF87C2",
+  "word_bg": "#93E3FD",
+  "emphasis": "#00EE4F"
+ },
+ {
+  "id": "8D838146-8469-4F64-A2F5-323E340972B9",
+  "name": "Spring Cottage",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "ElsieSwashCaps-Black",
+  "shadow": "custom",
+  "caption_bg": "#76814C",
+  "fill": "#FFE4AC",
+  "emphasis": "#E6BBE6"
+ },
+ {
+  "id": "D15E30D7-FC0A-4781-9A96-A3D0BA01897D",
+  "name": "Playful Easter",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "GasoekOne-Regular",
+  "shadow": "custom",
+  "fill": "#FFFFFF",
+  "word_bg": "#F552A1",
+  "emphasis": "#FFD62C"
+ },
+ {
+  "id": "F0035BAF-D7A5-40FF-B8B8-ED65EEEE5AB6",
+  "name": "Glare",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "none",
+  "font": "The Bold Font",
+  "shadow": "custom",
+  "fill": "#27FF15",
+  "word_bg": "#FF2D55"
+ },
+ {
+  "id": "5C138265-C929-433F-AC5D-FD46DC9B3C27",
+  "name": "Creamy",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "BioRhymeSemiExpanded-Bold",
+  "shadow": "custom",
+  "emphasis": "#FFD9A8"
+ },
+ {
+  "id": "2B84BC82-A041-4838-8A3A-355F3768FDBA",
+  "name": "Marina",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Charter-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "mx3924",
+  "name": "Neon",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "static",
+  "font": "Lovelo-LineBold",
+  "shadow": "custom"
+ },
+ {
+  "id": "60D0B746-5635-46A9-B201-E05320D1053F",
+  "name": "Grapefruit",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Panton-BlackCaps",
+  "shadow": "none"
+ },
+ {
+  "id": "50BDBDFD-C8CE-4C06-B46D-E5B57FD3FB32",
+  "name": "Pop",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "BioRhyme-Medium",
+  "shadow": "custom",
+  "fill": "#FFFFFF",
+  "emphasis": "#FFF994",
+  "caption_bg": "#99244F",
+  "word_bg": "#EE719E"
+ },
+ {
+  "id": "548CEAFC-95E7-45BA-9728-47715009F207",
+  "name": "Anemone",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Roboto-ExtraBold",
+  "shadow": "none"
+ },
+ {
+  "id": "2DF409E8-D50D-4F34-9509-1AAA7FF3E8D9",
+  "name": "Gelato",
+  "category": "colorPop",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Barriecito-Regular",
+  "shadow": "none"
+ },
+ {
+  "id": "01B6062A-D602-44D9-BA97-351B501CAD22",
+  "name": "Mario",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "static",
+  "font": "PressStart2P-Regular",
+  "shadow": "custom"
+ },
+ {
+  "id": "902D48E7-178E-48B0-A9E1-2324B23EDD5D",
+  "name": "Vanilla",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "AvenirNext-Regular",
+  "shadow": "none",
+  "emphasis": "#FFFBB9",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "809D2ABD-4FE1-46DF-BEC7-48092EDE749C",
+  "name": "Alternates",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Arial-ItalicMT",
+  "shadow": "none",
+  "emphasis": "#FFFFFF",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "4A3B6307-17DA-4F47-B0D9-8B3DDCAE6B92",
+  "name": "Human",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "Jua-Regular",
+  "shadow": "none",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "E544EE1B-F63C-49AE-AA2D-61AE0B6122CF",
+  "name": "Classy",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "AbhayaLibre-Regular",
+  "shadow": "custom",
+  "emphasis": "#FFD8FE"
+ },
+ {
+  "id": "14BA2546-91E4-4586-A43E-C8D4A71329CD",
+  "name": "Dusk",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "Fraunces72ptSoft-Italic",
+  "shadow": "custom"
+ },
+ {
+  "id": "FC93B7ED-677F-4817-9F4E-2E9D59EB26C3",
+  "name": "Minimal",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "Avenir-Book",
+  "shadow": "custom"
+ },
+ {
+  "id": "260DD8EA-3B0B-45EA-AA37-70F121BB85A2",
+  "name": "Notepad",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "AvenirNextCondensed-MediumItalic",
+  "shadow": "custom",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "0CD16410-8203-4665-A291-ABF456ABAF60",
+  "name": "Whisper",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "Optima-Regular",
+  "shadow": "custom",
+  "caption_bg": "#000000"
+ },
+ {
+  "id": "D1F2538B-99B7-42AE-B3C7-E3E2B1D7B7E6",
+  "name": "Grace",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "Fraunces72ptSoft-Italic",
+  "shadow": "custom"
+ },
+ {
+  "id": "E30290F1-8871-4575-916F-ED00EEC6D00B",
+  "name": "Cloud",
+  "category": "minimalClean",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "ArialHebrew",
+  "shadow": "custom"
+ },
+ {
+  "id": "3E6AE3D8-EE76-4A37-9CD7-BBAC8BFB0DF0",
+  "name": "Piano",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "AvenirNextCondensed-Italic",
+  "shadow": "none"
+ },
+ {
+  "id": "4888wt",
+  "name": "Old School",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "none",
+  "font": "Helvetica",
+  "shadow": "custom"
+ },
+ {
+  "id": "BB33281A-AD01-4CC6-BB5C-D6853A7A5D66",
+  "name": "Cupcake",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "static",
+  "font": "SnellRoundhand",
+  "shadow": "custom"
+ },
+ {
+  "id": "B43964A4-AA78-4163-A231-2B2897EEF3E0",
+  "name": "Fancy",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "static",
+  "font": "STIXTwoText-Italic_Medium-Italic",
+  "shadow": "custom",
+  "emphasis": "#EFCAFF"
+ },
+ {
+  "id": "EAC83355-FE76-4085-9DAF-DD9A6FCFD488",
+  "name": "Terminal",
+  "category": "retroTech",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "DMMono-Regular",
+  "shadow": "custom"
+ },
+ {
+  "id": "4m6y9o",
+  "name": "Typewriter",
+  "category": "retroTech",
+  "case": "none",
+  "highlight": "none",
+  "font": "AmericanTypewriter-Semibold",
+  "shadow": "custom"
+ },
+ {
+  "id": "394C39D1-B473-43B2-AEA7-6BFDDD71B710",
+  "name": "Telegraph",
+  "category": "retroTech",
+  "case": "none",
+  "highlight": "none",
+  "font": "AmericanTypewriter",
+  "shadow": "custom"
+ },
+ {
+  "id": "FF8A81C1-146A-4B6C-8EBA-A3A99B505A45",
+  "name": "Box",
+  "category": "retroTech",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "DMMono-MediumItalic",
+  "shadow": "custom"
+ },
+ {
+  "id": "kee7zm",
+  "name": "Retro",
+  "category": "retroTech",
+  "case": "none",
+  "highlight": "none",
+  "font": "Silkscreen-Regular",
+  "shadow": "strong"
+ },
+ {
+  "id": "92E93F2F-F341-4AFC-9169-A89FA194D324",
+  "name": "Maze",
+  "category": "retroTech",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "DMMono-Medium",
+  "shadow": "custom"
+ },
+ {
+  "id": "fbqz51",
+  "name": "Rogaine",
+  "category": "influencerPack",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "The Bold Font",
+  "shadow": "custom"
+ },
+ {
+  "id": "htc34a",
+  "name": "Goggins",
+  "category": "influencerPack",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Panton",
+  "shadow": "custom"
+ },
+ {
+  "id": "zn29ba",
+  "name": "Diagonal",
+  "category": "influencerPack",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "The Bold Font",
+  "shadow": "custom"
+ },
+ {
+  "id": "nj6k5e",
+  "name": "Blowout",
+  "category": "influencerPack",
+  "case": "none",
+  "highlight": "static",
+  "font": "The Bold Font",
+  "shadow": "custom"
+ },
+ {
+  "id": "4xu3d5",
+  "name": "Mosying",
+  "category": "influencerPack",
+  "case": "none",
+  "highlight": "static",
+  "font": "The Bold Font",
+  "shadow": "custom"
+ },
+ {
+  "id": "6D0E5CDF-BA11-483B-91B6-ACF47D9DE068",
+  "name": "Buzz",
+  "category": "influencerPack",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "TheBoldFont-Bold",
+  "shadow": "custom",
+  "word_bg": "#7D14FF"
+ },
+ {
+  "id": "23E0C2DD-59E7-4894-89FF-87073C4579A1",
+  "name": "Frost",
+  "category": "influencerPack",
+  "case": "none",
+  "highlight": "none",
+  "font": "HelveticaNeue-Medium",
+  "shadow": "none",
+  "caption_bg": "#0090F6"
+ },
+ {
+  "id": "g54tq8",
+  "name": "Confident 1",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "AvenirNext-Heavy",
+  "shadow": "soft"
+ },
+ {
+  "id": "uerdoq",
+  "name": "Confident 8",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "AvenirNextCondensed-Bold",
+  "shadow": "soft"
+ },
+ {
+  "id": "3llkoz",
+  "name": "Confident 9",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "Futura-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "nky3f1",
+  "name": "Confident 10",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "Impact",
+  "shadow": "soft"
+ },
+ {
+  "id": "6uvdcg",
+  "name": "Confident 11",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "GillSans-Bold",
+  "shadow": "soft"
+ },
+ {
+  "id": "dz8247",
+  "name": "Confident 2",
+  "category": "legacyConfident",
+  "case": "uppercase",
+  "highlight": "static",
+  "font": "AvenirNext-Heavy",
+  "shadow": "custom"
+ },
+ {
+  "id": "uomrs7",
+  "name": "Confident 3",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "AvenirNext-Bold",
+  "shadow": "soft"
+ },
+ {
+  "id": "akx8yq",
+  "name": "Confident 4",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "HelveticaNeue-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "m5ivwo",
+  "name": "Confident 5",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "Avenir-Black",
+  "shadow": "soft"
+ },
+ {
+  "id": "p207mt",
+  "name": "Confident 6",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "AlNile-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "xynzu7",
+  "name": "Confident 7",
+  "category": "legacyConfident",
+  "case": "none",
+  "highlight": "static",
+  "font": "AppleSDGothicNeo-Bold",
+  "shadow": "soft"
+ },
+ {
+  "id": "bcjfi1",
+  "name": "Friendly 1",
+  "category": "legacyFriendly",
+  "case": "none",
+  "highlight": "static",
+  "font": "GillSans-UltraBold",
+  "shadow": "custom"
+ },
+ {
+  "id": "k6mt9y",
+  "name": "Friendly 2",
+  "category": "legacyFriendly",
+  "case": "none",
+  "highlight": "static",
+  "font": "ChalkboardSE-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "xvbv1q",
+  "name": "Friendly 3",
+  "category": "legacyFriendly",
+  "case": "none",
+  "highlight": "static",
+  "font": "ArialRoundedMTBold",
+  "shadow": "soft"
+ },
+ {
+  "id": "2rfize",
+  "name": "Friendly 4",
+  "category": "legacyFriendly",
+  "case": "none",
+  "highlight": "static",
+  "font": "Baskerville-Bold",
+  "shadow": "soft"
+ },
+ {
+  "id": "ijq5d1",
+  "name": "Friendly 5",
+  "category": "legacyFriendly",
+  "case": "none",
+  "highlight": "static",
+  "font": "Avenir-Heavy",
+  "shadow": "soft"
+ },
+ {
+  "id": "awj0t8",
+  "name": "Friendly 6",
+  "category": "legacyFriendly",
+  "case": "none",
+  "highlight": "static",
+  "font": "Optima-ExtraBlack",
+  "shadow": "soft"
+ },
+ {
+  "id": "dkfmp2",
+  "name": "Italic 1",
+  "category": "legacyItalic",
+  "case": "none",
+  "highlight": "static",
+  "font": "AvenirNext-HeavyItalic",
+  "shadow": "custom"
+ },
+ {
+  "id": "03l0xg",
+  "name": "Italic 2",
+  "category": "legacyItalic",
+  "case": "none",
+  "highlight": "static",
+  "font": "HoeflerText-BlackItalic",
+  "shadow": "custom"
+ },
+ {
+  "id": "a7574n",
+  "name": "Italic 3",
+  "category": "legacyItalic",
+  "case": "none",
+  "highlight": "static",
+  "font": "Baskerville-SemiBoldItalic",
+  "shadow": "soft"
+ },
+ {
+  "id": "ggf6ky",
+  "name": "Italic 4",
+  "category": "legacyItalic",
+  "case": "none",
+  "highlight": "static",
+  "font": "Optima-Italic",
+  "shadow": "soft"
+ },
+ {
+  "id": "oslxz4",
+  "name": "Italic 5",
+  "category": "legacyItalic",
+  "case": "none",
+  "highlight": "static",
+  "font": "SnellRoundhand-Black",
+  "shadow": "soft"
+ },
+ {
+  "id": "qkfx4e",
+  "name": "Italic 6",
+  "category": "legacyItalic",
+  "case": "none",
+  "highlight": "static",
+  "font": "TimesNewRomanPS-BoldItalicMT",
+  "shadow": "soft"
+ },
+ {
+  "id": "56jbho",
+  "name": "Serif 1",
+  "category": "legacySerif",
+  "case": "none",
+  "highlight": "static",
+  "font": "Rockwell-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "j832qo",
+  "name": "Serif 3",
+  "category": "legacySerif",
+  "case": "none",
+  "highlight": "static",
+  "font": "AmericanTypewriter",
+  "shadow": "soft"
+ },
+ {
+  "id": "zhw013",
+  "name": "Serif 2",
+  "category": "legacySerif",
+  "case": "none",
+  "highlight": "static",
+  "font": "CourierNewPS-BoldMT",
+  "shadow": "custom"
+ },
+ {
+  "id": "mzty8g",
+  "name": "Serif 4",
+  "category": "legacySerif",
+  "case": "none",
+  "highlight": "static",
+  "font": "AmericanTypewriter-Semibold",
+  "shadow": "soft"
+ },
+ {
+  "id": "tovji7",
+  "name": "Serif 5",
+  "category": "legacySerif",
+  "case": "none",
+  "highlight": "static",
+  "font": "AmericanTypewriter-Bold",
+  "shadow": "soft"
+ },
+ {
+  "id": "hjfetf",
+  "name": "Grand 1",
+  "category": "legacyGrand",
+  "case": "none",
+  "highlight": "static",
+  "font": "Baskerville",
+  "shadow": "soft"
+ },
+ {
+  "id": "4ic6up",
+  "name": "Grand 2",
+  "category": "legacyGrand",
+  "case": "none",
+  "highlight": "static",
+  "font": "AcademyEngravedLetPlain",
+  "shadow": "soft"
+ },
+ {
+  "id": "psugvv",
+  "name": "Grand 3",
+  "category": "legacyGrand",
+  "case": "none",
+  "highlight": "static",
+  "font": "BodoniSvtyTwoSCITCTT-Book",
+  "shadow": "soft"
+ },
+ {
+  "id": "iy7idl",
+  "name": "Grand 4",
+  "category": "legacyGrand",
+  "case": "none",
+  "highlight": "static",
+  "font": "Charter-Roman",
+  "shadow": "soft"
+ },
+ {
+  "id": "3k9eta",
+  "name": "Grand 5",
+  "category": "legacyGrand",
+  "case": "none",
+  "highlight": "static",
+  "font": "Didot",
+  "shadow": "soft"
+ },
+ {
+  "id": "whc6ze",
+  "name": "Grand 6",
+  "category": "legacyGrand",
+  "case": "none",
+  "highlight": "static",
+  "font": "Copperplate-Bold",
+  "shadow": "custom"
+ },
+ {
+  "id": "hff1zo",
+  "name": "Light 1",
+  "category": "legacyLight",
+  "case": "none",
+  "highlight": "static",
+  "font": "AvenirNext-UltraLight",
+  "shadow": "soft"
+ },
+ {
+  "id": "i8pqm7",
+  "name": "Light 2",
+  "category": "legacyLight",
+  "case": "none",
+  "highlight": "static",
+  "font": "AvenirNextCondensed-UltraLight",
+  "shadow": "soft"
+ },
+ {
+  "id": "yi6ng0",
+  "name": "Light 3",
+  "category": "legacyLight",
+  "case": "none",
+  "highlight": "static",
+  "font": "EuphemiaUCAS",
+  "shadow": "soft"
+ },
+ {
+  "id": "agfmmk",
+  "name": "Light 4",
+  "category": "legacyLight",
+  "case": "none",
+  "highlight": "static",
+  "font": "GillSans-Light",
+  "shadow": "soft"
+ },
+ {
+  "id": "0h9vwi",
+  "name": "Light 5",
+  "category": "legacyLight",
+  "case": "none",
+  "highlight": "static",
+  "font": "HiraMinProN-W3",
+  "shadow": "soft"
+ },
+ {
+  "id": "bparpo",
+  "name": "Cute 1",
+  "category": "legacyCute",
+  "case": "none",
+  "highlight": "static",
+  "font": "BradleyHandITCTT-Bold",
+  "shadow": "soft"
+ },
+ {
+  "id": "a9162u",
+  "name": "Cute 2",
+  "category": "legacyCute",
+  "case": "none",
+  "highlight": "static",
+  "font": "ChalkDuster",
+  "shadow": "custom"
+ },
+ {
+  "id": "2smack",
+  "name": "Cute 3",
+  "category": "legacyCute",
+  "case": "none",
+  "highlight": "static",
+  "font": "MarkerFelt-Thin",
+  "shadow": "soft"
+ },
+ {
+  "id": "jwkrsc",
+  "name": "Cute 4",
+  "category": "legacyCute",
+  "case": "none",
+  "highlight": "static",
+  "font": "Noteworthy-Light",
+  "shadow": "soft"
+ },
+ {
+  "id": "mbom5b",
+  "name": "Cute 5",
+  "category": "legacyCute",
+  "case": "none",
+  "highlight": "static",
+  "font": "SavoyeLetPlain",
+  "shadow": "custom"
+ },
+ {
+  "id": "67wexc",
+  "name": "Cute 6",
+  "category": "legacyCute",
+  "case": "none",
+  "highlight": "static",
+  "font": "PartyLetPlain",
+  "shadow": "custom"
+ },
+ {
+  "id": "xpe7ov",
+  "name": "Cute 7",
+  "category": "legacyCute",
+  "case": "none",
+  "highlight": "static",
+  "font": "Papyrus",
+  "shadow": "custom"
+ },
+ {
+  "id": "ED3F1913-1884-45ED-813D-7B531ABDB7B1",
+  "name": "Gothic Diva",
+  "category": "",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Truculenta-Bold",
+  "shadow": "custom",
+  "word_bg": "#2D2F34",
+  "fill": "#FFFFFF",
+  "emphasis": "#FF6BBF"
+ },
+ {
+  "id": "6CE45E74-1A54-47DB-AEE1-A98E71FBC7D1",
+  "name": "Citrus",
+  "category": "",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "AvenirNextCondensed-DemiBold",
+  "shadow": "custom",
+  "emphasis": "#C7EF00"
+ },
+ {
+  "id": "D4ADC057-ED24-4AF0-AE2D-111C9EE7E88C",
+  "name": "Formik",
+  "category": "",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "HelveticaNeueLTStd-Bd",
+  "shadow": "none",
+  "caption_bg": "#F3D200",
+  "word_bg": "#D80022",
+  "emphasis": "#E7DD2D",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "B2CDFD32-FE8A-431C-808E-A3E76BA91379",
+  "name": "Sorbet",
+  "category": "",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "FredokaOne-Regular",
+  "shadow": "custom",
+  "fill": "#F7DBFF",
+  "emphasis": "#EFED00"
+ },
+ {
+  "id": "2CE539CF-F7B8-4E3B-8FE0-459E02205E91",
+  "name": "Lisa",
+  "category": "",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "AvenirNext-BoldItalic",
+  "shadow": "custom",
+  "emphasis": "#F1FF1C",
+  "word_bg": "#FF2D55"
+ },
+ {
+  "id": "F9760AD1-2494-433F-A8FB-683DFB624A7D",
+  "name": "Promo",
+  "category": "",
+  "case": "uppercase",
+  "highlight": "none",
+  "font": "Montserrat-Black",
+  "shadow": "none",
+  "caption_bg": "#000000",
+  "emphasis": "#FAEA00",
+  "fill": "#C2F900"
+ },
+ {
+  "id": "3CC573A2-F137-464A-8D4F-C61EDC0F9898",
+  "name": "Clean",
+  "category": "",
+  "case": "none",
+  "highlight": "none",
+  "font": "AbhayaLibre-Regular",
+  "shadow": "custom",
+  "emphasis": "#FFFF00"
+ },
+ {
+  "id": "F405EA06-96AF-4EB0-B7A2-E5D6DA59E941",
+  "name": "Night",
+  "category": "",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Montserrat-ExtraBold",
+  "shadow": "custom",
+  "fill": "#000000",
+  "emphasis": "#0056D6"
+ },
+ {
+  "id": "4EBDF486-4D71-4E83-A6FD-70573B182678",
+  "name": "Blush Bloom",
+  "category": "bold",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Gorditas-Bold",
+  "shadow": "none",
+  "caption_bg": "#FFFFFF",
+  "emphasis": "#FFC4D2",
+  "fill": "#A7DA97"
+ },
+ {
+  "id": "F7E0A717-BBB4-481A-AA10-BD488F26C161",
+  "name": "Pastel Bunny",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "DeliusSwashCaps-Regular",
+  "shadow": "none",
+  "fill": "#FFFFFF",
+  "caption_bg": "#9D5FFF",
+  "emphasis": "#C7AEFF",
+  "word_bg": "#D2FFE1"
+ },
+ {
+  "id": "9D4BECF5-CCE7-4A38-8344-C7D9034D23E4",
+  "name": "Readline Serif",
+  "category": "minimalClean",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Rosmatika-Regular",
+  "shadow": "none",
+  "fill": "#940021",
+  "caption_bg": "#FFFBFB",
+  "emphasis": "#791A3D",
+  "word_bg": "#FDF8FF",
+  "overflow": "resize_to_fit"
+ },
+ {
+  "id": "57FFBDC6-28C3-468F-81C4-AA0CB7C0DF66",
+  "name": "Pop Layers",
+  "category": "colorPop",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Staatliches-Regular",
+  "shadow": "custom",
+  "fill": "#FFFFFF",
+  "emphasis": "#FFFFFF",
+  "word_bg": "#FF005C"
+ },
+ {
+  "id": "4B95E918-431C-4A64-9EAA-41978E6A3D29",
+  "name": "Glow Marker",
+  "category": "colorPop",
+  "case": "capitalized",
+  "highlight": "spoken_word",
+  "font": "Jua-Regular",
+  "shadow": "custom",
+  "emphasis": "#51FF51",
+  "fill": "#FFFFFF",
+  "overflow": "wrap"
+ },
+ {
+  "id": "8C421EF2-EAC2-44AA-B628-80DCF66BFC41",
+  "name": "Modern Serif",
+  "category": "minimalClean",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "SteelworksVintageDemo",
+  "shadow": "none",
+  "emphasis": "#FFFFFF",
+  "fill": "#FFFFFF"
+ },
+ {
+  "id": "E84FBAD8-B91A-46E0-B843-E2538F26758A",
+  "name": "Soft Glow",
+  "category": "playful",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Dynalight-Regular",
+  "shadow": "custom",
+  "emphasis": "#FFD2D3",
+  "caption_bg": "#FF2D55",
+  "fill": "#FFFFAC",
+  "overflow": "wrap"
+ },
+ {
+  "id": "00288E63-68E5-4E3D-BC64-FBA273F316A4",
+  "name": "Argentina",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Saturdate",
+  "shadow": "custom",
+  "word_bg": "#55A8E2",
+  "emphasis": "#FFCC02"
+ },
+ {
+  "id": "26DD15DA-8214-425A-90F7-0D5820513296",
+  "name": "Uzbekistan",
+  "category": "worldCup",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "RammettoOne-Regular",
+  "shadow": "custom",
+  "emphasis": "#FFFFFF",
+  "fill": "#00B819",
+  "word_bg": "#3ED8FD",
+  "overflow": "resize_to_fit"
+ },
+ {
+  "id": "D6565E61-7C33-4BA3-AA87-77EB27BFC325",
+  "name": "Japan",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "ChineseRocksRg-Regular",
+  "shadow": "custom",
+  "emphasis": "#FFFFFF",
+  "fill": "#CE0001",
+  "word_bg": "#01411C",
+  "overflow": "wrap"
+ },
+ {
+  "id": "EA7F6041-E487-4147-8383-1265E02BBCCE",
+  "name": "USA",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "ElsieSwashCaps-Black",
+  "shadow": "custom",
+  "fill": "#C2002E",
+  "caption_bg": "#FFFFFF",
+  "emphasis": "#3C3B71"
+ },
+ {
+  "id": "27F7B85F-3C53-4A93-8EAD-873390CBD106",
+  "name": "Brazil",
+  "category": "worldCup",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Montserrat-Black",
+  "shadow": "custom",
+  "fill": "#009F29",
+  "emphasis": "#00287B",
+  "word_bg": "#FFDF00",
+  "overflow": "wrap"
+ },
+ {
+  "id": "A490C711-0C2F-4E20-B3FF-EF4B7F861FD3",
+  "name": "Portugal",
+  "category": "worldCup",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Roboto-ExtraBold",
+  "shadow": "custom",
+  "fill": "#B80624",
+  "word_bg": "#FF005C",
+  "emphasis": "#008369",
+  "overflow": "wrap"
+ },
+ {
+  "id": "7E0A8A45-19B9-415F-9D6F-79036EA577C8",
+  "name": "India",
+  "category": "worldCup",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Truculenta-Bold",
+  "shadow": "custom",
+  "word_bg": "#FFFFFF",
+  "emphasis": "#FF5A00",
+  "fill": "#00B819"
+ },
+ {
+  "id": "3E266DEB-F0C2-4BB0-8E29-AC0213F88B49",
+  "name": "England",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "Staatliches-Regular",
+  "shadow": "custom",
+  "word_bg": "#E2001F",
+  "emphasis": "#FFFFFF"
+ },
+ {
+  "id": "370916AB-18AE-4EE9-9DA2-6BF078384A23",
+  "name": "Pakistan",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "none",
+  "font": "Mulish-ExtraBoldItalic",
+  "shadow": "custom",
+  "fill": "#FFFFFF",
+  "word_bg": "#01411C"
+ },
+ {
+  "id": "766499A0-777D-437B-A63F-DAD20FDBDBBB",
+  "name": "Germany",
+  "category": "worldCup",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "Righteous-Regular",
+  "shadow": "custom",
+  "emphasis": "#FFCB00",
+  "word_bg": "#000000",
+  "fill": "#F20000"
+ },
+ {
+  "id": "E732EEBA-8635-42B2-8173-B56FA3124645",
+  "name": "Spain",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "HappyMonkey-Regular",
+  "shadow": "none",
+  "fill": "#FABC00",
+  "emphasis": "#FABC00",
+  "caption_bg": "#BA000C",
+  "overflow": "wrap"
+ },
+ {
+  "id": "9C23EB0E-7F70-48FA-8644-A75710C40F76",
+  "name": "France",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "HappyMonkey-Regular",
+  "shadow": "none",
+  "fill": "#FF3A30",
+  "caption_bg": "#002771",
+  "emphasis": "#FFFFFF",
+  "overflow": "resize_to_fit"
+ },
+ {
+  "id": "69348A9C-EE58-4713-82C0-B766B433B51C",
+  "name": "Mexico",
+  "category": "worldCup",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "SteelworksVintageDemo",
+  "shadow": "none",
+  "caption_bg": "#036546",
+  "fill": "#FFFFFF",
+  "emphasis": "#FF344A"
+ },
+ {
+  "id": "52B4A319-EA31-4ACD-9601-666A24183426",
+  "name": "Midnight Witch",
+  "category": "halloween",
+  "case": "uppercase",
+  "highlight": "spoken_word",
+  "font": "HalloweenWhispers",
+  "shadow": "none",
+  "emphasis": "#D83E24",
+  "fill": "#D86429",
+  "word_bg": "#000000"
+ },
+ {
+  "id": "42270B43-63C4-4234-9BA1-62B0FF2D790C",
+  "name": "Pumpkin Patch 🎃",
+  "category": "halloween",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "HalloweenBonesRegular",
+  "shadow": "custom",
+  "word_bg": "#1FDBF1",
+  "fill": "#E07A2D",
+  "caption_bg": "#41452E",
+  "emphasis": "#E07A2D",
+  "overflow": "resize_to_fit"
+ },
+ {
+  "id": "2271ACAE-E9AE-47E6-9F10-C7EBED50BA98",
+  "name": "Boo Cute 👻",
+  "category": "halloween",
+  "case": "capitalized",
+  "highlight": "spoken_word",
+  "font": "HalloweenGuises",
+  "shadow": "none",
+  "emphasis": "#D9C6E8",
+  "caption_bg": "#00BD96",
+  "word_bg": "#3B2A4A",
+  "fill": "#FF8A3D",
+  "size": 63,
+  "pacing": "fast",
+  "overflow": "wrap"
+ },
+ {
+  "id": "0418E192-F60B-4B62-B9F9-F02AEDDBA944",
+  "name": "Magic Halloween 🧪",
+  "category": "halloween",
+  "case": "none",
+  "highlight": "spoken_word",
+  "font": "HalloweenPlaque",
+  "shadow": "none",
+  "fill": "#FFFFFF",
+  "caption_bg": "#8A88D0",
+  "emphasis": "#C0DE12",
+  "pacing": "standard",
+  "overflow": "wrap"
+ }
+]

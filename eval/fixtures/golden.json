@@ -1,0 +1,1241 @@
+{
+ "about": "Golden cases for instruction-based editing (docs/instruction_editing_plan.md §5). Shared by the iOS EditApplier tests and the proxy's JS reference applier. Each case runs its tool calls through decode -> validate -> apply against the fixture. expect.style lists the style keys that change (all others must be unchanged); expect.captions is the full resulting caption list (a string is the text only; an object can also pin start/end, emphasis (null = none) and words [text, start, end]), \"repaced\" when pacing rebuilds the lines, and omitted when captions must be unchanged.",
+ "fixture": {
+  "id": "F1",
+  "language": "en",
+  "duration": 10.2,
+  "focus": "c2",
+  "revision": 7,
+  "style": {
+   "preset": "6voux0",
+   "size": 90,
+   "fill": "#FFFFFF",
+   "emphasis": "#00E5FF",
+   "caption_bg": "none",
+   "word_bg": "none",
+   "position": "bottom",
+   "case": "none",
+   "highlight": "spoken_word",
+   "pacing": "standard",
+   "overflow": "resize_to_fit",
+   "y": 0.2,
+   "outline": {
+    "color": "#000000",
+    "width": 8
+   },
+   "shadow": "strong",
+   "font": "The Bold Font",
+   "preset_name": "Mosy"
+  },
+  "captions": [
+   {
+    "words": [
+     [
+      "Hey",
+      0.0,
+      0.25
+     ],
+     [
+      "guys",
+      0.25,
+      0.55
+     ],
+     [
+      "it's",
+      0.55,
+      0.8
+     ],
+     [
+      "Denis",
+      0.8,
+      1.2
+     ]
+    ],
+    "emphasis": null
+   },
+   {
+    "words": [
+     [
+      "um",
+      1.2,
+      1.45
+     ],
+     [
+      "today",
+      1.45,
+      1.8
+     ],
+     [
+      "we're",
+      1.8,
+      2.0
+     ],
+     [
+      "talking",
+      2.0,
+      2.3
+     ],
+     [
+      "about",
+      2.3,
+      2.6
+     ]
+    ],
+    "emphasis": null
+   },
+   {
+    "words": [
+     [
+      "how",
+      2.6,
+      2.8
+     ],
+     [
+      "to",
+      2.8,
+      2.95
+     ],
+     [
+      "like",
+      2.95,
+      3.2
+     ],
+     [
+      "grow",
+      3.2,
+      3.5
+     ],
+     [
+      "your",
+      3.5,
+      3.7
+     ],
+     [
+      "channel",
+      3.7,
+      4.1
+     ]
+    ],
+    "emphasis": [
+     5,
+     5
+    ]
+   },
+   {
+    "words": [
+     [
+      "so",
+      4.1,
+      4.4
+     ],
+     [
+      "uh",
+      4.4,
+      4.8
+     ],
+     [
+      "the",
+      4.8,
+      5.0
+     ],
+     [
+      "first",
+      5.0,
+      5.3
+     ],
+     [
+      "thing",
+      5.3,
+      5.6
+     ],
+     [
+      "is",
+      5.6,
+      5.9
+     ]
+    ],
+    "emphasis": null
+   },
+   {
+    "words": [
+     [
+      "post",
+      5.9,
+      6.2
+     ],
+     [
+      "every",
+      6.2,
+      6.5
+     ],
+     [
+      "single",
+      6.5,
+      6.9
+     ],
+     [
+      "day",
+      6.9,
+      7.2
+     ],
+     [
+      "no",
+      7.2,
+      7.4
+     ],
+     [
+      "excuses",
+      7.4,
+      7.8
+     ]
+    ],
+    "emphasis": [
+     5,
+     5
+    ]
+   },
+   {
+    "words": [
+     [
+      "and",
+      7.8,
+      7.95
+     ],
+     [
+      "the",
+      7.95,
+      8.1
+     ],
+     [
+      "second",
+      8.1,
+      8.4
+     ],
+     [
+      "thing",
+      8.4,
+      8.7
+     ],
+     [
+      "is",
+      8.7,
+      8.85
+     ],
+     [
+      "consistency",
+      8.85,
+      9.2
+     ],
+     [
+      "you",
+      9.2,
+      9.35
+     ],
+     [
+      "know",
+      9.35,
+      9.5
+     ]
+    ],
+    "emphasis": null
+   }
+  ]
+ },
+ "cases": [
+  {
+   "case": "1",
+   "instruction": "make the captions yellow",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": \"#FFD600\", \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "fill": "#FFD600"
+    }
+   }
+  },
+  {
+   "case": "2",
+   "instruction": "make the captions yellow and bigger",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": \"#FFD600\", \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": 104, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "fill": "#FFD600",
+     "size": 104
+    }
+   }
+  },
+  {
+   "case": "5",
+   "instruction": "put the captions in the middle",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": \"center\", \"case\": null, \"highlight\": null, \"overflow\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "position": "center",
+     "y": 0.5
+    }
+   }
+  },
+  {
+   "case": "7",
+   "instruction": "all caps",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": \"uppercase\", \"highlight\": null, \"overflow\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "case": "uppercase"
+    }
+   }
+  },
+  {
+   "case": "11",
+   "instruction": "use the Boo Cute style",
+   "calls": [
+    {
+     "name": "apply_preset",
+     "arguments": "{\"preset_id\": \"2271ACAE-E9AE-47E6-9F10-C7EBED50BA98\"}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "preset": "2271ACAE-E9AE-47E6-9F10-C7EBED50BA98",
+     "size": 63,
+     "fill": "#FF8A3D",
+     "emphasis": "#D9C6E8",
+     "caption_bg": "#00BD96",
+     "word_bg": "#3B2A4A",
+     "case": "capitalized",
+     "highlight": "spoken_word",
+     "pacing": "fast",
+     "overflow": "wrap",
+     "font": "HalloweenGuises",
+     "shadow": "none",
+     "preset_name": "Boo Cute 👻"
+    },
+    "captions": "repaced"
+   }
+  },
+  {
+   "case": "12",
+   "instruction": "Boo Cute but with white text",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": \"#FFFFFF\", \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null}"
+    },
+    {
+     "name": "apply_preset",
+     "arguments": "{\"preset_id\": \"2271ACAE-E9AE-47E6-9F10-C7EBED50BA98\"}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "preset": "2271ACAE-E9AE-47E6-9F10-C7EBED50BA98",
+     "size": 63,
+     "fill": "#FFFFFF",
+     "emphasis": "#D9C6E8",
+     "caption_bg": "#00BD96",
+     "word_bg": "#3B2A4A",
+     "case": "capitalized",
+     "highlight": "spoken_word",
+     "pacing": "fast",
+     "overflow": "wrap",
+     "font": "HalloweenGuises",
+     "shadow": "none",
+     "preset_name": "Boo Cute 👻"
+    },
+    "captions": "repaced"
+   }
+  },
+  {
+   "case": "14",
+   "instruction": "one word at a time",
+   "calls": [
+    {
+     "name": "set_pacing",
+     "arguments": "{\"pacing\": \"fast\"}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "pacing": "fast"
+    },
+    "captions": "repaced"
+   }
+  },
+  {
+   "case": "16",
+   "instruction": "fix the spelling of Dennis",
+   "calls": [
+    {
+     "name": "find_replace",
+     "arguments": "{\"find\": \"Denis\", \"replace\": \"Dennis\", \"whole_word\": true, \"match_case\": false}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Dennis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "19",
+   "instruction": "remove the filler words",
+   "calls": [
+    {
+     "name": "delete_words",
+     "arguments": "{\"words\": [{\"id\": \"c1.0\", \"expect\": \"um\"}, {\"id\": \"c2.2\", \"expect\": \"like\"}, {\"id\": \"c3.1\", \"expect\": \"uh\"}]}"
+    },
+    {
+     "name": "cannot_do",
+     "arguments": "{\"reason\": \"cut_audio\", \"message\": \"Removed the fillers from the captions; the audio isn't cut.\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "today we're talking about",
+     {
+      "text": "how to grow your channel",
+      "emphasis": "channel"
+     },
+     "so the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ],
+    "cannot_do": [
+     "cut_audio"
+    ]
+   }
+  },
+  {
+   "case": "21",
+   "instruction": "change \"guys\" to \"everyone\"",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c0.1\", \"to\": \"c0.1\", \"expect\": \"guys\", \"text\": \"everyone\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     {
+      "text": "Hey everyone it's Denis",
+      "words": [
+       [
+        "Hey",
+        0.0,
+        0.25
+       ],
+       [
+        "everyone",
+        0.25,
+        0.55
+       ],
+       [
+        "it's",
+        0.55,
+        0.8
+       ],
+       [
+        "Denis",
+        0.8,
+        1.2
+       ]
+      ]
+     },
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "22",
+   "instruction": "it's \"post every day\", not \"post every single day\"",
+   "calls": [
+    {
+     "name": "delete_words",
+     "arguments": "{\"words\": [{\"id\": \"c4.2\", \"expect\": \"single\"}]}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     {
+      "text": "post every day no excuses",
+      "emphasis": "excuses"
+     },
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "23",
+   "instruction": "the second line should say \"today we're talking about\"",
+   "calls": [
+    {
+     "name": "set_caption_text",
+     "arguments": "{\"caption\": \"c1\", \"expect\": \"um today we're talking about\", \"text\": \"today we're talking about\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "24",
+   "instruction": "replace \"no excuses\" with \"no matter what\"",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c4.4\", \"to\": \"c4.5\", \"expect\": \"no excuses\", \"text\": \"no matter what\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     {
+      "text": "post every single day no matter what",
+      "emphasis": null,
+      "words": [
+       [
+        "post",
+        5.9,
+        6.2
+       ],
+       [
+        "every",
+        6.2,
+        6.5
+       ],
+       [
+        "single",
+        6.5,
+        6.9
+       ],
+       [
+        "day",
+        6.9,
+        7.2
+       ],
+       [
+        "no",
+        7.2,
+        7.3
+       ],
+       [
+        "matter",
+        7.3,
+        7.6
+       ],
+       [
+        "what",
+        7.6,
+        7.8
+       ]
+      ]
+     },
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "25",
+   "instruction": "delete the last line",
+   "calls": [
+    {
+     "name": "delete_captions",
+     "arguments": "{\"captions\": [{\"id\": \"c5\", \"expect\": \"and the second thing is consistency you know\"}]}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses"
+    ]
+   }
+  },
+  {
+   "case": "30",
+   "instruction": "split after \"grow\"",
+   "calls": [
+    {
+     "name": "split_caption",
+     "arguments": "{\"caption\": \"c2\", \"before\": \"c2.4\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     {
+      "text": "how to like grow",
+      "start": 2.6,
+      "end": 3.5,
+      "emphasis": null
+     },
+     {
+      "text": "your channel",
+      "start": 3.5,
+      "end": 4.1,
+      "emphasis": "channel"
+     },
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "31",
+   "instruction": "merge the first two lines",
+   "calls": [
+    {
+     "name": "merge_captions",
+     "arguments": "{\"first\": \"c0\", \"second\": \"c1\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     {
+      "text": "Hey guys it's Denis um today we're talking about",
+      "start": 0.0,
+      "end": 2.6
+     },
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "35",
+   "instruction": "captions are half a second late",
+   "calls": [
+    {
+     "name": "shift_timing",
+     "arguments": "{\"from\": null, \"to\": null, \"offset_ms\": -500}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     {
+      "text": "Hey guys it's Denis",
+      "start": 0.0,
+      "end": 0.7
+     },
+     {
+      "text": "um today we're talking about",
+      "start": 0.7,
+      "end": 2.1
+     },
+     {
+      "text": "how to like grow your channel",
+      "start": 2.1,
+      "end": 3.6
+     },
+     {
+      "text": "so uh the first thing is",
+      "start": 3.6,
+      "end": 5.4
+     },
+     {
+      "text": "post every single day no excuses",
+      "start": 5.4,
+      "end": 7.3
+     },
+     {
+      "text": "and the second thing is consistency you know",
+      "start": 7.3,
+      "end": 9.0
+     }
+    ]
+   }
+  },
+  {
+   "case": "36",
+   "instruction": "captions show up too early, delay them 200 ms",
+   "calls": [
+    {
+     "name": "shift_timing",
+     "arguments": "{\"from\": null, \"to\": null, \"offset_ms\": 200}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     {
+      "text": "Hey guys it's Denis",
+      "start": 0.2,
+      "end": 1.4,
+      "words": [
+       [
+        "Hey",
+        0.2,
+        0.45
+       ],
+       [
+        "guys",
+        0.45,
+        0.75
+       ],
+       [
+        "it's",
+        0.75,
+        1.0
+       ],
+       [
+        "Denis",
+        1.0,
+        1.4
+       ]
+      ]
+     },
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     {
+      "text": "and the second thing is consistency you know",
+      "start": 8.0,
+      "end": 9.7
+     }
+    ]
+   }
+  },
+  {
+   "case": "38",
+   "instruction": "keep the last caption on screen until the end",
+   "calls": [
+    {
+     "name": "set_caption_timing",
+     "arguments": "{\"caption\": \"c5\", \"start_s\": null, \"end_s\": 10.2}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     {
+      "text": "and the second thing is consistency you know",
+      "start": 7.8,
+      "end": 10.2
+     }
+    ]
+   }
+  },
+  {
+   "case": "39",
+   "instruction": "emphasize \"every single day\"",
+   "calls": [
+    {
+     "name": "set_emphasis",
+     "arguments": "{\"caption\": \"c4\", \"from\": \"c4.1\", \"to\": \"c4.3\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     {
+      "text": "post every single day no excuses",
+      "emphasis": "every single day"
+     },
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "42",
+   "instruction": "make it better",
+   "calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": "{\"question\": \"What should I change?\", \"options\": [\"Bigger text\", \"Brighter colors\", \"Fewer words per line\"]}"
+    }
+   ],
+   "expect": {
+    "clarification": true
+   }
+  },
+  {
+   "case": "44",
+   "instruction": "make only Dennis red",
+   "calls": [
+    {
+     "name": "cannot_do",
+     "arguments": "{\"reason\": \"per_word_style\", \"message\": \"Each word can't have its own color. I can emphasize Dennis instead.\"}"
+    }
+   ],
+   "expect": {
+    "cannot_do": [
+     "per_word_style"
+    ]
+   }
+  },
+  {
+   "case": "47",
+   "instruction": "remove the ums from the audio too",
+   "calls": [
+    {
+     "name": "delete_words",
+     "arguments": "{\"words\": [{\"id\": \"c1.0\", \"expect\": \"um\"}, {\"id\": \"c3.1\", \"expect\": \"uh\"}]}"
+    },
+    {
+     "name": "cannot_do",
+     "arguments": "{\"reason\": \"cut_audio\", \"message\": \"Removed them from the captions. Cutting audio is coming soon.\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "today we're talking about",
+     "how to like grow your channel",
+     "so the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ],
+    "cannot_do": [
+     "cut_audio"
+    ]
+   }
+  },
+  {
+   "case": "insert-1",
+   "instruction": "add a last line saying thanks for watching",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": \"c5\", \"text\": \"thanks for watching\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     {
+      "text": "and the second thing is consistency you know",
+      "start": 7.8,
+      "end": 9.2
+     },
+     {
+      "text": "thanks for watching",
+      "start": 9.2,
+      "end": 10.2
+     }
+    ]
+   }
+  },
+  {
+   "case": "insert-2",
+   "instruction": "after \"grow your channel\" add a line saying this is huge",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": \"c2\", \"text\": \"this is huge\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     {
+      "text": "how to like grow your channel",
+      "start": 2.6,
+      "end": 3.1,
+      "emphasis": "channel"
+     },
+     {
+      "text": "this is huge",
+      "start": 3.1,
+      "end": 4.1
+     },
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "insert-3",
+   "instruction": "add a first line saying welcome back",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": null, \"text\": \"welcome back\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     {
+      "text": "welcome back",
+      "start": 0.0,
+      "end": 0.9
+     },
+     {
+      "text": "Hey guys it's Denis",
+      "start": 0.9,
+      "end": 1.2
+     },
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "style-y",
+   "instruction": "move the captions a bit higher",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": 0.35, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "y": 0.35,
+     "position": "custom"
+    }
+   }
+  },
+  {
+   "case": "style-outline",
+   "instruction": "add a thick red outline",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": \"#FF0000\", \"outline_width\": 16, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "outline": {
+      "color": "#FF0000",
+      "width": 16
+     }
+    }
+   }
+  },
+  {
+   "case": "style-outline-clamped",
+   "instruction": "make the outline as thick as possible",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": 80, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "outline": {
+      "color": "#000000",
+      "width": 50
+     }
+    }
+   }
+  },
+  {
+   "case": "style-no-outline",
+   "instruction": "remove the outline",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": \"none\", \"outline_width\": null, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "outline": "none"
+    }
+   }
+  },
+  {
+   "case": "style-shadow",
+   "instruction": "make the shadow softer",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": null, \"shadow\": \"soft\", \"font\": null}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "shadow": "soft"
+    }
+   }
+  },
+  {
+   "case": "style-font",
+   "instruction": "use Avenir Next",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": \"AvenirNext-Bold\"}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "font": "AvenirNext-Bold"
+    }
+   }
+  }
+ ],
+ "invalid": [
+  {
+   "name": "unknown id",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c9.0\", \"to\": \"c9.0\", \"expect\": \"hey\", \"text\": \"hi\"}"
+    }
+   ],
+   "error": "no word c9.0"
+  },
+  {
+   "name": "wrong expect (off by one)",
+   "calls": [
+    {
+     "name": "delete_words",
+     "arguments": "{\"words\": [{\"id\": \"c1.1\", \"expect\": \"um\"}]}"
+    }
+   ],
+   "error": "c1.1 is \"today\", not \"um\""
+  },
+  {
+   "name": "same word edited twice",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c0.3\", \"to\": \"c0.3\", \"expect\": \"Denis\", \"text\": \"Dennis\"}"
+    },
+    {
+     "name": "delete_words",
+     "arguments": "{\"words\": [{\"id\": \"c0.3\", \"expect\": \"Denis\"}]}"
+    }
+   ],
+   "error": "word c0.3 is already edited"
+  },
+  {
+   "name": "font size out of range",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": 200, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null}"
+    }
+   ],
+   "error": "font_size 200 is out of range"
+  },
+  {
+   "name": "split and merge the same caption",
+   "calls": [
+    {
+     "name": "split_caption",
+     "arguments": "{\"caption\": \"c2\", \"before\": \"c2.3\"}"
+    },
+    {
+     "name": "merge_captions",
+     "arguments": "{\"first\": \"c2\", \"second\": \"c3\"}"
+    }
+   ],
+   "error": "c2 is changed by both split_caption and merge_captions"
+  },
+  {
+   "name": "edit a deleted caption",
+   "calls": [
+    {
+     "name": "delete_captions",
+     "arguments": "{\"captions\": [{\"id\": \"c1\", \"expect\": \"um today we're talking about\"}]}"
+    },
+    {
+     "name": "delete_words",
+     "arguments": "{\"words\": [{\"id\": \"c1.0\", \"expect\": \"um\"}]}"
+    }
+   ],
+   "error": "c1 is changed by both delete_captions and delete_words"
+  },
+  {
+   "name": "merge non-adjacent captions",
+   "calls": [
+    {
+     "name": "merge_captions",
+     "arguments": "{\"first\": \"c0\", \"second\": \"c2\"}"
+    }
+   ],
+   "error": "aren't adjacent"
+  },
+  {
+   "name": "split before the first word",
+   "calls": [
+    {
+     "name": "split_caption",
+     "arguments": "{\"caption\": \"c2\", \"before\": \"c2.0\"}"
+    }
+   ],
+   "error": "can't split before the first word"
+  },
+  {
+   "name": "clarification mixed with edits",
+   "calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": "{\"question\": \"Which color?\", \"options\": [\"Text\", \"Highlight\"]}"
+    },
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": \"#FF0000\", \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null}"
+    }
+   ],
+   "error": "ask_clarification can't be combined"
+  },
+  {
+   "name": "unknown preset",
+   "calls": [
+    {
+     "name": "apply_preset",
+     "arguments": "{\"preset_id\": \"nope\"}"
+    }
+   ],
+   "error": "no preset with id"
+  },
+  {
+   "name": "unknown tool",
+   "calls": [
+    {
+     "name": "make_it_pop",
+     "arguments": "{}"
+    }
+   ],
+   "error": "unknown tool \"make_it_pop\""
+  },
+  {
+   "name": "missing field",
+   "calls": [
+    {
+     "name": "set_pacing",
+     "arguments": "{}"
+    }
+   ],
+   "error": "set_pacing: missing field pacing"
+  },
+  {
+   "name": "shift too far",
+   "calls": [
+    {
+     "name": "shift_timing",
+     "arguments": "{\"from\": null, \"to\": null, \"offset_ms\": 9000}"
+    }
+   ],
+   "error": "within ±5000"
+  },
+  {
+   "name": "emphasis and word edit on the same caption",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c0.3\", \"to\": \"c0.3\", \"expect\": \"Denis\", \"text\": \"Dennis\"}"
+    },
+    {
+     "name": "set_emphasis",
+     "arguments": "{\"caption\": \"c0\", \"from\": \"c0.3\", \"to\": \"c0.3\"}"
+    }
+   ],
+   "error": "c0 is changed by both set_emphasis and replace_words"
+  },
+  {
+   "name": "insert next to a merged line",
+   "calls": [
+    {
+     "name": "insert_caption",
+     "arguments": "{\"after\": \"c1\", \"text\": \"hello\"}"
+    },
+    {
+     "name": "merge_captions",
+     "arguments": "{\"first\": \"c1\", \"second\": \"c2\"}"
+    }
+   ],
+   "error": "c1 is changed by both insert_caption and merge_captions; do one or the other"
+  },
+  {
+   "name": "merge a caption with itself",
+   "calls": [
+    {
+     "name": "merge_captions",
+     "arguments": "{\"first\": \"c3\", \"second\": \"c3\"}"
+    }
+   ],
+   "error": "first and second are both c3"
+  },
+  {
+   "name": "position_y out of range",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": 1.5, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": null}"
+    }
+   ],
+   "error": "position_y 1.5 is out of range"
+  },
+  {
+   "name": "font not in the list",
+   "calls": [
+    {
+     "name": "set_style",
+     "arguments": "{\"fill_color\": null, \"emphasis_color\": null, \"caption_background_color\": null, \"word_background_color\": null, \"font_size\": null, \"position\": null, \"case\": null, \"highlight\": null, \"overflow\": null, \"position_y\": null, \"outline_color\": null, \"outline_width\": null, \"shadow\": null, \"font\": \"Comic Sans Forever\"}"
+    }
+   ],
+   "error": "isn't in the fonts list"
+  }
+ ]
+}
