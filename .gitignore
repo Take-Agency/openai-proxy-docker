@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# instruction edit eval reports (node eval/run.js)
+eval-results/
