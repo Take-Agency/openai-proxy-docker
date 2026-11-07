@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { loadFixture, run, snapshotText, captionText } from './applier.js';
+import { FONTS } from './fixtures.js';
 
 const golden = JSON.parse(readFileSync(new URL('./fixtures/golden.json', import.meta.url), 'utf8'));
 const presets = JSON.parse(readFileSync(new URL('./presets.json', import.meta.url), 'utf8'));
@@ -17,15 +18,15 @@ const emphasizedText = (caption) => (Array.isArray(caption.emphasis)
 
 for (const goldenCase of golden.cases) {
     test(`golden case ${goldenCase.case}: ${goldenCase.instruction}`, () => {
-        const result = run(goldenCase.calls, fixture, presets);
+        const result = run(goldenCase.calls, fixture, presets, FONTS);
         assert.deepEqual(result.errors, []);
         const { state, edit } = result;
         const expect = goldenCase.expect;
 
         // expect.style lists every key that may change (some keep their value, e.g. highlight)
-        const changed = Object.keys(fixture.style).filter((key) => state.style[key] !== fixture.style[key]);
+        const changed = Object.keys(fixture.style).filter((key) => JSON.stringify(state.style[key]) !== JSON.stringify(fixture.style[key]));
         for (const key of changed) assert.ok(key in (expect.style || {}), `${key} changed`);
-        for (const [key, value] of Object.entries(expect.style || {})) assert.equal(state.style[key], value, key);
+        for (const [key, value] of Object.entries(expect.style || {})) assert.deepEqual(state.style[key], value, key);
 
         if (expect.captions === 'repaced') {
             assert.ok(state.repaced);
@@ -56,7 +57,7 @@ for (const goldenCase of golden.cases) {
 
 for (const invalid of golden.invalid) {
     test(`golden invalid: ${invalid.name}`, () => {
-        const { errors } = run(invalid.calls, fixture, presets);
+        const { errors } = run(invalid.calls, fixture, presets, FONTS);
         assert.ok(errors.some((error) => error.includes(invalid.error)), errors.join(' | '));
     });
 }
@@ -102,6 +103,10 @@ test('insert_caption timing v2: a 1 s+ gap takes the line, else `after` makes ro
     short.duration = 9.7;
     const tail = run([insert('c5', 'Follow for more')], short, presets).state.captions;
     assert.ok(tail[6].end - tail[6].start >= 0.9, JSON.stringify(times(tail[6])));
+    // the app's pinned edge case: "made" 5.76-5.92, video end 6.1 -> new 5.84-6.1, "made" 5.76-5.84
+    const made = { ...structuredClone(fixture), duration: 6.1, captions: [{ start: 5.76, end: 5.92, emphasis: null, words: [{ text: 'made', start: 5.76, end: 5.92, src: 'c0.0' }] }] };
+    const edge = run([insert('c0', 'Chicken dinner')], made, presets).state.captions;
+    assert.deepEqual([times(edge[0]), times(edge[1])], [[5.76, 5.84], [5.84, 6.1]]);
     // a big gap is used as is, up to 2 s
     const long = structuredClone(fixture);
     long.duration = 14;

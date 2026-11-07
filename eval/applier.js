@@ -30,6 +30,7 @@ export const MAX_INSERTS = 5;
 export const POSITIONS = { bottom: 0.2, center: 0.5, top: 0.9 };
 const Y_RANGE = [0.05, 0.95];
 const DEFAULT_OUTLINE = { color: '#000000', width: 4 };
+const MAX_OUTLINE_WIDTH = 50;
 // insert_caption timing (v2, from the app's staging re-check): see step 6b in apply()
 const INSERT_GAP_S = 1;
 const INSERT_MAX_S = 2;
@@ -270,8 +271,8 @@ export function validate(calls, state, presets, fonts = []) {
                 errors.push(`set_style: position_y ${args.position_y} is out of range ${Y_RANGE[0]}–${Y_RANGE[1]}`);
             }
             if (args.position != null && args.position_y != null) errors.push('set_style: set position or position_y, not both');
-            if (args.outline_width != null && args.outline_width <= 0) errors.push(`set_style: outline_width ${args.outline_width} must be positive`);
-            if (args.font != null && !fonts.includes(args.font)) errors.push(`set_style: no font named "${args.font}"`);
+            if (args.outline_width != null && args.outline_width < 0) errors.push('set_style: outline_width must be 0 or more');
+            if (args.font != null && !fonts.includes(args.font)) errors.push(`set_style: font "${args.font}" isn't in the fonts list`);
             edit.styles.push(args);
             break;
         }
@@ -369,6 +370,10 @@ export function validate(calls, state, presets, fonts = []) {
             const second = captionIndex(state, args.second);
             if (first == null || second == null) {
                 errors.push(`${name}: no caption ${first == null ? args.first : args.second}`);
+                break;
+            }
+            if (first === second) {
+                errors.push(`${name}: first and second are both ${args.first}; merge a caption with the one right after it`);
                 break;
             }
             if (second !== first + 1) {
@@ -660,6 +665,8 @@ export function apply(edit, original) {
     if (edit.preset) {
         const { id, name, category, ...fields } = edit.preset;
         state.style = { ...state.style, ...fields, preset: id };
+        if ('preset_name' in state.style) state.style.preset_name = name;
+        for (const key of ['font', 'shadow']) if (!(key in original.style)) delete state.style[key];
     }
 
     // 2. style
@@ -679,13 +686,11 @@ export function apply(edit, original) {
             state.style.y = args.position_y;
             state.style.position = Object.keys(POSITIONS).find((key) => Math.abs(POSITIONS[key] - args.position_y) < 0.001) || 'custom';
         }
+        // as the app: width first (clamped to 0-50), then color, so outline_color "none" wins
+        const current = () => (state.style.outline === 'none' || !state.style.outline ? DEFAULT_OUTLINE : state.style.outline);
+        if (args.outline_width != null) state.style.outline = { ...current(), width: Math.min(Math.max(args.outline_width, 0), MAX_OUTLINE_WIDTH) };
         if (args.outline_color != null) {
-            state.style.outline = args.outline_color === 'none' ? 'none'
-                : { ...(state.style.outline === 'none' || !state.style.outline ? DEFAULT_OUTLINE : state.style.outline), color: args.outline_color.toUpperCase() };
-        }
-        if (args.outline_width != null && !(args.outline_color === 'none')) {
-            const outline = state.style.outline === 'none' || !state.style.outline ? DEFAULT_OUTLINE : state.style.outline;
-            state.style.outline = { ...outline, width: args.outline_width };
+            state.style.outline = args.outline_color === 'none' ? 'none' : { ...current(), color: args.outline_color.toUpperCase() };
         }
         if (args.shadow != null) state.style.shadow = args.shadow;
         if (args.font != null) state.style.font = args.font;
