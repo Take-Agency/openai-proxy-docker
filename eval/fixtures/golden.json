@@ -1,5 +1,5 @@
 {
- "about": "Golden cases for instruction-based editing (docs/instruction_editing_plan.md §5). Shared by the iOS EditApplier tests and the proxy's JS reference applier. Each case runs its tool calls through decode -> validate -> apply against the fixture. expect.style lists the style keys that change (all others must be unchanged); expect.captions is the full resulting caption list (a string is the text only; an object can also pin start/end, emphasis (null = none) and words [text, start, end]), \"repaced\" when pacing rebuilds the lines, and omitted when captions must be unchanged.",
+ "about": "Golden cases for instruction-based editing (docs/instruction_editing_plan.md §5). Shared by the iOS EditApplier tests and the proxy's JS reference applier. Each case runs its tool calls through decode -> validate -> apply against the fixture. expect.style lists the style keys that change (all others must be unchanged); expect.captions is the full resulting caption list (a string is the text only; an object can also pin start/end, emphasis (null = none) and words [text, start, end]), \"repaced\" when pacing rebuilds the lines, and omitted when captions must be unchanged. fixture_style overrides style keys of the fixture for one case.",
  "fixture": {
   "id": "F1",
   "language": "en",
@@ -1030,6 +1030,362 @@
      "font": "AvenirNext-Bold"
     }
    }
+  },
+  {
+   "case": "snap-delete",
+   "instruction": "remove \"um\" (id one word off)",
+   "calls": [
+    {
+     "name": "delete_words",
+     "arguments": "{\"words\": [{\"id\": \"c1.1\", \"expect\": \"um\"}]}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "snap-replace",
+   "instruction": "fix the spelling of Dennis (id one word off)",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c0.2\", \"to\": \"c0.2\", \"expect\": \"Denis\", \"text\": \"Dennis\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Dennis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "shrink-to-delete",
+   "instruction": "it's \"post every day\", not \"post every single day\"",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c4.1\", \"to\": \"c4.2\", \"expect\": \"every single\", \"text\": \"every\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     {
+      "text": "post every day no excuses",
+      "words": [
+       [
+        "post",
+        5.9,
+        6.2
+       ],
+       [
+        "every",
+        6.2,
+        6.5
+       ],
+       [
+        "day",
+        6.9,
+        7.2
+       ],
+       [
+        "no",
+        7.2,
+        7.4
+       ],
+       [
+        "excuses",
+        7.4,
+        7.8
+       ]
+      ]
+     },
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "no-op-dropped",
+   "instruction": "capitalize the first word of every line (with a no-op)",
+   "calls": [
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c0.0\", \"to\": \"c0.0\", \"expect\": \"Hey\", \"text\": \"Hey\"}"
+    },
+    {
+     "name": "replace_words",
+     "arguments": "{\"from\": \"c1.0\", \"to\": \"c1.0\", \"expect\": \"um\", \"text\": \"Um\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     {
+      "text": "Hey guys it's Denis",
+      "words": [
+       [
+        "Hey",
+        0.0,
+        0.25
+       ],
+       [
+        "guys",
+        0.25,
+        0.55
+       ],
+       [
+        "it's",
+        0.55,
+        0.8
+       ],
+       [
+        "Denis",
+        0.8,
+        1.2
+       ]
+      ]
+     },
+     "Um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "split-in-half",
+   "instruction": "split every line in half",
+   "calls": [
+    {
+     "name": "split_in_half",
+     "arguments": "{\"captions\": null}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys",
+     "it's Denis",
+     "um today we're",
+     "talking about",
+     "how to like",
+     "grow your channel",
+     "so uh the",
+     "first thing is",
+     "post every single",
+     "day no excuses",
+     "and the second thing",
+     "is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "capitalize-first-word",
+   "instruction": "capitalize the first word of every line",
+   "calls": [
+    {
+     "name": "change_letters",
+     "arguments": "{\"captions\": null, \"mode\": \"capitalize_first_word\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "Um today we're talking about",
+     {
+      "text": "How to like grow your channel",
+      "emphasis": "channel"
+     },
+     "So uh the first thing is",
+     {
+      "text": "Post every single day no excuses",
+      "emphasis": "excuses"
+     },
+     "And the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "lowercase",
+   "instruction": "make them all lowercase",
+   "calls": [
+    {
+     "name": "change_letters",
+     "arguments": "{\"captions\": null, \"mode\": \"lowercase\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "hey guys it's denis",
+     "um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "merge-short",
+   "instruction": "merge the lines with 4 words or fewer",
+   "calls": [
+    {
+     "name": "merge_short_captions",
+     "arguments": "{\"max_words\": 4}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis um today we're talking about",
+     "how to like grow your channel",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "delete-all",
+   "instruction": "remove every \"like\"",
+   "calls": [
+    {
+     "name": "delete_all",
+     "arguments": "{\"word\": \"like\", \"occurrences\": null}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     {
+      "text": "how to grow your channel",
+      "emphasis": "channel"
+     },
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "delete-all-listed",
+   "instruction": "remove the first \"is\" (with an id one off and one that isn't \"is\")",
+   "calls": [
+    {
+     "name": "delete_all",
+     "arguments": "{\"word\": \"is\", \"occurrences\": [{\"id\": \"c3.4\", \"expect\": \"is\"}, {\"id\": \"c4.0\", \"expect\": \"post\"}]}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "um today we're talking about",
+     {
+      "text": "how to like grow your channel",
+      "emphasis": "channel"
+     },
+     "so uh the first thing",
+     {
+      "text": "post every single day no excuses",
+      "emphasis": "excuses"
+     },
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "rewrite-sentence",
+   "instruction": "the second sentence should say \"today we talk about growth\"",
+   "calls": [
+    {
+     "name": "rewrite_sentence",
+     "arguments": "{\"first\": \"c1\", \"last\": \"c2\", \"expect\": \"um today we're talking about how to like grow your channel\", \"text\": \"today we talk about growth\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     {
+      "text": "today we",
+      "start": 1.2,
+      "end": 2.6
+     },
+     {
+      "text": "talk about growth",
+      "start": 2.6,
+      "end": 4.1
+     },
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "rewrite-sentence-shorter",
+   "instruction": "those two lines should just say \"hello\"",
+   "calls": [
+    {
+     "name": "rewrite_sentence",
+     "arguments": "{\"first\": \"c1\", \"last\": \"c2\", \"expect\": \"um today we're talking about how to like grow your channel\", \"text\": \"hello\"}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Denis",
+     "hello",
+     "so uh the first thing is",
+     "post every single day no excuses",
+     "and the second thing is consistency you know"
+    ]
+   }
+  },
+  {
+   "case": "lowercase-uppercase-style",
+   "instruction": "make them all lowercase (style forces capitals)",
+   "fixture_style": {
+    "case": "uppercase"
+   },
+   "calls": [
+    {
+     "name": "change_letters",
+     "arguments": "{\"captions\": null, \"mode\": \"lowercase\"}"
+    }
+   ],
+   "expect": {
+    "style": {
+     "case": "none"
+    },
+    "captions": [
+     "hey guys it's denis",
+     "um today we're talking about",
+     {
+      "text": "how to like grow your channel",
+      "emphasis": "channel"
+     },
+     "so uh the first thing is",
+     {
+      "text": "post every single day no excuses",
+      "emphasis": "excuses"
+     },
+     "and the second thing is consistency you know"
+    ]
+   }
   }
  ],
  "invalid": [
@@ -1044,14 +1400,14 @@
    "error": "no word c9.0"
   },
   {
-   "name": "wrong expect (off by one)",
+   "name": "wrong expect (not in that caption)",
    "calls": [
     {
      "name": "delete_words",
-     "arguments": "{\"words\": [{\"id\": \"c1.1\", \"expect\": \"um\"}]}"
+     "arguments": "{\"words\": [{\"id\": \"c1.1\", \"expect\": \"uh\"}]}"
     }
    ],
-   "error": "c1.1 is \"today\", not \"um\""
+   "error": "c1.1 is \"today\", not \"uh\""
   },
   {
    "name": "same word edited twice",
@@ -1236,6 +1592,46 @@
     }
    ],
    "error": "isn't in the fonts list"
+  },
+  {
+   "name": "merge_short_captions max_words out of range",
+   "calls": [
+    {
+     "name": "merge_short_captions",
+     "arguments": "{\"max_words\": 9}"
+    }
+   ],
+   "error": "max_words must be 1–5"
+  },
+  {
+   "name": "delete_all with two words",
+   "calls": [
+    {
+     "name": "delete_all",
+     "arguments": "{\"word\": \"you know\", \"occurrences\": null}"
+    }
+   ],
+   "error": "word must be one word"
+  },
+  {
+   "name": "rewrite_sentence backwards",
+   "calls": [
+    {
+     "name": "rewrite_sentence",
+     "arguments": "{\"first\": \"c2\", \"last\": \"c1\", \"expect\": \"x\", \"text\": \"y\"}"
+    }
+   ],
+   "error": "must be 1–6 captions in order"
+  },
+  {
+   "name": "rewrite_sentence wrong expect",
+   "calls": [
+    {
+     "name": "rewrite_sentence",
+     "arguments": "{\"first\": \"c1\", \"last\": \"c2\", \"expect\": \"um today\", \"text\": \"y\"}"
+    }
+   ],
+   "error": "c1…c2 is"
   }
  ]
 }

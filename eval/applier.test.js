@@ -18,13 +18,14 @@ const emphasizedText = (caption) => (Array.isArray(caption.emphasis)
 
 for (const goldenCase of golden.cases) {
     test(`golden case ${goldenCase.case}: ${goldenCase.instruction}`, () => {
-        const result = run(goldenCase.calls, fixture, presets, FONTS);
+        const start = goldenCase.fixture_style ? { ...fixture, style: { ...fixture.style, ...goldenCase.fixture_style } } : fixture;
+        const result = run(goldenCase.calls, start, presets, FONTS);
         assert.deepEqual(result.errors, []);
         const { state, edit } = result;
         const expect = goldenCase.expect;
 
         // expect.style lists every key that may change (some keep their value, e.g. highlight)
-        const changed = Object.keys(fixture.style).filter((key) => JSON.stringify(state.style[key]) !== JSON.stringify(fixture.style[key]));
+        const changed = Object.keys(start.style).filter((key) => JSON.stringify(state.style[key]) !== JSON.stringify(start.style[key]));
         for (const key of changed) assert.ok(key in (expect.style || {}), `${key} changed`);
         for (const [key, value] of Object.entries(expect.style || {})) assert.deepEqual(state.style[key], value, key);
 
