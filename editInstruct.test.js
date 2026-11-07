@@ -199,6 +199,10 @@ test('more than 50 calls is rejected, 50 is accepted', async () => {
         assert.equal(body.tool_calls.length, 50);
     });
     assert.throws(() => validateToolCalls(Array.from({ length: 51 }, () => ({ name: 'find_replace', arguments: JSON.parse(findReplace.arguments) }))), /too_many_calls/);
+    const insert = { name: 'insert_caption', arguments: { after: 'c0', text: 'Subscribe now' } };
+    assert.equal(validateToolCalls(Array.from({ length: 5 }, () => insert)).length, 5);
+    assert.throws(() => validateToolCalls(Array.from({ length: 6 }, () => insert)), /too_many_inserts/);
+    assert.throws(() => validateToolCalls([{ name: 'insert_caption', arguments: { after: null } }]), /bad_arguments/);
 });
 
 test('unknown tools, wrong argument keys, no calls and incomplete responses fail the check', async () => {
@@ -301,10 +305,10 @@ test('per-IP limiter allows 20/min across installs', async () => {
     });
 });
 
-test('tool schemas are strict: all 15 tools, every property required, no extra properties', () => {
+test('tool schemas are strict: all 16 tools, every property required, no extra properties', () => {
     assert.deepEqual(TOOL_NAMES, [
         'set_style', 'apply_preset', 'set_pacing', 'replace_words', 'delete_words', 'find_replace', 'set_caption_text',
-        'split_caption', 'merge_captions', 'delete_captions', 'shift_timing', 'set_caption_timing', 'set_emphasis',
+        'split_caption', 'merge_captions', 'delete_captions', 'insert_caption', 'shift_timing', 'set_caption_timing', 'set_emphasis',
         'ask_clarification', 'cannot_do',
     ]);
     const checkObject = (schema, path) => {

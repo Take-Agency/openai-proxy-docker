@@ -190,7 +190,7 @@ Logs one line per request (mode, models, chunks, words, latency, tokens); never 
 Turns a typed instruction ("fix Denis to Dennis everywhere and make it bigger") into strict tool
 calls that the Auto Caption app validates against its caption snapshot and applies as one
 transaction (design: shorts-caption `docs/instruction_editing_plan.md`). Uses the Responses API
-with the 15 strict function tools in `editInstructTools.js`, `reasoning: none`,
+with the 16 strict function tools in `editInstructTools.js` (§3.2's 15 plus `insert_caption`), `reasoning: none`,
 `tool_choice: required` and `store: false`. Models: `EDIT_INSTRUCT_MODEL` (default `gpt-6-luna`)
 with one retry on `EDIT_INSTRUCT_FALLBACK_MODEL` (default `gpt-5.6-luna`) on a timeout (7s, so both
 attempts fit the app's 15s client timeout), an
@@ -218,7 +218,7 @@ limiting only, never sent to OpenAI). 64kb body cap.
 ```
 
 The server checks only what it can without the snapshot: known tool names, JSON arguments with
-exactly the schema's keys, at most 50 calls, and `ask_clarification` alone. Ids, `expect` text,
+exactly the schema's keys, at most 50 calls (5 `insert_caption`), and `ask_clarification` alone. Ids, `expect` text,
 ranges and conflicts are the app's validator's job; it may resend once with `repair`.
 
 Errors: 400 `install_id_required` / `instruction_required` / `snapshot_required` /

@@ -1,5 +1,5 @@
-// The 15 strict function tools for /edit/instruct, as Responses API function tools.
-// Source of truth: shorts-caption docs/instruction_editing_plan.md §3.2. Kept as plain data in its
+// The 16 strict function tools for /edit/instruct, as Responses API function tools.
+// Source of truth: shorts-caption docs/instruction_editing_plan.md §3.2, plus insert_caption. Kept as plain data in its
 // own module so it can be diffed against (or exported to) the iOS decoder's fixture.
 //
 // Strict mode: every property is required, optional ones are nullable (`["X", "null"]`), and
@@ -96,6 +96,10 @@ export const EDIT_TOOLS = [
                 additionalProperties: false,
             },
         },
+    }),
+    tool('insert_caption', 'Insert a NEW caption line with the given text after caption `after` (null = before the first caption). The app times it automatically: it uses the gap after `after`, or splits that caption\'s time. Use it whenever the user asks to add or insert a new line or caption. At most 5 per instruction.', {
+        after: nullableCapId,
+        text: { type: 'string' },
     }),
     tool('shift_timing', 'Shift caption timing by offset_ms (within +-5000; positive = later). from/to null means every caption.', {
         from: nullableCapId,

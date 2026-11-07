@@ -5,7 +5,8 @@
 // (the app's validator rejected the batch) is a fresh request carrying the earlier turn.
 //
 // Checks here are only the ones the server can do without the snapshot's semantics: known tool
-// names, JSON arguments with the schema's keys, at most 50 calls, and ask_clarification alone.
+// names, JSON arguments with the schema's keys, at most 50 calls (5 insert_caption), and
+// ask_clarification alone.
 // A failed check, a timeout or an upstream error retries once on the fallback model; if that
 // also fails the request 502s, as /hindi/convert does.
 
@@ -24,6 +25,7 @@ const MAX_CLARIFICATION_CHARS = 300;
 const MAX_REPAIR_ERRORS = 20;
 const MAX_REPAIR_ERROR_CHARS = 500;
 const MAX_TOOL_CALLS = 50;
+const MAX_INSERTS = 5;
 const MAX_OUTPUT_TOKENS = 4096;
 // Two attempts must fit inside the app's 15 s client timeout (worst case ~14 s).
 const ATTEMPT_TIMEOUT_MS = 7_000;
@@ -48,6 +50,7 @@ Tools:
 - replace_words keeps word timing; use set_caption_text only to rewrite a whole line.
 - font_size is absolute (40-120). Compute it from the current size in the style line.
 - set_pacing rebuilds all lines from the words; it is applied after every other edit.
+- To add a new line, call insert_caption with the user's words; "after" is the caption it follows (null = at the very start). The app times it.
 - Emphasis is one contiguous range per caption, and all emphasized words share one color.
 
 Deciding:
@@ -58,7 +61,8 @@ Deciding:
 5. Removing filler words (um, uh, "like" used as filler) deletes them from the captions only; the audio is not cut. If the user asks to cut them from the audio or video, also call cannot_do(cut_audio).
 6. Translation, emojis, left/right placement and re-transcribing aren't possible: cannot_do with translate, emoji, horizontal_position or retranscribe.
 7. Change only what the user asked for.
-8. Write question, options and message in the language of the instruction (the locale is a hint), in under 25 words.`;
+8. Write question, options and message in the language of the instruction (the locale is a hint), in under 25 words.
+9. Adding or inserting a caption or line with words the user gives is always possible: call insert_caption, never cannot_do. Never fake a new line by appending or merging new words into an existing caption (replace_words, find_replace, set_caption_text), and never write words the user didn't give. If they didn't say what the new line should say, call cannot_do(other) and ask them to type it.`;
 
 const TAGS = ['presets', 'snapshot', 'instruction', 'clarification', 'validation_errors'];
 const TAG_PATTERN = new RegExp(`</?(${TAGS.join('|')})\\b[^>]*>`, 'gi');
@@ -82,6 +86,7 @@ export function validateToolCalls(calls) {
             throw new Error('bad_arguments');
         }
     }
+    if (calls.filter((call) => call.name === 'insert_caption').length > MAX_INSERTS) throw new Error('too_many_inserts');
     if (calls.length > 1 && calls.some((call) => call.name === 'ask_clarification')) {
         throw new Error('clarification_mixed');
     }
