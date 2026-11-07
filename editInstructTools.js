@@ -50,7 +50,7 @@ export const EDIT_TOOLS = [
         shadow: nullableEnum(['none', 'soft', 'strong']),
         font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
     }),
-    tool('apply_preset', 'Apply a style preset by its id from the presets list. Resets style overrides, so it is applied before set_style.', {
+    tool('apply_preset', 'Apply a style preset by its id from the presets list. Resets style overrides, so it is applied before set_style. When the user also asks for changes to the preset ("X but with white text"), also call set_style with those changes in the same batch.', {
         preset_id: { type: 'string' },
     }),
     tool('set_pacing', 'Change how many words each caption line holds. Rebuilds every line; applied after all other edits.', {
