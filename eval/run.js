@@ -178,14 +178,14 @@ function report(args, results, requests, startedAt, finishedAt = Date.now()) {
     lines.push(`- Started ${new Date(startedAt).toISOString()}, ${requests.length} requests, ${((finishedAt - startedAt) / 60000).toFixed(1)} min`, '');
 
     lines.push('## Summary', '', '| Metric | Value | Ship bar |', '|---|---|---|');
-    lines.push(`| Valid, first response (schema + app validator) | ${pct(results.filter((entry) => entry.validFirst).length, results.length)} | ≥ 99% |`);
-    lines.push(`| Valid after the repair turn | ${pct(results.filter((entry) => entry.validFinal).length, results.length)} | |`);
+    lines.push(`| Valid, first response (schema + app validator), 1–50 / all | ${pct(plan.filter((entry) => entry.validFirst).length, plan.length)} / ${pct(results.filter((entry) => entry.validFirst).length, results.length)} | ≥ 99% |`);
+    lines.push(`| Valid after the repair turn, 1–50 / all | ${pct(plan.filter((entry) => entry.validFinal).length, plan.length)} / ${pct(results.filter((entry) => entry.validFinal).length, results.length)} | |`);
     lines.push(`| Task success, in scope (1–41) | ${successRate(inScope)} | ≥ 90% ${inScopeRate >= 0.9 ? 'PASS' : 'FAIL'} |`);
     lines.push(`| Correct abstention (42–50) | ${successRate(abstain)} | ≥ 95% ${abstainRate >= 0.95 ? 'PASS' : 'FAIL'} |`);
     lines.push(`| Collateral damage (runs, 1–50) | ${pct(collateralRuns, plan.length)} | ≤ 1% ${collateralRuns / (plan.length || 1) <= 0.01 ? 'PASS' : 'FAIL'} |`);
     lines.push(`| Precision / recall, case 19 (fillers) | ${pr(19)} | |`);
     lines.push(`| Precision / recall, case 27 (F2 "like") | ${pr(27)} | ≥ 0.9 / ≥ 0.8 |`);
-    lines.push(`| Over-asking (ask_clarification where the case has a default), all cases | ${pct(results.filter((entry) => entry.overAsked).length, results.length)} (${results.filter((entry) => entry.overAsked).length}) | |`);
+    lines.push(`| Over-asking (ask_clarification where the case accepts none), all cases | ${pct(results.filter((entry) => entry.overAsked).length, results.length)} (${results.filter((entry) => entry.overAsked).length}) | |`);
     lines.push(`| pass^${args.runs}, in scope / abstention | ${passAll(inScope)} / ${passAll(abstain)} | |`);
     for (const group of [...new Set(regression.map((entry) => CASES.find((item) => item.id === entry.caseId).group))]) {
         const entries = regression.filter((entry) => CASES.find((item) => item.id === entry.caseId).group === group);
