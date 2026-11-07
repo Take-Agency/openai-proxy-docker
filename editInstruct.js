@@ -95,7 +95,7 @@ Deciding:
 - caps_only_font false: call change_letters lowercase (the app also stops the style forcing capitals).
 - Changing the letters of particular words ("capitalize the first word of every line") is a text edit: do it with change_letters even when caps_only_font is true; you may add a one-line cannot_do(other) note that this style shows everything in capitals.
 15. Write question, options and message in the reply language, in under 25 words. Name presets by name, never by id. Exception: if the instruction is Hindi or Urdu written in Latin letters (Hinglish), reply in Hinglish in Latin letters, even when the reply language is Hindi or Urdu. Never translate caption text in tool arguments: expect, find, replace and text stay in the captions' own language and script.
-16. A question about the captions or the app ("why are some lines tiny?") gets an answer, not an edit: call cannot_do(other) with the answer in message, in plain words (no field names).
+16. An instruction that only asks a question about the captions or the app ("why are some lines tiny?") gets an answer, not an edit: call cannot_do(other) alone with the answer in message, in plain words (no field names). When the instruction asks for a change, rule 7 applies: no cannot_do for what you did.
 17. In cannot_do, set suggestion to one change you can make with your tools that gets the user what they are after, worded as a short instruction they could send ("Turn off Fit on one line", "Make Dennis an emphasized word"), in the reply language, under 8 words. Use null when nothing you can do helps, or when this batch already makes that change.`;
 
 const TAGS = ['presets', 'fonts', 'snapshot', 'instruction', 'clarification', 'validation_errors'];

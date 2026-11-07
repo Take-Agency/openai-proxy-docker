@@ -161,7 +161,7 @@ export const EDIT_TOOLS = [
         question: { type: 'string' },
         options: { type: 'array', items: { type: 'string' } },
     }),
-    tool('cannot_do', 'Say that (part of) the instruction is not possible, and offer what is; also answers a question. May be combined with edits.', {
+    tool('cannot_do', 'Say that (part of) the instruction is not possible, and offer what is, or answer a question that asks for no change. May be combined with edits. Never a confirmation of edits you made.', {
         reason: { type: 'string', enum: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'] },
         message: { type: 'string' },
         suggestion: {
