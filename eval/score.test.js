@@ -30,7 +30,8 @@ test('yellow passes; yellow plus an unasked size change is collateral', () => {
 });
 
 test('a gratuitous cannot_do fails the case without being collateral', () => {
-    const result = score(2, [style({ fill_color: '#FFD600', font_size: 104 }), cannot('other')]);
+    // case 2 may note "Fit on one line" now; case 1 (yellow only) may not add a note
+    const result = score(1, [style({ fill_color: '#FFD600' }), cannot('other')]);
     assert.equal(result.success, false);
     assert.deepEqual(result.collateral, []);
 });
