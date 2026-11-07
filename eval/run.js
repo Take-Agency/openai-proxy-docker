@@ -11,6 +11,8 @@
 //             doesn't throttle a local run. Never used against staging.
 // --no-repair score the first response only (by default an invalid batch gets the app's one
 //             repair turn, and task success is scored on the result)
+// --rescore   re-score a finished run (<out>/<label>.jsonl + .requests.jsonl) with the current
+//             cases and scorer, without sending requests
 // Install ids rotate over five synthetic `eval-<label>-<n>` ids, keeping each under the
 // per-install limits (10/min, 150/day).
 
@@ -36,17 +38,18 @@ const PRICE_NOTE = 'gpt-6-luna list price from the plan (§2.2); gpt-5.6-luna pr
 // ---------------------------------------------------------------- args
 
 function parseArgs(argv) {
-    const args = { runs: 1, rate: 18, label: 'eval', repair: true, local: false };
+    const args = { runs: 1, rate: 18, label: 'eval', repair: true, local: false, rescore: false };
     for (let index = 0; index < argv.length; index += 1) {
         const key = argv[index].replace(/^--/, '');
         if (key === 'no-repair') args.repair = false;
         else if (key === 'local') args.local = true;
+        else if (key === 'rescore') args.rescore = true;
         else args[key] = argv[++index];
     }
-    if (!args.url) throw new Error('--url is required');
+    if (!args.url && !args.rescore) throw new Error('--url is required');
     args.runs = Number(args.runs);
     args.rate = Number(args.rate);
-    if (args.local && !/^https?:\/\/(127\.0\.0\.1|localhost)[:/]/.test(args.url)) throw new Error('--local is for localhost only');
+    if (args.local && args.url && !/^https?:\/\/(127\.0\.0\.1|localhost)[:/]/.test(args.url)) throw new Error('--local is for localhost only');
     return args;
 }
 
@@ -139,7 +142,7 @@ function correlation(xs, ys) {
 
 // ---------------------------------------------------------------- report
 
-function report(args, results, requests, startedAt) {
+function report(args, results, requests, startedAt, finishedAt = Date.now()) {
     const planCase = (id) => id <= 50;
     const inScope = results.filter((entry) => entry.caseId <= 41);
     const abstain = results.filter((entry) => entry.caseId >= 42 && entry.caseId <= 50);
@@ -172,7 +175,7 @@ function report(args, results, requests, startedAt) {
     lines.push(`- Endpoint: \`${args.url}\``);
     lines.push(`- Models answering: ${models.join(', ') || 'n/a'} · runs per case: ${args.runs} · cases: ${new Set(results.map((entry) => entry.caseId)).size}`);
     lines.push(`- Prompt + tools hash (local files): \`${createHash('sha256').update(SYSTEM_PROMPT + JSON.stringify(EDIT_TOOLS)).digest('hex').slice(0, 10)}\` · repair turn: ${args.repair ? 'on' : 'off'}`);
-    lines.push(`- Started ${new Date(startedAt).toISOString()}, ${requests.length} requests, ${((Date.now() - startedAt) / 60000).toFixed(1)} min`, '');
+    lines.push(`- Started ${new Date(startedAt).toISOString()}, ${requests.length} requests, ${((finishedAt - startedAt) / 60000).toFixed(1)} min`, '');
 
     lines.push('## Summary', '', '| Metric | Value | Ship bar |', '|---|---|---|');
     lines.push(`| Valid, first response (schema + app validator) | ${pct(results.filter((entry) => entry.validFirst).length, results.length)} | ≥ 99% |`);
@@ -182,6 +185,7 @@ function report(args, results, requests, startedAt) {
     lines.push(`| Collateral damage (runs, 1–50) | ${pct(collateralRuns, plan.length)} | ≤ 1% ${collateralRuns / (plan.length || 1) <= 0.01 ? 'PASS' : 'FAIL'} |`);
     lines.push(`| Precision / recall, case 19 (fillers) | ${pr(19)} | |`);
     lines.push(`| Precision / recall, case 27 (F2 "like") | ${pr(27)} | ≥ 0.9 / ≥ 0.8 |`);
+    lines.push(`| Over-asking (ask_clarification where the case has a default), all cases | ${pct(results.filter((entry) => entry.overAsked).length, results.length)} (${results.filter((entry) => entry.overAsked).length}) | |`);
     lines.push(`| pass^${args.runs}, in scope / abstention | ${passAll(inScope)} / ${passAll(abstain)} | |`);
     for (const group of [...new Set(regression.map((entry) => CASES.find((item) => item.id === entry.caseId).group))]) {
         const entries = regression.filter((entry) => CASES.find((item) => item.id === entry.caseId).group === group);
@@ -263,8 +267,25 @@ function report(args, results, requests, startedAt) {
 
 // ---------------------------------------------------------------- main
 
+function rescore(args, outDir) {
+    const read = (name) => readFileSync(join(outDir, name), 'utf8').trim().split('\n').map((line) => JSON.parse(line));
+    const requests = read(`${args.label}.requests.jsonl`);
+    const results = read(`${args.label}.jsonl`).filter((entry) => CASES.some((item) => item.id === entry.caseId)).map((entry) => {
+        const testCase = CASES.find((item) => item.id === entry.caseId);
+        const fixture = fixtureState(testCase.fixture || 'F1');
+        const result = entry.validFinal ? run(entry.calls, fixture, presets) : { errors: ['invalid'] };
+        return { ...entry, ...scoreCase(testCase, fixture, presets, result, { systemPrompt: SYSTEM_PROMPT, calls: entry.calls }) };
+    });
+    const meta = JSON.parse(readFileSync(join(outDir, `${args.label}.meta.json`), 'utf8'));
+    const markdown = report({ ...args, ...meta, label: args.label }, results, requests, meta.startedAt, meta.finishedAt);
+    writeFileSync(join(outDir, `${args.label}.md`), markdown);
+    writeFileSync(join(outDir, `${args.label}.jsonl`), `${results.map((entry) => JSON.stringify(entry)).join('\n')}\n`);
+    console.log(`rescored: ${join(outDir, `${args.label}.md`)}`);
+}
+
 async function main() {
     const args = parseArgs(process.argv.slice(2));
+    if (args.rescore) return rescore(args, args.out || join(process.cwd(), 'eval-results'));
     const cases = selectCases(args.cases);
     const outDir = args.out || join(process.cwd(), 'eval-results');
     mkdirSync(outDir, { recursive: true });
@@ -334,6 +355,7 @@ async function main() {
         }
     }
 
+    writeFileSync(join(outDir, `${args.label}.meta.json`), JSON.stringify({ url: args.url, runs: args.runs, repair: args.repair, startedAt, finishedAt: Date.now() }));
     const markdown = report(args, results, requests, startedAt);
     writeFileSync(join(outDir, `${args.label}.md`), markdown);
     // tool calls hold fixture text only (synthetic / internal corpus)

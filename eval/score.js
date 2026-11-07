@@ -215,17 +215,20 @@ function noOpEdits(calls, fixture) {
             }
         }
         if (call.name === 'merge_captions' && args.first === args.second) found.push(`merge_captions ${args.first} with itself`);
-        // after a preset, a field "set to its current value" may be overriding the preset
+        // a set_style is a no-op when every field it sets already has that value (after a
+        // preset, a field "set to its current value" may be overriding the preset)
         if (call.name === 'set_style' && !calls.some((other) => other.name === 'apply_preset')) {
-            for (const [field, key] of Object.entries(STYLE_FIELDS)) {
-                const value = args[field];
-                if (value == null || !(key in fixture.style)) continue;
+            const set = Object.entries(STYLE_FIELDS).filter(([field]) => args[field] != null);
+            const unchanged = set.filter(([field, key]) => {
                 const current = fixture.style[key];
-                if (typeof value === 'string' && typeof current === 'string' ? value.toUpperCase() === current.toUpperCase() : value === current) {
-                    found.push(`set_style ${field} = current ${JSON.stringify(current)}`);
-                }
+                const value = args[field];
+                return typeof value === 'string' && typeof current === 'string' ? value.toUpperCase() === current.toUpperCase() : value === current;
+            });
+            const outlineSet = args.outline_color != null || args.outline_width != null;
+            const outlineUnchanged = !outlineSet || (args.outline_color === 'none' && fixture.style.outline === 'none');
+            if (set.length + (outlineSet ? 1 : 0) > 0 && unchanged.length === set.length && outlineUnchanged) {
+                found.push(`set_style only sets current values (${unchanged.map(([field]) => field).join(', ') || 'outline'})`);
             }
-            if (args.outline_color === 'none' && fixture.style.outline === 'none') found.push('set_style outline_color = current "none"');
         }
     }
     return found;
@@ -306,7 +309,7 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
             ...extraCannot.map((reason) => `unexpected cannot_do(${reason})`),
             ...scored.collateral.map((entry) => `collateral: ${entry}`),
         ];
-        return { success: failures.length === 0, collateral: scored.collateral, reasons: failures, precision: scored.precision, recall: scored.recall };
+        return { success: failures.length === 0, overAsked: Boolean(edit.clarification), collateral: scored.collateral, reasons: failures, precision: scored.precision, recall: scored.recall };
     }
 
     let best = null;
@@ -322,7 +325,9 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
         if (!best || lessThan(rank, best.rank)) best = { rank, failures, collateral };
         if (!failures.length && !collateral.length) break;
     }
+    const asksAllowed = (testCase.accept || []).some((alternative) => alternative.clarify);
     return {
+        overAsked: Boolean(edit.clarification) && !asksAllowed,
         success: best.failures.length === 0 && best.collateral.length === 0,
         collateral: best.collateral,
         reasons: [...best.failures, ...best.collateral.map((location) => `collateral: ${location}`)],
