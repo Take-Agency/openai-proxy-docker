@@ -10,7 +10,7 @@ export const FONTS = readFileSync(new URL('./fonts.txt', import.meta.url), 'utf8
 
 // Style keys the app's snapshot gained with PR #15 (position, outline, shadow, font). Mosy's
 // font; caps_only_font is false except in the case-specific variants.
-const STYLE_EXTRAS = { y: 0.2, outline: { color: '#000000', width: 4 }, shadow: 'none', font: 'The Bold Font Bold', caps_only_font: false };
+const STYLE_EXTRAS = { preset_name: 'Mosy', y: 0.2, outline: { color: '#000000', width: 4 }, shadow: 'none', font: 'The Bold Font Bold', caps_only_font: false };
 
 const read = (name) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8'));
 const golden = read('golden.json');

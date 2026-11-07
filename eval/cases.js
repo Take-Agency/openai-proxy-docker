@@ -14,6 +14,7 @@
 // `deletions` cases (filler removal) are scored on which snapshot words are deleted instead:
 //   required words must all go (or, with `minRecall`, enough of them), `optional` may go, and
 //   deleting anything else is collateral, except `lowPrecision` words, which only lower precision.
+// Cases whose accept list has no `clarify` count an ask_clarification as over-asking.
 // `checks` are extra pass conditions: noPromptLeak, noTextCram (no word edit or merge may carry
 // the new text of an insertion), keepStyleOption (a "Keep this style" option and not the
 // current preset), fontOptions (at least 2 options are catalog font names).
@@ -29,6 +30,7 @@ const presets = JSON.parse(readFileSync(new URL('./presets.json', import.meta.ur
 const presetId = (name) => presets.find((preset) => preset.name.startsWith(name)).id;
 const category = (id) => presets.filter((preset) => preset.category === id).map((preset) => preset.id);
 
+const SENTENCE = ['today', 'we', 'talk', 'about', 'growth'];
 const YELLOW = { hue: [45, 60], minSaturation: 0.6 };
 const GREEN = { hue: [90, 150], minSaturation: 0.5 };
 const DARK = { maxChannel: 0x22 };
@@ -203,4 +205,30 @@ export const CASES = [
     { id: 75, group: 'multilingual', locale: 'ja', reply: 'ja', instruction: 'Dennisだけ赤くして', accept: [{ calls: [], cannot: ['per_word_style'] }] },
     { id: 76, group: 'multilingual', fixture: 'P3', locale: 'hi', instruction: 'फालतू शब्द हटाओ', cannotOptional: ['cut_audio'], deletions: { required: ['c2.1'], optional: ['c2.0'] } },
     { id: 77, group: 'multilingual', fixture: 'P4', locale: 'hi', instruction: 'umm hatao', accept: [{ calls: [['delete_words', { words: [{ id: 'c2.1', expect: 'umm' }] }]] }] },
+
+    // Reversible defaults instead of asking, and other round-2 decisions
+    {
+        // the sentence continues from c1 into c2; every given word must land, in order
+        id: 81, group: 'defaults', instruction: 'the second sentence should say "today we talk about growth"',
+        accept: [1, 2, 3, 4].map((cut) => ({ calls: [
+            ['set_caption_text', { caption: 'c1', expect: "um today we're talking about", text: SENTENCE.slice(0, cut).join(' ') }],
+            ['set_caption_text', { caption: 'c2', expect: 'how to like grow your channel', text: SENTENCE.slice(cut).join(' ') }],
+        ] })),
+    },
+    {
+        id: 82, group: 'defaults', fixture: 'P2', instruction: 'remove all the punctuation',
+        accept: [{ calls: [['c0.0', 'Okay,', 'Okay'], ['c1.5', 'views.', 'views'], ['c2.1', '1:', '1'], ['c2.2', 'hooks,', 'hooks'], ['c2.3', 'hooks,', 'hooks'], ['c2.4', 'hooks!', 'hooks'], ['c3.0', 'Like,', 'Like'], ['c3.1', 'seriously,', 'seriously'], ['c5.1', 'damn,', 'damn'], ['c6.7', 'ago,', 'ago'], ['c6.12', 'mean?', 'mean']]
+            .map(([id, expect, text]) => ['replace_words', { from: id, to: id, expect, text }]) }],
+    },
+    { id: 83, group: 'defaults', fixture: 'P3', locale: 'hi', instruction: 'हर बार एक ही शब्द दिखाओ', accept: [{ calls: [['set_pacing', { pacing: 'fast' }]] }] },
+    {
+        // P2 c4 "are everything" is the one caption under 3 words; either neighbour is fine
+        id: 84, group: 'defaults', fixture: 'P2', instruction: 'merge the short lines',
+        accept: [{ calls: [['merge_captions', { first: 'c3', second: 'c4' }]] }, { calls: [['merge_captions', { first: 'c4', second: 'c5' }]] }],
+    },
+    { id: 85, group: 'defaults', fixture: 'P2', instruction: "shorten the captions, there's too much text", accept: [{ calls: [['set_pacing', { pacing: 'fast' }]] }] },
+    {
+        id: 86, group: 'defaults', fixture: 'F1u', instruction: 'capitalize the first word of every line', cannotOptional: ['other'],
+        accept: [{ calls: [['c1', 'um', 'Um'], ['c2', 'how', 'How'], ['c3', 'so', 'So'], ['c4', 'post', 'Post'], ['c5', 'and', 'And']].map(([caption, expect, text]) => ['replace_words', { from: `${caption}.0`, to: `${caption}.0`, expect, text }]) }],
+    },
 ];
