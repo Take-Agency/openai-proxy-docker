@@ -154,7 +154,7 @@ export const SCHEMAS = {
     delete_all: { word: 'string', occurrences: 'refs?' },
     rewrite_sentence: { first: 'string', last: 'string', expect: 'string', text: 'string' },
     save_style: { name: 'string' },
-    cannot_do: { reason: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'], message: 'string' },
+    cannot_do: { reason: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'], message: 'string', suggestion: 'string?' },
 };
 export const TOOL_NAMES = Object.keys(SCHEMAS);
 
@@ -777,7 +777,7 @@ export function validate(calls, state, presets, fonts = []) {
             break;
         case 'cannot_do':
             if (!args.message.trim()) errors.push(`${name}: message is empty`);
-            edit.cannotDo.push({ reason: args.reason, message: args.message });
+            edit.cannotDo.push({ reason: args.reason, message: args.message, suggestion: args.suggestion ?? null });
             break;
         default:
             break;

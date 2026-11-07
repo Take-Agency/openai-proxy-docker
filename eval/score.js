@@ -256,6 +256,8 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
     }
     // optionsMatch: some option must match (a background-box option when the style has a box)
     if (testCase.optionsMatch && !(edit.clarification?.options || []).some((option) => testCase.optionsMatch.test(option))) failures.push('optionsMatch');
+    // suggestionMatch: a cannot_do must offer a matching one-tap change (a question's fix)
+    if (testCase.suggestionMatch && !(edit.cannotDo || []).some((entry) => testCase.suggestionMatch.test(entry.suggestion || ''))) failures.push('suggestionMatch');
     if (wrongLanguage(edit, replyLanguage(testCase))) failures.push('replyLanguage');
     return failures.map((check) => `failed check ${check}`);
 }

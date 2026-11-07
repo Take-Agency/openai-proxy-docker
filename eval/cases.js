@@ -266,6 +266,8 @@ export const CASES = [
     // Saving and naming the style
     { id: 103, group: 'looks', instruction: 'save this style as My Brand', accept: [{ calls: [['save_style', { name: 'My Brand' }]] }] },
     { id: 104, group: 'looks', instruction: 'make the text yellow and save it as Sunny', accept: [{ calls: [['set_style', { fill_color: '#FFD600' }], ['save_style', { name: 'Sunny' }]], style: { fill: YELLOW } }] },
+    // Questions get an answer plus one change the user can tap (cannot_do.suggestion)
+    { id: 105, group: 'answer', instruction: 'why do some of the captions become very small text', suggestionMatch: /fit|one line|wrap|lines?/i, accept: [{ calls: [], cannot: ['other'] }] },
     // Style-only requests in other languages on captions full of fillers: no word may change
     // (case 78 deleted um/uh/like in 3 of 5 runs before reasoning "low").
     { id: 88, group: 'style-only', locale: 'pt', reply: 'pt', instruction: 'deixa as legendas amarelas e maiores', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },

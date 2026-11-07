@@ -161,9 +161,13 @@ export const EDIT_TOOLS = [
         question: { type: 'string' },
         options: { type: 'array', items: { type: 'string' } },
     }),
-    tool('cannot_do', 'Say that (part of) the instruction is not possible, and offer what is. May be combined with edits.', {
+    tool('cannot_do', 'Say that (part of) the instruction is not possible, and offer what is; also answers a question. May be combined with edits.', {
         reason: { type: 'string', enum: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'] },
         message: { type: 'string' },
+        suggestion: {
+            type: ['string', 'null'],
+            description: 'One change you can make that gets the user what they are after, worded as an instruction they could send ("Turn off Fit on one line"). The app shows it as a button. Null when there is none.',
+        },
     }),
 ];
 
