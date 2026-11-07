@@ -244,7 +244,11 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
             const current = presets.find((preset) => preset.id === fixture.style.preset)?.name;
             if (!options.some((option) => /keep/i.test(option)) || options.some((option) => current && option.startsWith(current))) failures.push(check);
         }
-        if (check === 'fontOptions' && (edit.clarification?.options || []).filter((option) => FONTS.includes(option)).length < 2) failures.push(check);
+        if (check === 'fontOptions') {
+            const options = edit.clarification?.options || [];
+            const fonts = options.filter((option) => FONTS.includes(option));
+            if (fonts.length < 2 || options.some((option) => !FONTS.includes(option) && !/^keep\b/i.test(option))) failures.push(check);
+        }
     }
     if (wrongLanguage(edit, replyLanguage(testCase))) failures.push('replyLanguage');
     const noOps = testCase.allowNoOp ? [] : noOpEdits(calls, fixture);
