@@ -59,6 +59,9 @@ export function loadFixture(fixture) {
             emphasis: caption.emphasis ? [...caption.emphasis] : null,
             words: caption.words.map(([text, start, end], w) => ({ text, start, end, src: `c${c}.${w}` })),
         })),
+        // which boxes the style can draw at all (a box color does nothing without one); the
+        // golden fixture's Mosy has a box behind the spoken word and none behind captions
+        boxes: { word: fixture.boxes?.word ?? true, caption: fixture.boxes?.caption ?? false },
     };
 }
 
@@ -77,7 +80,36 @@ export function snapshotText(state) {
         return `c${c} ${seconds(caption.start)}-${seconds(caption.end)} | ${words}`;
     });
     const style = Object.fromEntries(Object.keys(state.style).sort().map((key) => [key, state.style[key]]));
-    return [header, ...lines, `style ${JSON.stringify(style)}`].join('\n');
+    return [header, ...lines, `looks ${looksText(state.style, state.boxes)}`, `style ${JSON.stringify(style)}`].join('\n');
+}
+
+// StyleChangeRow.colorName: the nearest of a few plain names
+const NAMED_COLORS = [
+    ['white', 255, 255, 255], ['black', 0, 0, 0], ['gray', 128, 128, 128], ['red', 229, 57, 53],
+    ['orange', 255, 140, 0], ['yellow', 255, 214, 0], ['green', 46, 184, 75], ['cyan', 0, 229, 255],
+    ['blue', 30, 91, 255], ['purple', 142, 59, 255], ['pink', 255, 79, 163],
+];
+export function colorName(hex) {
+    if (!hex || hex === 'none') return 'none';
+    const value = Number.parseInt(hex.slice(1), 16);
+    const [r, g, b] = [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+    const distance = ([, cr, cg, cb]) => (cr - r) ** 2 + (cg - g) ** 2 + (cb - b) ** 2;
+    return NAMED_COLORS.reduce((best, color) => (distance(color) < distance(best) ? color : best))[0];
+}
+
+// EditSnapshot.looks: what the user sees, part by part, with the field that sets each
+export function looksText(style, boxes = { word: true, caption: false }) {
+    const parts = [`text: ${colorName(style.fill)} letters (fill)`];
+    if (boxes.word && style.word_bg !== 'none') parts.push(`word being spoken: ${colorName(style.word_bg)} box behind it (word_bg)`);
+    else if (boxes.word) parts.push('no box behind words yet (word_bg adds one)');
+    else parts.push('no box behind words (word_bg does nothing in this style)');
+    if (style.highlight === 'spoken_word') parts.push(`word being spoken: ${colorName(style.emphasis)} letters (emphasis)`);
+    else if (style.highlight === 'static') parts.push(`[bracketed] words: ${colorName(style.emphasis)} letters (emphasis)`);
+    else parts.push('no colored words (emphasis does nothing while highlight is none)');
+    if (boxes.caption && style.caption_bg !== 'none') parts.push(`${colorName(style.caption_bg)} box behind each caption (caption_bg)`);
+    else if (boxes.caption) parts.push('no box behind captions yet (caption_bg adds one)');
+    else parts.push('no box behind captions (caption_bg does nothing in this style)');
+    return parts.join('; ');
 }
 
 // What the app sends as `presets` (InstructionEditService.presetCatalog).

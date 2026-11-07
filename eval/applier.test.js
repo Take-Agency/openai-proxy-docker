@@ -126,3 +126,8 @@ test('a replacement keeps trailing punctuation its expect left out', async () =>
     // removing the punctuation itself is left alone
     assert.equal(captionText(run(call('Number 1', 'Number 1'), p2, presets, FONTS).state.captions[2]), 'Number 1 hooks, hooks, hooks!');
 });
+
+test('the looks line matches the app (InstructionEditTests.testSnapshotTextFormat)', () => {
+    const lines = snapshotText(fixture).split('\n');
+    assert.equal(lines.at(-2), 'looks text: white letters (fill); no box behind words yet (word_bg adds one); word being spoken: cyan letters (emphasis); no box behind captions (caption_bg does nothing in this style)');
+});
