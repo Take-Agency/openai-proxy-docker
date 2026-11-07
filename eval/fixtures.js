@@ -30,7 +30,7 @@ function timedWords(text, start, end) {
 function variant(id, replacements, style = {}) {
     const fixture = structuredClone(golden.fixture);
     fixture.id = id;
-    fixture.style = { ...fixture.style, ...style };
+    fixture.styleOverrides = style;
     for (const [index, text] of Object.entries(replacements)) {
         const caption = fixture.captions[index];
         caption.words = timedWords(text, caption.words[0][1], caption.words.at(-1)[2]);
@@ -60,8 +60,10 @@ export const FIXTURES = {
     P4: read('P4.json'),
 };
 
+// The eval's style extras win over the golden fixture's (which the app's tests changed to outline
+// width 8 and a strong shadow), so every eval run sends the same style line; variants override.
 export function fixtureState(id) {
     const state = loadFixture(FIXTURES[id]);
-    state.style = { ...state.style, ...STYLE_EXTRAS, ...FIXTURES[id].style };
+    state.style = { ...state.style, ...STYLE_EXTRAS, ...(FIXTURES[id].styleOverrides || {}) };
     return state;
 }
