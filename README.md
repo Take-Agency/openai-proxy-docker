@@ -229,3 +229,21 @@ Errors: 400 `install_id_required` / `instruction_required` / `snapshot_required`
 default bucket), 502 `edit_failed` (both models failed), 503 `not_configured`.
 Logs one line per request (model, tool names, call count, sizes, latency, tokens); never
 instruction or caption text.
+
+### Eval (`eval/`)
+
+Accuracy eval for `/edit/instruct` (shorts-caption `docs/instruction_editing_plan.md` §5): 80
+cases (the plan's 50 plus QA and pressure-test regressions) scored on the state the tool calls
+produce, through a JS reference applier that mirrors the app's validator and applier.
+
+```bash
+node --test eval/                     # applier vs the app's golden cases, scorer checks
+node eval/run.js --url https://…/edit/instruct --runs 5 --label staging      # stays under the rate limits
+EDIT_INSTRUCT_OPENAI_API_KEY=… PORT=9018 node app.js > /tmp/proxy.log &       # local, for cost and failure codes:
+node eval/run.js --url http://127.0.0.1:9018/edit/instruct --runs 5 --local --log /tmp/proxy.log --label local
+```
+
+The report (`eval-results/<label>.md`) has valid rate, task success in scope (1–41) and for
+abstentions (42–50), collateral damage, precision/recall for the filler cases, pass^N, latency by
+tool, failure codes, and cost from the proxy's token counts. `eval/build-*.js` rebuild the
+fixtures and catalogs from the corpus and the app; their headers say how.
