@@ -245,9 +245,12 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
             if (!options.some((option) => /keep/i.test(option)) || options.some((option) => current && option.startsWith(current))) failures.push(check);
         }
         if (check === 'fontOptions') {
-            const options = edit.clarification?.options || [];
-            const fonts = options.filter((option) => FONTS.includes(option));
-            if (fonts.length < 2 || options.some((option) => !FONTS.includes(option) && !/^keep\b/i.test(option))) failures.push(check);
+            // plain font names (a catalog name, or a family name the next turn can map), no
+            // descriptions or prefixes, plus an optional "keep" option
+            const options = (edit.clarification?.options || []).filter((option) => !/^keep\b/i.test(option));
+            const plain = (option) => FONTS.includes(option)
+                || (/^[\p{L}\p{N} .'-]+$/u.test(option) && !/\b(style|like|alternative|similar|closest|choose|font)\b/i.test(option));
+            if (options.length < 2 || !options.every(plain)) failures.push(check);
         }
     }
     if (wrongLanguage(edit, replyLanguage(testCase))) failures.push('replyLanguage');

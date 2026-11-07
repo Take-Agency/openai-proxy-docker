@@ -124,6 +124,8 @@ test('outline, shadow, position and font', () => {
     assert.equal(score(62, style({ font: 'Montserrat' })).success, false);
     const ask = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available. Which of these?', options: ['Bangers-Regular', 'LuckiestGuy-Regular', 'Keep current font'] } }];
     assert.equal(score(63, ask).success, true);
-    const worded = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Bangers-Regular', 'Comic-style: LuckiestGuy-Regular', 'Keep current font'] } }];
+    const plain = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Fredoka One', 'ChalkboardSE-Bold', 'Keep current font'] } }];
+    assert.equal(score(63, plain).success, true);
+    const worded = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Bangers-Regular', 'Comic-style Fredoka One', 'Keep current font'] } }];
     assert.equal(score(63, worded).success, false);
 });
