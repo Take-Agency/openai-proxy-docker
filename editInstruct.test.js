@@ -330,11 +330,11 @@ test('the locale is rendered as a named reply language', () => {
     assert.equal(languageName('en', 'make it bigger'), 'English (en)');
 });
 
-test('tool schemas are strict: all 21 tools, every property required, no extra properties', () => {
+test('tool schemas are strict: all 22 tools, every property required, no extra properties', () => {
     assert.deepEqual(TOOL_NAMES, [
         'set_style', 'apply_preset', 'set_pacing', 'replace_words', 'delete_words', 'find_replace', 'set_caption_text',
         'split_caption', 'merge_captions', 'delete_captions', 'insert_caption', 'shift_timing', 'set_caption_timing', 'set_emphasis',
-        'split_in_half', 'change_letters', 'merge_short_captions', 'delete_all', 'rewrite_sentence',
+        'split_in_half', 'change_letters', 'merge_short_captions', 'delete_all', 'rewrite_sentence', 'save_style',
         'ask_clarification', 'cannot_do',
     ]);
     const checkObject = (schema, path) => {

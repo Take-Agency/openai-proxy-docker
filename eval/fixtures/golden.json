@@ -1662,6 +1662,16 @@
     }
    ],
    "error": "c1…c2 is"
+  },
+  {
+   "name": "save_style with an empty name",
+   "calls": [
+    {
+     "name": "save_style",
+     "arguments": "{\"name\": \"  \"}"
+    }
+   ],
+   "error": "save_style: name must be 1–40 characters"
   }
  ]
 }

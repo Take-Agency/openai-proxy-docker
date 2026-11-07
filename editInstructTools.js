@@ -1,4 +1,4 @@
-// The 21 strict function tools for /edit/instruct, as Responses API function tools.
+// The 22 strict function tools for /edit/instruct, as Responses API function tools.
 // Source of truth: shorts-caption docs/instruction_editing_plan.md §3.2, plus insert_caption. Kept as plain data in its
 // own module so it can be diffed against (or exported to) the iOS decoder's fixture.
 //
@@ -153,6 +153,9 @@ export const EDIT_TOOLS = [
         last: capId,
         expect: { type: 'string' },
         text: { type: 'string' },
+    }),
+    tool('save_style', 'Save the current look (after the other edits in this batch) as one of the user\'s styles under this name. If the current style is already one of theirs, it is renamed. Use it when the user asks to save or name the style.', {
+        name: { type: 'string' },
     }),
     tool('ask_clarification', 'Ask the user to choose between 2-3 readings of the instruction. The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. When the question is which font to use, options are 1-3 font names copied exactly from <fonts>. Never combined with other calls.', {
         question: { type: 'string' },

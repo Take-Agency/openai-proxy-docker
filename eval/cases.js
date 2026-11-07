@@ -263,6 +263,9 @@ export const CASES = [
         accept: [{ calls: [['set_style', { word_background_color: '#A970FF' }]], style: { word_bg: { hue: [250, 300], minSaturation: 0.3 } } }, { clarify: true }] },
     { id: 102, group: 'looks', fixture: 'F1pw', instruction: 'make the purple brighter', cannotOptional: ['other'],
         accept: [{ calls: [['set_style', { word_background_color: '#A970FF' }]], style: { word_bg: { hue: [250, 300], minSaturation: 0.3 } } }] },
+    // Saving and naming the style
+    { id: 103, group: 'looks', instruction: 'save this style as My Brand', accept: [{ calls: [['save_style', { name: 'My Brand' }]] }] },
+    { id: 104, group: 'looks', instruction: 'make the text yellow and save it as Sunny', accept: [{ calls: [['set_style', { fill_color: '#FFD600' }], ['save_style', { name: 'Sunny' }]], style: { fill: YELLOW } }] },
     // Style-only requests in other languages on captions full of fillers: no word may change
     // (case 78 deleted um/uh/like in 3 of 5 runs before reasoning "low").
     { id: 88, group: 'style-only', locale: 'pt', reply: 'pt', instruction: 'deixa as legendas amarelas e maiores', accept: [{ calls: [['set_style', { fill_color: '#FFD600', font_size: 104 }]], style: { fill: YELLOW, size: { min: 100, max: 115 } } }] },

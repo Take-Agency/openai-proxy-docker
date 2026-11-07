@@ -1,4 +1,4 @@
-// Reference applier for the eval: the 21 edit tools applied to a plain-JSON caption state, with
+// Reference applier for the eval: the 22 edit tools applied to a plain-JSON caption state, with
 // the semantics of the app's EditValidator / EditApplier (shorts-caption,
 // ShortsCaption/Service/InstructionEditing, branch instruction-edit/5-edit-validator).
 // eval/applier.test.js runs the app's own golden cases (eval/fixtures/golden.json) through it.
@@ -153,6 +153,7 @@ export const SCHEMAS = {
     merge_short_captions: { max_words: 'int' },
     delete_all: { word: 'string', occurrences: 'refs?' },
     rewrite_sentence: { first: 'string', last: 'string', expect: 'string', text: 'string' },
+    save_style: { name: 'string' },
     cannot_do: { reason: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'], message: 'string' },
 };
 export const TOOL_NAMES = Object.keys(SCHEMAS);
@@ -357,7 +358,7 @@ export function validate(calls, state, presets, fonts = []) {
 
     const edit = {
         preset: null, styles: [], wordEdits: new Map(), emphasis: new Map(), splits: new Map(), merges: [],
-        deletions: new Set(), inserts: [], shifts: [], timings: [], pacing: null, clarification: null, cannotDo: [],
+        deletions: new Set(), inserts: [], shifts: [], timings: [], pacing: null, clarification: null, cannotDo: [], saveStyleName: null,
     };
     const wordOwners = new Map();
     const notFound = [];
@@ -761,6 +762,13 @@ export function validate(calls, state, presets, fonts = []) {
             });
             break;
         }
+        case 'save_style': {
+            const trimmed = args.name.trim();
+            if (!trimmed || [...trimmed].length > 40) errors.push(`${name}: name must be 1–40 characters`);
+            if (edit.saveStyleName != null) errors.push('save_style: save the style once per batch');
+            edit.saveStyleName = trimmed;
+            break;
+        }
         case 'ask_clarification':
             if (!args.question.trim()) errors.push(`${name}: question is empty`);
             // the app adds its own "Keep as is", so one option (a font, say) is enough
@@ -1001,6 +1009,9 @@ export function apply(edit, original) {
         if (args.case != null) state.style.case = args.case;
         if (args.highlight != null) state.style.highlight = args.highlight;
     }
+
+    // save_style: the look is saved under that name (the app's TextStyleService); here only the name shows
+    if (edit.saveStyleName && 'preset_name' in state.style) state.style.preset_name = edit.saveStyleName;
 
     // each snapshot caption becomes a group, so snapshot indexes stay valid
     const groups = state.captions.map((caption) => [caption]);
