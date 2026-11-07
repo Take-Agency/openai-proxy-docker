@@ -85,15 +85,26 @@ test('every case accept batch is valid and a canonical answer scores as a pass',
     }
 });
 
-test('insert_caption uses the gap after `after`, else splits its time', () => {
+test('insert_caption timing v2: a 1 s+ gap takes the line, else `after` makes room', () => {
     const insert = (after, text) => ({ name: 'insert_caption', arguments: { after, text } });
+    const times = (caption) => [caption.start, caption.end];
+    // after c5: gap 9.5-10.2 (0.7 s) < 1 s; window 7.8-10.2; new line 1 s at the end
     const atEnd = run([insert('c5', 'thanks for watching')], fixture, presets).state.captions;
-    assert.equal(atEnd.length, 7);
-    assert.deepEqual([atEnd[6].start, atEnd[6].end, captionText(atEnd[6])], [9.5, 10.2, 'thanks for watching']);
+    assert.deepEqual([times(atEnd[5]), times(atEnd[6]), captionText(atEnd[6])], [[7.8, 9.2], [9.2, 10.2], 'thanks for watching']);
+    // after c0: no gap; window 0-1.2; new line = 1.2 - min(0.3, 0.6) = 0.9 s
     const afterFirst = run([insert('c0', 'Subscribe now')], fixture, presets).state.captions;
-    assert.deepEqual([afterFirst[0].start, afterFirst[0].end, afterFirst[1].start, afterFirst[1].end], [0, 0.6, 0.6, 1.2]);
-    assert.equal(captionText(afterFirst[1]), 'Subscribe now');
+    assert.deepEqual([times(afterFirst[0]), times(afterFirst[1])], [[0, 0.3], [0.3, 1.2]]);
+    // null: mirrored at the head of c0
     const atStart = run([insert(null, 'Hey')], fixture, presets).state.captions;
-    assert.deepEqual([captionText(atStart[0]), atStart[0].start, atStart[0].end, atStart[1].start], ['Hey', 0, 0.6, 0.6]);
+    assert.deepEqual([captionText(atStart[0]), times(atStart[0]), times(atStart[1])], ['Hey', [0, 0.9], [0.9, 1.2]]);
+    // a short last line right before the end (the 80 ms case): the new line still gets most of the window
+    const short = structuredClone(fixture);
+    short.duration = 9.7;
+    const tail = run([insert('c5', 'Follow for more')], short, presets).state.captions;
+    assert.ok(tail[6].end - tail[6].start >= 0.9, JSON.stringify(times(tail[6])));
+    // a big gap is used as is, up to 2 s
+    const long = structuredClone(fixture);
+    long.duration = 14;
+    assert.deepEqual(times(run([insert('c5', 'Bye')], long, presets).state.captions[6]), [9.5, 11.5]);
     assert.match(run(Array.from({ length: 6 }, () => insert('c5', 'x')), fixture, presets).errors.join(), /at most 5/);
 });

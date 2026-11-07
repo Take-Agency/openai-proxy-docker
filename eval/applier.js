@@ -30,9 +30,11 @@ export const MAX_INSERTS = 5;
 export const POSITIONS = { bottom: 0.2, center: 0.5, top: 0.9 };
 const Y_RANGE = [0.05, 0.95];
 const DEFAULT_OUTLINE = { color: '#000000', width: 4 };
-// insert_caption timing: a gap of at least this long takes the new line, up to INSERT_MAX_S
-const INSERT_MIN_GAP_S = 0.3;
+// insert_caption timing (v2, from the app's staging re-check): see step 6b in apply()
+const INSERT_GAP_S = 1;
 const INSERT_MAX_S = 2;
+const INSERT_SHORT_S = 1;
+const INSERT_KEEP_S = 0.3;
 
 const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 // Swift String.count counts grapheme clusters; Devanagari needs this to match.
@@ -731,8 +733,11 @@ export function apply(edit, original) {
     // 6. deletes
     for (const index of edit.deletions) groups[index] = [];
 
-    // 6b. new captions: into the gap after `after` (or before the first caption), else into the
-    // second half of `after`'s time
+    // 6b. new captions (timing v2). The window is the gap after `after` (to the next caption or
+    // the video end; for null, from 0 to the first caption) plus `after`'s own time. A gap of
+    // INSERT_GAP_S or more takes the new line (up to INSERT_MAX_S). Otherwise the new line gets
+    // min(1 s, window - min(0.3 s, half of `after`)) at the window's end, and `after` is shortened
+    // from its end to make room; for null, the new line takes the head of the first caption.
     if (edit.inserts.length) groups.unshift([]); // group 0 = before the first caption
     for (const insert of edit.inserts) {
         const group = insert.after + 1;
@@ -740,23 +745,24 @@ export function apply(edit, original) {
         const next = groups.slice(group + 1).flat()[0];
         const gapStart = previous ? previous.end : 0;
         const gapEnd = next ? next.start : state.duration;
+        const gap = gapEnd - gapStart;
         let start;
         let end;
-        if (gapEnd - gapStart >= INSERT_MIN_GAP_S) {
+        if (gap >= INSERT_GAP_S || !(previous || next)) {
             start = gapStart;
-            end = Math.min(gapStart + INSERT_MAX_S, gapEnd);
+            end = gapStart + Math.min(INSERT_MAX_S, gap);
+        } else if (previous) {
+            const window = gapEnd - previous.start;
+            const length = Math.min(INSERT_SHORT_S, window - Math.min(INSERT_KEEP_S, (previous.end - previous.start) / 2));
+            end = gapEnd;
+            start = round(gapEnd - length);
+            if (start < previous.end) setTimeRange(previous, previous.start, start);
         } else {
-            const host = previous || next;
-            const middle = round((host.start + host.end) / 2);
-            if (host === previous) {
-                start = middle;
-                end = host.end;
-                setTimeRange(host, host.start, middle);
-            } else {
-                start = host.start;
-                end = middle;
-                setTimeRange(host, middle, host.end);
-            }
+            const window = next.end;
+            const length = Math.min(INSERT_SHORT_S, window - Math.min(INSERT_KEEP_S, (next.end - next.start) / 2));
+            start = 0;
+            end = round(length);
+            if (end > next.start) setTimeRange(next, end, next.end);
         }
         const caption = { start: round(start), end: round(end), words: [], emphasis: null };
         caption.words = [{ text: '', start: caption.start, end: caption.end, src: null }];
