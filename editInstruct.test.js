@@ -123,7 +123,7 @@ test('prompt puts presets before the snapshot and fences untrusted text', async 
         assert.ok(user.startsWith('<snapshot>\nrev 7f3a'));
         assert.ok(user.indexOf('</snapshot>') < user.indexOf('<instruction>'));
         assert.ok(user.includes('<instruction>\nfix Denis to Dennis and make it bigger\n</instruction>'));
-        assert.ok(user.endsWith("Reply language: Hindi (hi). Write every question, option and message in it, in the instruction's script."));
+        assert.ok(user.endsWith('Reply language: Hinglish: Hindi in Latin letters (hi-Latn). Write every question, option and message in it.'));
         // Caption text can't close the snapshot block or open an instruction block of its own.
         assert.equal(user.split('</snapshot>').length, 2);
         assert.equal(user.split('<instruction>').length, 2);
@@ -322,6 +322,10 @@ test('the locale is rendered as a named reply language', () => {
     assert.equal(languageName('es'), 'Spanish (es)');
     assert.equal(languageName('ur_PK'), 'Urdu (ur)');
     assert.equal(languageName('zz'), 'zz');
+    assert.equal(languageName('hi', 'emoji add karo har line pe'), 'Hinglish: Hindi in Latin letters (hi-Latn)');
+    assert.equal(languageName('hi', 'कैप्शन पीले करो'), 'Hindi (hi)');
+    assert.equal(languageName('ur', 'captions ko bara karo'), 'Roman Urdu: Urdu in Latin letters (ur-Latn)');
+    assert.equal(languageName('en', 'make it bigger'), 'English (en)');
 });
 
 test('tool schemas are strict: all 16 tools, every property required, no extra properties', () => {
