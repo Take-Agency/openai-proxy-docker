@@ -1386,6 +1386,36 @@
      "and the second thing is consistency you know"
     ]
    }
+  },
+  {
+   "case": "find-replace-one-term-missing",
+   "instruction": "remove the commas and semicolons (there are no semicolons)",
+   "calls": [
+    {
+     "name": "find_replace",
+     "arguments": "{\"find\": \"Denis\", \"replace\": \"Dennis\", \"whole_word\": true, \"match_case\": false}"
+    },
+    {
+     "name": "find_replace",
+     "arguments": "{\"find\": \";\", \"replace\": \"\", \"whole_word\": false, \"match_case\": false}"
+    }
+   ],
+   "expect": {
+    "captions": [
+     "Hey guys it's Dennis",
+     "um today we're talking about",
+     {
+      "text": "how to like grow your channel",
+      "emphasis": "channel"
+     },
+     "so uh the first thing is",
+     {
+      "text": "post every single day no excuses",
+      "emphasis": "excuses"
+     },
+     "and the second thing is consistency you know"
+    ]
+   }
   }
  ],
  "invalid": [

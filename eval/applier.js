@@ -231,6 +231,8 @@ function droppedWords(words, text) {
 const TRAILING_PUNCTUATION = /[\p{P}]+$/u;
 function keepTrailingPunctuation(actual, expect, text) {
     const mark = actual.match(TRAILING_PUNCTUATION)?.[0];
+    // an edit that only changes punctuation ("views." -> "views") means it
+    if (normalized(text) === normalized(actual)) return text;
     if (!mark || TRAILING_PUNCTUATION.test(expect.trim()) || TRAILING_PUNCTUATION.test(text.trim())) return text;
     return `${text.trim()}${mark}`;
 }
@@ -317,6 +319,8 @@ export function validate(calls, state, presets, fonts = []) {
         deletions: new Set(), inserts: [], shifts: [], timings: [], pacing: null, clarification: null, cannotDo: [],
     };
     const wordOwners = new Map();
+    const notFound = [];
+    let findReplaceMatched = false;
     const captionUses = new Map();
     const merged = new Set();
     const use = (caption, name) => captionUses.set(caption, [...(captionUses.get(caption) || []), CATEGORY[name] || name]);
@@ -432,8 +436,10 @@ export function validate(calls, state, presets, fonts = []) {
                 break;
             }
             const matches = findMatches(state, args.find, args.replace, args.whole_word, args.match_case);
-            if (!matches.length) errors.push(`${name}: "${args.find}" not found`);
-            else if (matches.length > MAX_REPLACEMENTS) errors.push(`${name}: ${matches.length} matches; the limit is ${MAX_REPLACEMENTS}`);
+            // one term of several missing (";" in "remove all the punctuation") isn't an error
+            if (!matches.length) notFound.push(`${name}: "${args.find}" not found`);
+            else findReplaceMatched = true;
+            if (matches.length > MAX_REPLACEMENTS) errors.push(`${name}: ${matches.length} matches; the limit is ${MAX_REPLACEMENTS}`);
             for (const match of matches) {
                 for (let word = match.from; word <= match.to; word += 1) touch(match.caption, word, name);
                 addWordEdit(match.caption, { type: 'replace', from: match.from, to: match.to, text: match.text });
@@ -728,6 +734,8 @@ export function validate(calls, state, presets, fonts = []) {
             break;
         }
     }
+
+    if (!findReplaceMatched) errors.push(...notFound);
 
     // lowercase letters only show once the style stops forcing capitals
     const lowercases = tools.some((tool) => tool.name === 'change_letters' && tool.args.mode === 'lowercase');
