@@ -143,7 +143,11 @@ export const CASES = [
     { id: 46, group: 'abstain', instruction: 'add emojis', accept: [{ calls: [], cannot: ['emoji'] }] },
     {
         id: 47, group: 'abstain', instruction: 'remove the ums from the audio too',
-        accept: [{ calls: [['delete_words', { words: [{ id: 'c1.0', expect: 'um' }, { id: 'c3.1', expect: 'uh' }] }]], cannot: ['cut_audio'] }],
+        // "the ums": um alone, or every filler sound
+        accept: [
+            { calls: [['delete_words', { words: [{ id: 'c1.0', expect: 'um' }, { id: 'c3.1', expect: 'uh' }] }]], cannot: ['cut_audio'] },
+            { calls: [['delete_words', { words: [{ id: 'c1.0', expect: 'um' }] }]], cannot: ['cut_audio'] },
+        ],
     },
     { id: 48, group: 'abstain', instruction: 'move the captions to the left', accept: [{ calls: [], cannot: ['horizontal_position'] }] },
     {

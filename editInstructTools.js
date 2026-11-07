@@ -44,7 +44,7 @@ function tool(name, description, properties) {
 }
 
 export const EDIT_TOOLS = [
-    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. case: "capitalized" = Every Word Capitalized, "none" = as written. position is one of three presets; position_y is any height.', {
+    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. fill_color is the text color; emphasis_color is the highlight color (the spoken or emphasized word, "highlight the word being spoken in green"). case: "capitalized" = Every Word Capitalized, "none" = as written. position is one of three presets; position_y is any height.', {
         fill_color: { type: ['string', 'null'], pattern: HEX },
         emphasis_color: { type: ['string', 'null'], pattern: HEX },
         caption_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
@@ -137,7 +137,7 @@ export const EDIT_TOOLS = [
     tool('split_in_half', 'Split captions into two lines each, near the middle. null = every caption with 2 or more words. Use for "split every line in half" instead of one split_caption per line.', {
         captions: nullableCaptionList,
     }),
-    tool('change_letters', 'Change the letters of the caption text itself (a text edit the user reviews). lowercase = every letter lowercase; capitalize_first_word = capitalize the first letter of the first word of each caption. null = every caption. Words that already look like that are left alone.', {
+    tool('change_letters', 'Change the letters of the caption text itself (a text edit the user reviews). lowercase = every letter lowercase; capitalize_first_word = capitalize the first letter of the first word of each caption. null = every caption. Words that already look like that are left alone. Only for these two: all caps and Every Word Capitalized are set_style case, never change_letters.', {
         captions: nullableCaptionList,
         mode: { type: 'string', enum: ['lowercase', 'capitalize_first_word'] },
     }),

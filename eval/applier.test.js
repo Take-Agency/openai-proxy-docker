@@ -114,3 +114,13 @@ test('insert_caption timing v2: a 1 s+ gap takes the line, else `after` makes ro
     assert.deepEqual(times(run([insert('c5', 'Bye')], long, presets).state.captions[6]), [9.5, 11.5]);
     assert.match(run(Array.from({ length: 6 }, () => insert('c5', 'x')), fixture, presets).errors.join(), /at most 5/);
 });
+
+test('a replacement keeps trailing punctuation its expect left out', async () => {
+    const { FIXTURES } = await import('./fixtures.js');
+    const p2 = loadFixture(FIXTURES.P2);
+    const call = (expect, text) => [{ name: 'replace_words', arguments: { from: 'c2.0', to: 'c2.1', expect, text } }];
+    assert.equal(captionText(run(call('Number 1', 'Number one'), p2, presets, FONTS).state.captions[2]), 'Number one: hooks, hooks, hooks!');
+    // the model's own punctuation wins
+    assert.equal(captionText(run(call('Number 1:', 'Number one'), p2, presets, FONTS).state.captions[2]), 'Number one hooks, hooks, hooks!');
+    assert.equal(captionText(run(call('Number 1', 'Number one -'), p2, presets, FONTS).state.captions[2]), 'Number one - hooks, hooks, hooks!');
+});

@@ -227,6 +227,14 @@ function droppedWords(words, text) {
     return next === kept.length ? words.map((_, index) => index).filter((index) => !keep.has(index)) : null;
 }
 
+// "Number 1:" replaced with "Number one" by an expect without the colon: the colon stays.
+const TRAILING_PUNCTUATION = /[\p{P}]+$/u;
+function keepTrailingPunctuation(actual, expect, text) {
+    const mark = actual.match(TRAILING_PUNCTUATION)?.[0];
+    if (!mark || TRAILING_PUNCTUATION.test(expect.trim()) || TRAILING_PUNCTUATION.test(text.trim())) return text;
+    return `${text.trim()}${mark}`;
+}
+
 const capitalizeFirstLetter = (text) => text.replace(/\p{L}/u, (letter) => letter.toUpperCase());
 
 // rewrite_sentence: the new text's words (characters without word spaces) spread over the
@@ -387,7 +395,8 @@ export function validate(calls, state, presets, fonts = []) {
             if (args.text.trim() === spanText(caption, start.word, end.word)) break;
             checkExpect(args.expect, spanText(caption, start.word, end.word), `${args.from}…${args.to}`, name);
             if (!args.text.trim()) errors.push(`${name}: text is empty; use delete_words to remove words`);
-            const dropped = hasWordSpaces(state) ? droppedWords(caption.words.slice(start.word, end.word + 1), args.text) : null;
+            const text = keepTrailingPunctuation(spanText(caption, start.word, end.word), args.expect, args.text);
+            const dropped = hasWordSpaces(state) ? droppedWords(caption.words.slice(start.word, end.word + 1), text) : null;
             if (dropped) {
                 for (const offset of dropped) {
                     touch(start.caption, start.word + offset, name);
@@ -396,7 +405,7 @@ export function validate(calls, state, presets, fonts = []) {
                 break;
             }
             for (let word = start.word; word <= end.word; word += 1) touch(start.caption, word, name);
-            addWordEdit(start.caption, { type: 'replace', from: start.word, to: end.word, text: args.text });
+            addWordEdit(start.caption, { type: 'replace', from: start.word, to: end.word, text });
             break;
         }
         case 'delete_words':
