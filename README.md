@@ -184,3 +184,46 @@ Errors: 400 `install_id_required` / `invalid_mode` / `words_required`, 413 `too_
 429 `rate_limited` (6/min per IP, 10/min and 60/day per install), 502 `conversion_failed`
 (both models failed — the app keeps Devanagari), 503 `not_configured` (no key configured).
 Logs one line per request (mode, models, chunks, words, latency, tokens); never transcript content.
+
+## Instruction-based caption editing
+
+Turns a typed instruction ("fix Denis to Dennis everywhere and make it bigger") into strict tool
+calls that the Auto Caption app validates against its caption snapshot and applies as one
+transaction (design: shorts-caption `docs/instruction_editing_plan.md`). Uses the Responses API
+with the 15 strict function tools in `editInstructTools.js`, `reasoning: none`,
+`tool_choice: required` and `store: false`. Models: `EDIT_INSTRUCT_MODEL` (default `gpt-6-luna`)
+with one retry on `EDIT_INSTRUCT_FALLBACK_MODEL` (default `gpt-5.6-luna`) on a timeout (12s), an
+upstream error or a failed check. Auth uses `EDIT_INSTRUCT_OPENAI_API_KEY` only (a key from its own
+OpenAI project with a budget); there is no fallback to `OPENAI_API_KEY`, so the route 503s until it is set.
+
+### `POST /edit/instruct`
+
+Headers: `content-type: application/json`, `x-install-id` (8–64 chars, required; used for rate
+limiting only, never sent to OpenAI). 64kb body cap.
+
+```jsonc
+{
+  "instruction": "make it bigger",            // 1..500 chars
+  "snapshot": "rev 7f3a · duration 10.2s · focus c2\nc0 0.00-1.20 | 0 Hey 1 guys …\nstyle {…}",
+  "presets": "mosy|Mosy|minimal\n…",          // the app's catalog, one id|name|category per line
+  "revision": "7f3a",                          // echoed back, ≤64 chars
+  "locale": "hi-IN",                           // optional
+  "clarification": { "question": "…", "choice": "…" },                       // optional follow-up
+  "repair": { "tool_calls": [{ "name": "…", "arguments": {} }], "errors": ["…"] } // optional, once
+}
+// 200
+{ "success": true, "revision": "7f3a", "model": "gpt-6-luna",
+  "tool_calls": [{ "name": "set_style", "arguments": { "font_size": 104, … } }] }
+```
+
+The server checks only what it can without the snapshot: known tool names, JSON arguments with
+exactly the schema's keys, at most 50 calls, and `ask_clarification` alone. Ids, `expect` text,
+ranges and conflicts are the app's validator's job; it may resend once with `repair`.
+
+Errors: 400 `install_id_required` / `instruction_required` / `snapshot_required` /
+`presets_required` / `revision_required` / `invalid_locale` / `invalid_clarification` /
+`invalid_repair` / `invalid_json`, 413 `instruction_too_long` / `body_too_large`, 429
+`rate_limited` (20/min per IP, 10/min and 150/day per install; exempt from the app's 10/min
+default bucket), 502 `edit_failed` (both models failed), 503 `not_configured`.
+Logs one line per request (model, tool names, call count, sizes, latency, tokens); never
+instruction or caption text.

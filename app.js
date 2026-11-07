@@ -8,6 +8,7 @@ import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createHinglishFeedbackRouter } from './hinglishFeedback.js';
 import { createHindiConvertRouter } from './hindiConvert.js';
+import { createEditInstructRouter } from './editInstruct.js';
 
 const allowedTargets = [
     'https://api.openai.com/',
@@ -22,6 +23,8 @@ const target = process.env.TARGET || 'https://api.openai.com';
 const openaiApiKey = process.env.OPENAI_API_KEY;
 // Hindi conversion bills to its own OpenAI project so its spend/budget is tracked separately.
 const hindiConvertApiKey = process.env.HINDI_CONVERT_OPENAI_API_KEY || openaiApiKey;
+// Instruction editing has its own key and no fallback: the route 503s until it is set.
+const editInstructApiKey = process.env.EDIT_INSTRUCT_OPENAI_API_KEY;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
 const cleanvoiceApiKey = process.env.CLEANVOICE_API_KEY;
 
@@ -86,6 +89,8 @@ const limiterFor = (req) => {
     if (req.method === 'GET' && targetUrl.includes('api.cleanvoice.ai') && req.path.startsWith('/v2/edits/')) {
         return null;
     }
+    // Carries its own per-IP (20/min) and per-install limiters, which this 10/min bucket would undercut.
+    if (req.method === 'POST' && req.path === '/edit/instruct') return null;
     if (targetUrl.includes('api.cleanvoice.ai')) return cleanvoiceLimiter;
     if (targetUrl.includes('api.elevenlabs.io')) return sttLimiter;
     if (req.method === 'GET' && req.path === '/music') return musicLimiter;
@@ -130,6 +135,10 @@ app.use(createHinglishFeedbackRouter({
 // model other than gpt-4o — this route picks its own models server-side and uses the injected
 // key directly. Carries its own per-IP and per-install limiters.
 app.use(createHindiConvertRouter({ openaiApiKey: hindiConvertApiKey }));
+
+// Instruction-based caption editing. Mounted here for the same reasons as /hindi/convert: its own
+// 64kb body cap, and the passthrough below would 403 its models and log full request bodies.
+app.use(createEditInstructRouter({ openaiApiKey: editInstructApiKey }));
 
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
