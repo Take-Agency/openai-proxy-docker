@@ -46,7 +46,7 @@ export const EDIT_TOOLS = [
         overflow: nullableEnum(['none', 'resize_to_fit', 'wrap']),
         position_y: { type: ['number', 'null'], description: 'Vertical position, 0 = bottom edge, 1 = top edge (the style line\'s y; the bottom/center/top presets are about 0.2/0.5/0.9). For "a bit higher/lower" move 0.08-0.12 from the current y. Keep within 0.05-0.95.' },
         outline_color: { type: ['string', 'null'], pattern: HEX_OR_NONE, description: '"none" removes the outline.' },
-        outline_width: { type: ['number', 'null'], description: 'Thin about 2, medium about 4, thick about 8.' },
+        outline_width: { type: ['number', 'null'], description: 'Without an outline yet: thin about 2, medium about 4, thick about 8. With one, relative words move from the current width (outline.width in the style line).' },
         shadow: nullableEnum(['none', 'soft', 'strong']),
         font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
     }),
