@@ -33,7 +33,7 @@ function tool(name, description, properties) {
 }
 
 export const EDIT_TOOLS = [
-    tool('set_style', 'Change global caption style. Set only the fields to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot.', {
+    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. case: "capitalized" = Every Word Capitalized, "none" = as written.', {
         fill_color: { type: ['string', 'null'], pattern: HEX },
         emphasis_color: { type: ['string', 'null'], pattern: HEX },
         caption_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
@@ -82,7 +82,7 @@ export const EDIT_TOOLS = [
         caption: capId,
         before: wordId,
     }),
-    tool('merge_captions', 'Merge two adjacent captions, in order, into one line.', {
+    tool('merge_captions', 'Merge two different, adjacent captions (first, then the one right after it) into one line.', {
         first: capId,
         second: capId,
     }),
