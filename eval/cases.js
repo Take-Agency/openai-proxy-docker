@@ -17,7 +17,8 @@
 // Cases whose accept list has no `clarify` count an ask_clarification as over-asking.
 // `checks` are extra pass conditions: noPromptLeak, noTextCram (no word edit or merge may carry
 // the new text of an insertion), keepStyleOption (a "Keep this style" option and not the
-// current preset), fontOptions (at least 2 options are catalog font names).
+// current preset), fontOptions (every option is a plain catalog font name or a "keep" option,
+// with at least 2 font names).
 // Every case (unless `allowNoOp`) also fails on a no-op edit (a word replaced by itself, a style field set to its
 // current value), and on a question or message in the wrong language: `reply` names it (en, es,
 // ja, hi-deva, hi-latn), defaulting to en for the en locale. Every case with an English locale also
@@ -171,7 +172,8 @@ export const CASES = [
     { id: 59, group: 'style2', instruction: 'add a drop shadow', accept: [{ calls: [['set_style', { shadow: 'soft' }]], style: { shadow: { oneOf: ['soft', 'strong'] } } }] },
     { id: 60, group: 'style2', fixture: 'F1s', instruction: 'no shadow', accept: [{ calls: [['set_style', { shadow: 'none' }]] }] },
     { id: 61, group: 'style2', instruction: 'move captions up a bit', accept: [{ calls: [['set_style', { position_y: 0.3 }]], style: { y: { min: 0.27, max: 0.33 } } }] },
-    { id: 62, group: 'style2', instruction: 'change the font to Montserrat', accept: [{ calls: [['set_style', { font: { anyOf: FONTS.filter((font) => font.startsWith('Montserrat')) } }]] }, { clarify: true }] },
+    // a family with several weights gets a weight, not a question
+    { id: 62, group: 'style2', instruction: 'change the font to Montserrat', accept: [{ calls: [['set_style', { font: { anyOf: FONTS.filter((font) => font.startsWith('Montserrat')) } }]] }] },
     { id: 63, group: 'style2', instruction: 'use Comic Sans', checks: ['fontOptions'], accept: [{ clarify: true }] },
     { id: 64, group: 'style2', fixture: 'P3', locale: 'hi', instruction: 'आउटलाइन हटाओ', accept: [{ calls: [['set_style', { outline_color: 'none' }]] }] },
     { id: 65, group: 'style2', instruction: 'make the text bolder', accept: [{ clarify: true }, { calls: [['set_style', { outline_width: 8 }]], style: { outline: { outline: { color: '#000000', minWidth: 5, maxWidth: 12 } } } }] },
