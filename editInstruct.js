@@ -39,7 +39,18 @@ const INTENT_TIMEOUT_MS = 3_000;
 const INTENT_DEADLINE_MS = 11_000;
 const LOCALE = /^[A-Za-z]{2,3}([-_][A-Za-z0-9]{2,8}){0,3}$/;
 
-const DAY_MS = 24 * 60 * 60 * 1000;
+const HOUR_MS = 60 * 60 * 1000;
+const WEEK_MS = 7 * 24 * HOUR_MS;
+
+// Instructions per install, by the plan the app reports in x-plan. Free and trial are capped hard,
+// paying users loosely. The app can lie about its plan, which only buys the paid limits; the per-IP
+// limiter stays the real ceiling. A missing header is an older build (4.0 (1) on TestFlight), which
+// gets the paid limits. Counts live in memory, so a deploy resets them.
+export const PLAN_LIMITS = {
+    free: { fiveHour: 15, week: 40 },
+    trial: { fiveHour: 25, week: 80 },
+    paid: { fiveHour: 60, week: 300 },
+};
 
 // Static, so it is byte-identical across requests and lands in OpenAI's prompt cache together
 // with the tool schemas and (per app version) the preset catalog.
@@ -282,32 +293,38 @@ export function createEditInstructRouter({
     primaryModel = PRIMARY_MODEL,
     fallbackModel = FALLBACK_MODEL,
     attemptTimeoutMs = ATTEMPT_TIMEOUT_MS,
+    planLimits = PLAN_LIMITS,
 } = {}) {
     // Per-IP is the real ceiling (the client can't choose its IP); per-install bounds an honest
     // client's retry loops without a shared CGNAT IP starving real users, as in hindiConvert.
-    const ipLimiter = rateLimit({
-        windowMs: 60 * 1000,
-        limit: 20,
+    const ipKey = (req) => req.headers['do-connecting-ip'] || req.ip;
+    const installKey = (req) => req.headers['x-install-id'] || ipKey(req);
+    const planOf = (req) => (Object.hasOwn(planLimits, req.headers['x-plan']) ? req.headers['x-plan'] : 'paid');
+    // The 429 says which limit was hit and when it frees up, so the app can show a reset time or
+    // the paywall.
+    const limiter = ({ window, windowMs, limit, keyGenerator, skipFailedRequests = false }) => rateLimit({
+        windowMs,
+        limit,
+        keyGenerator,
+        skipFailedRequests,
         standardHeaders: 'draft-7',
         legacyHeaders: false,
-        keyGenerator: (req) => req.headers['do-connecting-ip'] || req.ip,
-        message: { success: false, error: 'rate_limited' },
+        handler: (req, res, next, options) => {
+            const resetTime = req[options.requestPropertyName]?.resetTime;
+            const retryAfterSeconds = resetTime ? Math.max(1, Math.ceil((resetTime.getTime() - Date.now()) / 1000)) : null;
+            res.status(options.statusCode).json({ success: false, error: 'rate_limited', window, plan: planOf(req), retryAfterSeconds });
+        },
     });
-    const installMinuteLimiter = rateLimit({
-        windowMs: 60 * 1000,
-        limit: 10,
-        standardHeaders: 'draft-7',
-        legacyHeaders: false,
-        keyGenerator: (req) => req.headers['x-install-id'] || req.headers['do-connecting-ip'] || req.ip,
-        message: { success: false, error: 'rate_limited' },
+    const ipLimiter = limiter({ window: 'minute', windowMs: 60 * 1000, limit: 20, keyGenerator: ipKey });
+    const installMinuteLimiter = limiter({ window: 'minute', windowMs: 60 * 1000, limit: 10, keyGenerator: installKey });
+    // Edits that fail on our side (5xx) don't use up the user's allowance.
+    const installFiveHourLimiter = limiter({
+        window: 'five_hours', windowMs: 5 * HOUR_MS, keyGenerator: installKey, skipFailedRequests: true,
+        limit: (req) => planLimits[planOf(req)].fiveHour,
     });
-    const installDayLimiter = rateLimit({
-        windowMs: DAY_MS,
-        limit: 150,
-        standardHeaders: 'draft-7',
-        legacyHeaders: false,
-        keyGenerator: (req) => req.headers['x-install-id'] || req.headers['do-connecting-ip'] || req.ip,
-        message: { success: false, error: 'rate_limited' },
+    const installWeekLimiter = limiter({
+        window: 'week', windowMs: WEEK_MS, keyGenerator: installKey, skipFailedRequests: true,
+        limit: (req) => planLimits[planOf(req)].week,
     });
 
     function requireInstallId(req, res, next) {
@@ -439,7 +456,8 @@ export function createEditInstructRouter({
         ipLimiter,
         requireInstallId,
         installMinuteLimiter,
-        installDayLimiter,
+        installFiveHourLimiter,
+        installWeekLimiter,
         express.json({ limit: BODY_LIMIT }),
         postEditInstruct,
     );
