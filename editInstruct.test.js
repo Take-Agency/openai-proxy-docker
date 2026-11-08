@@ -303,7 +303,67 @@ test('per-install minute limiter returns the shared rate_limited shape', async (
         }
         const { status, body } = await post(validBody(), { 'do-connecting-ip': '10.0.1.1' });
         assert.equal(status, 429);
-        assert.deepEqual(body, { success: false, error: 'rate_limited' });
+        assert.equal(body.error, 'rate_limited');
+        assert.equal(body.window, 'minute');
+        assert.ok(body.retryAfterSeconds > 0 && body.retryAfterSeconds <= 60);
+    });
+});
+
+const tinyLimits = { free: { fiveHour: 2, week: 3 }, trial: { fiveHour: 3, week: 4 }, paid: { fiveHour: 4, week: 5 } };
+
+test('free installs hit the 5-hour limit first and learn when it frees up', async () => {
+    const { fetch } = fakeFetch(() => [findReplace]);
+    await withServer({ fetch, planLimits: tinyLimits }, async (post) => {
+        const free = { 'x-plan': 'free' };
+        assert.equal((await post(validBody(), free)).status, 200);
+        assert.equal((await post(validBody(), free)).status, 200);
+        const { status, body } = await post(validBody(), free);
+        assert.equal(status, 429);
+        assert.equal(body.window, 'five_hours');
+        assert.equal(body.plan, 'free');
+        assert.ok(body.retryAfterSeconds > 4 * 3600 && body.retryAfterSeconds <= 5 * 3600);
+    });
+});
+
+test('the limits follow the reported plan, and a missing plan gets the paid limits', async () => {
+    const { fetch } = fakeFetch(() => [findReplace]);
+    await withServer({ fetch, planLimits: tinyLimits }, async (post) => {
+        const allowed = async (headers) => {
+            let count = 0;
+            while ((await post(validBody(), headers)).status === 200) count += 1;
+            return count;
+        };
+        assert.equal(await allowed({ 'x-install-id': 'trial-0001', 'x-plan': 'trial' }), 3);
+        assert.equal(await allowed({ 'x-install-id': 'paid-00001', 'x-plan': 'paid' }), 4);
+        assert.equal(await allowed({ 'x-install-id': 'older-0001' }), 4);
+        assert.equal(await allowed({ 'x-install-id': 'bogus-0001', 'x-plan': 'platinum' }), 4);
+    });
+});
+
+test('the weekly limit applies once the 5-hour one has room', async () => {
+    const { fetch } = fakeFetch(() => [findReplace]);
+    const limits = { ...tinyLimits, free: { fiveHour: 10, week: 3 } };
+    await withServer({ fetch, planLimits: limits }, async (post) => {
+        const free = { 'x-plan': 'free' };
+        for (let index = 0; index < 3; index += 1) assert.equal((await post(validBody(), free)).status, 200);
+        const { status, body } = await post(validBody(), free);
+        assert.equal(status, 429);
+        assert.equal(body.window, 'week');
+        assert.ok(body.retryAfterSeconds > 6 * 24 * 3600);
+    });
+});
+
+test('edits that fail on our side do not use up the allowance', async () => {
+    let fail = true;
+    const { fetch } = fakeFetch(() => (fail ? [] : [findReplace]));
+    await withServer({ fetch, planLimits: tinyLimits }, async (post) => {
+        const free = { 'x-plan': 'free' };
+        assert.equal((await post(validBody(), free)).status, 502);
+        assert.equal((await post(validBody(), free)).status, 502);
+        fail = false;
+        assert.equal((await post(validBody(), free)).status, 200);
+        assert.equal((await post(validBody(), free)).status, 200);
+        assert.equal((await post(validBody(), free)).status, 429);
     });
 });
 
