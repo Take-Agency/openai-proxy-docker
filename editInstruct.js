@@ -42,13 +42,14 @@ const LOCALE = /^[A-Za-z]{2,3}([-_][A-Za-z0-9]{2,8}){0,3}$/;
 const HOUR_MS = 60 * 60 * 1000;
 const WEEK_MS = 7 * 24 * HOUR_MS;
 
-// Instructions per install, by the plan the app reports in x-plan. Free and trial are capped hard,
-// paying users loosely. The app can lie about its plan, which only buys the paid limits; the per-IP
+// Instructions per install, by the plan the app reports in x-plan. Free users are capped hard (the
+// app offers the paywall at the limit); trial users get the paid limits, since they're deciding
+// whether to pay and Apple allows one trial per Apple ID. The app can lie about its plan, which only buys the paid limits; the per-IP
 // limiter stays the real ceiling. A missing header is an older build (4.0 (1) on TestFlight), which
 // gets the paid limits. Counts live in memory, so a deploy resets them.
 export const PLAN_LIMITS = {
     free: { fiveHour: 15, week: 40 },
-    trial: { fiveHour: 25, week: 80 },
+    trial: { fiveHour: 60, week: 300 },
     paid: { fiveHour: 60, week: 300 },
 };
 
