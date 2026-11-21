@@ -10,7 +10,7 @@ const SNAPSHOT = [
     'rev 7f3a · duration 10.2s · focus c2',
     'c0 0.00-1.20 | 0 Hey 1 guys 2 it\'s 3 Denis',
     'c1 1.20-2.60 | 0 um 1 today 2 we\'re 3 talking 4 about',
-    'c2 2.60-4.10 | 0 how 1 to 2 like 3 grow 4 your 5 [channel]',
+    'c2 2.60-4.10 | 0 how 1 to 2 like 3 grow 4 your 5 channel | highlight 5',
     'style {"preset":"mosy","size":90,"fill":"#FFFFFF","emphasis":"#00E5FF","position":"bottom"}',
 ].join('\n');
 const PRESETS = 'mosy|Mosy|minimal\nboo_cute|Boo Cute|halloween';
@@ -202,6 +202,48 @@ test('ask_clarification on its own is returned', async () => {
     });
 });
 
+const undoLastEdit = call('undo_last_edit', {});
+const previous = (applied) => ({
+    instruction: 'remove the music words',
+    applied,
+    tool_calls: [{ name: 'delete_words', arguments: { words: [{ id: 'c3.0', expect: '[upbeat' }] } }],
+});
+
+test('the previous edit is sent as context between the snapshot and the instruction', async () => {
+    const { fetch, calls } = fakeFetch(() => [findReplace]);
+    await withServer({ fetch }, async (post) => {
+        const { status } = await post(validBody({ instruction: 'just the music', previous: previous(true) }));
+        assert.equal(status, 200);
+        const content = calls[0].request.input[1].content;
+        assert.ok(content.includes('</snapshot>\n\n<previous>\nInstruction: remove the music words\nApplied: yes\nYour calls:\ndelete_words {"words":[{"id":"c3.0","expect":"[upbeat"}]}\n</previous>\n\n<instruction>\njust the music\n</instruction>'));
+    });
+});
+
+test('undo_last_edit is returned only alone and only while the previous edit is applied', async () => {
+    const { fetch } = fakeFetch(() => [undoLastEdit]);
+    await withServer({ fetch }, async (post) => {
+        const { status, body } = await post(validBody({ instruction: 'just the music', previous: previous(true) }));
+        assert.equal(status, 200);
+        assert.deepEqual(body.tool_calls, [{ name: 'undo_last_edit', arguments: {} }]);
+        assert.equal((await post(validBody({ instruction: 'just the music', previous: previous(false) }))).status, 502);
+        assert.equal((await post(validBody({ instruction: 'just the music' }))).status, 502);
+    });
+    assert.throws(() => validateToolCalls([JSON.parse(JSON.stringify({ name: 'undo_last_edit', arguments: {} })), { name: 'set_pacing', arguments: { pacing: 'fast' } }], { canUndo: true }), /bad_undo/);
+});
+
+test('a malformed previous is a 400', async () => {
+    const { fetch, calls } = fakeFetch(() => [findReplace]);
+    await withServer({ fetch }, async (post) => {
+        for (const bad of [{ instruction: 'x', applied: 'yes', tool_calls: [] }, { instruction: '', applied: true, tool_calls: [] },
+            { instruction: 'x', applied: true, tool_calls: [{ name: 'set_font', arguments: {} }] }, 'remove music']) {
+            const { status, body } = await post(validBody({ previous: bad }));
+            assert.equal(status, 400);
+            assert.equal(body.error, 'invalid_previous');
+        }
+        assert.equal(calls.length, 0);
+    });
+});
+
 test('more than 50 calls is rejected, 50 is accepted', async () => {
     const { fetch } = fakeFetch(({ model }) => Array.from({ length: model === 'gpt-6-luna' ? 51 : 50 }, () => findReplace));
     await withServer({ fetch }, async (post) => {
@@ -390,12 +432,12 @@ test('the locale is rendered as a named reply language', () => {
     assert.equal(languageName('en', 'make it bigger'), 'English (en)');
 });
 
-test('tool schemas are strict: all 22 tools, every property required, no extra properties', () => {
+test('tool schemas are strict: all 23 tools, every property required, no extra properties', () => {
     assert.deepEqual(TOOL_NAMES, [
         'set_style', 'apply_preset', 'set_pacing', 'replace_words', 'delete_words', 'find_replace', 'set_caption_text',
         'split_caption', 'merge_captions', 'delete_captions', 'insert_caption', 'shift_timing', 'set_caption_timing', 'set_emphasis',
         'split_in_half', 'change_letters', 'merge_short_captions', 'delete_all', 'rewrite_sentence', 'save_style',
-        'ask_clarification', 'cannot_do',
+        'undo_last_edit', 'ask_clarification', 'cannot_do',
     ]);
     const checkObject = (schema, path) => {
         assert.equal(schema.additionalProperties, false, path);

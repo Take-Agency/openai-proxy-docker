@@ -111,7 +111,7 @@ async function post(args, body, sequence) {
 
 // Upstream failure codes from the proxy's log: timeout vs schema check vs upstream HTTP/status.
 const failureKind = (code) => (code.endsWith(':timeout') ? 'timeout'
-    : /:(bad_arguments|unknown_tool|no_tool_calls|too_many_calls|clarification_mixed)$/.test(code) ? 'schema'
+    : /:(bad_arguments|unknown_tool|no_tool_calls|too_many_calls|clarification_mixed|bad_undo)$/.test(code) ? 'schema'
         : 'upstream');
 
 // ---------------------------------------------------------------- stats
@@ -332,6 +332,8 @@ async function main() {
             };
             // a follow-up turn: the user's answer to the model's earlier question
             if (testCase.clarification) body.clarification = testCase.clarification;
+            // a follow-up: the previous instruction, its calls and whether it's still applied
+            if (testCase.previous) body.previous = testCase.previous;
             const { response, request } = await send(body, { caseId: testCase.id, run: runIndex, repair: false });
             const calls = response.json.tool_calls || [];
             let result = response.status === 200 ? run(calls, fixture, presets) : { errors: [`http ${response.status}`] };
