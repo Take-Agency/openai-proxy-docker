@@ -76,8 +76,10 @@ export function snapshotText(state) {
     if (state.focus != null) header += ` · focus c${state.focus}`;
     const lines = state.captions.map((caption, c) => {
         const [first, last] = Array.isArray(caption.emphasis) ? caption.emphasis : [-1, -2];
-        const words = caption.words.map((word, w) => `${w} ${w >= first && w <= last ? `[${word.text}]` : word.text}`).join(' ');
-        return `c${c} ${seconds(caption.start)}-${seconds(caption.end)} | ${words}`;
+        const words = caption.words.map((word, w) => `${w} ${word.text}`).join(' ');
+        // emphasis by index, so brackets in the text are only ever the transcript's sound tags
+        const highlight = first < 0 ? '' : ` | highlight ${first === last ? first : `${first}-${last}`}`;
+        return `c${c} ${seconds(caption.start)}-${seconds(caption.end)} | ${words}${highlight}`;
     });
     const style = Object.fromEntries(Object.keys(state.style).sort().map((key) => [key, state.style[key]]));
     return [header, ...lines, `looks ${looksText(state.style, state.boxes)}`, `style ${JSON.stringify(style)}`].join('\n');
@@ -113,7 +115,7 @@ export function looksText(style, boxes = { word: true, caption: false }) {
     else if (boxes.word) parts.push('no box behind words yet (word_bg adds one)');
     else parts.push('no box behind words (word_bg does nothing in this style)');
     if (style.highlight === 'spoken_word') parts.push(`word being spoken: ${colorName(style.emphasis)} letters (emphasis)`);
-    else if (style.highlight === 'static') parts.push(`[bracketed] words: ${colorName(style.emphasis)} letters (emphasis)`);
+    else if (style.highlight === 'static') parts.push(`words listed after highlight: ${colorName(style.emphasis)} letters (emphasis)`);
     else parts.push('no colored words (emphasis does nothing while highlight is none)');
     if (boxes.caption && style.caption_bg !== 'none') parts.push(`${colorName(style.caption_bg)} box behind each caption (caption_bg)`);
     else if (boxes.caption) parts.push('no box behind captions yet (caption_bg adds one)');
@@ -147,6 +149,7 @@ export const SCHEMAS = {
     set_caption_timing: { caption: 'string', start_s: 'number?', end_s: 'number?' },
     set_emphasis: { caption: 'string', from: 'string?', to: 'string?' },
     ask_clarification: { question: 'string', options: 'strings' },
+    undo_last_edit: {},
     // bulk tools: the model names what to change, the app finds every target
     split_in_half: { captions: 'ids?' },
     change_letters: { captions: 'ids?', mode: ['lowercase', 'capitalize_first_word'] },
@@ -358,7 +361,7 @@ export function validate(calls, state, presets, fonts = []) {
 
     const edit = {
         preset: null, styles: [], wordEdits: new Map(), emphasis: new Map(), splits: new Map(), merges: [],
-        deletions: new Set(), inserts: [], shifts: [], timings: [], pacing: null, clarification: null, cannotDo: [], saveStyleName: null,
+        deletions: new Set(), inserts: [], shifts: [], timings: [], pacing: null, clarification: null, undo: false, cannotDo: [], saveStyleName: null,
     };
     const wordOwners = new Map();
     const notFound = [];
@@ -379,6 +382,9 @@ export function validate(calls, state, presets, fonts = []) {
 
     if (tools.length > 1 && tools.some((tool) => tool.name === 'ask_clarification')) {
         errors.push("ask_clarification can't be combined with other tools");
+    }
+    if (tools.length > 1 && tools.some((tool) => tool.name === 'undo_last_edit')) {
+        errors.push("undo_last_edit can't be combined with other tools");
     }
 
     for (const { name, args } of tools) {
@@ -774,6 +780,9 @@ export function validate(calls, state, presets, fonts = []) {
             // the app adds its own "Keep as is", so one option (a font, say) is enough
             if (args.options.length < 1 || args.options.length > 3) errors.push(`${name}: give 1 to 3 options`);
             edit.clarification = { question: args.question, options: args.options };
+            break;
+        case 'undo_last_edit':
+            edit.undo = true;
             break;
         case 'cannot_do':
             if (!args.message.trim()) errors.push(`${name}: message is empty`);

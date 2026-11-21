@@ -38,10 +38,15 @@ export function expectedOutcomes(testCase, fixture, presets) {
             outcomes.push({ state: fixture, cannot: [], clarify: true, style: {} });
             continue;
         }
+        // undo_last_edit alone: the app undoes and asks again, so nothing changes in this turn
+        if (alternative.undo) {
+            outcomes.push({ state: fixture, cannot: [], clarify: false, undo: true, style: {} });
+            continue;
+        }
         for (const calls of expandCalls(alternative.calls)) {
             const result = calls.length ? run(calls, fixture, presets) : { errors: [], state: fixture };
             if (result.errors.length) throw new Error(`case ${testCase.id}: accept batch is invalid: ${result.errors.join('; ')}`);
-            outcomes.push({ state: result.state, cannot: alternative.cannot || [], clarify: false, style: alternative.style || {} });
+            outcomes.push({ state: result.state, cannot: alternative.cannot || [], clarify: false, undo: false, style: alternative.style || {} });
         }
     }
     Object.defineProperty(testCase, 'cachedOutcomes', { value: outcomes, enumerable: false });
@@ -319,6 +324,7 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
         const failures = [
             ...scored.reasons,
             ...(edit.clarification ? ['asked instead'] : []),
+            ...(edit.undo ? ['undid instead'] : []),
             ...checkFailures,
             ...extraCannot.map((reason) => `unexpected cannot_do(${reason})`),
             ...scored.collateral.map((entry) => `collateral: ${entry}`),
@@ -330,6 +336,7 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
     for (const outcome of expectedOutcomes(testCase, fixture, presets)) {
         const failures = [];
         if (outcome.clarify !== Boolean(edit.clarification)) failures.push(outcome.clarify ? 'did not ask' : 'asked instead');
+        if (Boolean(outcome.undo) !== Boolean(edit.undo)) failures.push(outcome.undo ? 'did not undo' : 'undid instead');
         for (const reason of outcome.cannot) if (!reasons.includes(reason)) failures.push(`missing cannot_do(${reason})`);
         for (const reason of reasons) if (!outcome.cannot.includes(reason) && !optional.has(reason)) failures.push(`unexpected cannot_do(${reason})`);
         failures.push(...stateDiffs(state, outcome.state, outcome.style));

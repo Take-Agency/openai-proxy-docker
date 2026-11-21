@@ -66,7 +66,7 @@ for (const invalid of golden.invalid) {
 test('snapshot text matches the app format', () => {
     const lines = snapshotText(fixture).split('\n');
     assert.equal(lines[0], 'rev 7 · duration 10.20s · focus c2');
-    assert.equal(lines[3], 'c2 2.60-4.10 | 0 how 1 to 2 like 3 grow 4 your 5 [channel]');
+    assert.equal(lines[3], 'c2 2.60-4.10 | 0 how 1 to 2 like 3 grow 4 your 5 channel | highlight 5');
     assert.match(lines.at(-1), /^style \{"caption_bg":"none","case":"none","emphasis":"#00E5FF",/);
 });
 
