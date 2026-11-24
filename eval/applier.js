@@ -273,7 +273,8 @@ function droppedWords(words, text) {
 }
 
 // "Number 1:" replaced with "Number one" by an expect without the colon: the colon stays.
-const TRAILING_PUNCTUATION = /[\p{P}]+$/u;
+// Sentence marks only: "%", ")" or quotes belong to the word they're on ("50%" -> "fifty percent").
+const TRAILING_PUNCTUATION = /[.,:;!?…]+$/u;
 function keepTrailingPunctuation(actual, expect, text) {
     const mark = actual.match(TRAILING_PUNCTUATION)?.[0];
     // an edit that only changes punctuation ("views." -> "views") means it
@@ -717,7 +718,6 @@ export function validate(calls, state, presets, fonts = []) {
                 state.captions.forEach((caption, c) => caption.words.forEach((_, w) => {
                     if (isTarget(c, w)) targets.push([c, w]);
                 }));
-                if (!targets.length) errors.push(`${name}: "${args.word}" not found`);
             } else {
                 // only that word can go: an id one word off moves to the nearest occurrence in its
                 // caption, any other id is dropped
@@ -728,6 +728,9 @@ export function validate(calls, state, presets, fonts = []) {
                     if (word != null && !targets.some(([c, w]) => c === index.caption && w === word)) targets.push([index.caption, word]);
                 }
             }
+            // with or without listed occurrences: finding nothing gets the model a repair turn
+            // instead of a silent "nothing changed"
+            if (!targets.length) errors.push(`${name}: "${args.word}" not found`);
             if (targets.length > MAX_REPLACEMENTS) errors.push(`${name}: ${targets.length} matches; the limit is ${MAX_REPLACEMENTS}`);
             for (const [caption, word] of targets) {
                 touch(caption, word, name);

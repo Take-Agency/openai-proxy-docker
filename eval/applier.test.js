@@ -122,9 +122,22 @@ test('a replacement keeps trailing punctuation its expect left out', async () =>
     assert.equal(captionText(run(call('Number 1', 'Number one'), p2, presets, FONTS).state.captions[2]), 'Number one: hooks, hooks, hooks!');
     // the model's own punctuation wins
     assert.equal(captionText(run(call('Number 1:', 'Number one'), p2, presets, FONTS).state.captions[2]), 'Number one hooks, hooks, hooks!');
-    assert.equal(captionText(run(call('Number 1', 'Number one -'), p2, presets, FONTS).state.captions[2]), 'Number one - hooks, hooks, hooks!');
+    // only sentence marks (.,:;!?…) count, like the app: a dash doesn't stop the colon coming back
+    assert.equal(captionText(run(call('Number 1', 'Number one -'), p2, presets, FONTS).state.captions[2]), 'Number one -: hooks, hooks, hooks!');
     // removing the punctuation itself is left alone
     assert.equal(captionText(run(call('Number 1', 'Number 1'), p2, presets, FONTS).state.captions[2]), 'Number 1 hooks, hooks, hooks!');
+});
+
+test('a replacement does not re-add a symbol that belongs to the word (app testReplacementDoesNotReaddAWordsOwnSymbol)', () => {
+    const percent = { ...structuredClone(fixture), captions: [{ start: 0, end: 1, emphasis: null, words: [{ text: '50%', start: 0, end: 1, src: 'c0.0' }] }] };
+    const { state, errors } = run([{ name: 'replace_words', arguments: { from: 'c0.0', to: 'c0.0', expect: '50', text: 'fifty percent' } }], percent, presets);
+    assert.deepEqual(errors, []);
+    assert.equal(captionText(state.captions[0]), 'fifty percent');
+});
+
+test('delete_all with listed occurrences that miss the word is an error (app testDeleteAllWithOccurrencesThatDontMatchIsRejected)', () => {
+    const { errors } = run([{ name: 'delete_all', arguments: { word: 'um', occurrences: [{ id: 'c2.0', expect: 'um' }] } }], fixture, presets);
+    assert.ok(errors.some((error) => error.includes('"um" not found')), errors.join(' | '));
 });
 
 test('the looks line matches the app (InstructionEditTests.testSnapshotTextFormat)', () => {
