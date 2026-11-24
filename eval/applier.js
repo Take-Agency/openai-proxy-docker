@@ -279,7 +279,8 @@ function keepTrailingPunctuation(actual, expect, text) {
     const mark = actual.match(TRAILING_PUNCTUATION)?.[0];
     // an edit that only changes punctuation ("views." -> "views") means it
     if (normalized(text) === normalized(actual)) return text;
-    if (!mark || TRAILING_PUNCTUATION.test(expect.trim()) || TRAILING_PUNCTUATION.test(text.trim())) return text;
+    // the model ended its text with a dash ("Number one -"): its own mark, so don't add ours
+    if (!mark || TRAILING_PUNCTUATION.test(expect.trim()) || TRAILING_PUNCTUATION.test(text.trim()) || /[-–—]$/u.test(text.trim())) return text;
     return `${text.trim()}${mark}`;
 }
 
