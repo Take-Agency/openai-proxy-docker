@@ -126,7 +126,7 @@ export function appToolsPrompt({ open, comingSoon, state }) {
     const lines = ['', '', "The app's own tools:"];
     if (open.length) {
         const asks = open.map((name) => APP_TOOL_CATALOG[name].asks).filter(Boolean).join(', ');
-        lines.push(`20. Besides captions, the app can ${joinWords(labels(open))}. When the user asks for one of those (${asks}) or asks whether the app can do it, call open_tool with that tool and a short message saying what it does, never cannot_do for it. It changes no captions.`);
+        lines.push(`20. Besides captions, the app can ${joinWords(labels(open))}. When the user asks for one of those (${asks}) or asks whether the app can do it, call open_tool with that tool, never cannot_do for it. Its message is your reply to the user: answer them in a full sentence ("Yes, I can …"), say what the tool does for this video, and tell them to tap the button, by its name (${open.map((name) => `${name}: "${APP_TOOL_CATALOG[name].button}"`).join(', ')}). Never just a label like "Remove silent pauses from the video." It changes no captions.`);
     }
     if (comingSoon.length) {
         let rule = `21. ${capitalized(joinWords(labels(comingSoon)))} ${comingSoon.length === 1 ? 'is' : 'are'} coming soon: call coming_soon with that feature and a short message, never cannot_do for it.`;
@@ -137,17 +137,8 @@ export function appToolsPrompt({ open, comingSoon, state }) {
     }
     lines.push(`22. "What can you do?" gets cannot_do(other) alone, with a message that names caption edits${open.length ? ` and the app's tools: ${joinWords(labels(open))}` : ''}.`);
     if (state) {
-        let rule = `23. This video right now: silences ${state.silences_removed ? 'removed' : 'not removed'}, audio ${state.audio_cleaned ? 'cleaned up' : 'not cleaned up'}, ${state.music_added ? 'music added' : 'no music'}. When the user asks to remove silences that are already removed or clean up audio that already is, say so with cannot_do(other) instead of open_tool.`;
-        // the undo tools only make sense once their tool has been used
-        const undos = [
-            ['restore_silences', 'silences are removed'],
-            ['undo_cleanup_audio', 'audio is cleaned up'],
-            ['remove_music', 'music is added'],
-        ].filter(([name]) => open.includes(name));
-        if (undos.length) {
-            rule += ` Offer ${joinWords(undos.map(([name, when]) => `${name} only when ${when}`))}; otherwise say there's nothing to undo with cannot_do(other).`;
-        }
-        lines.push(rule);
+        // the tools that don't fit the clip were already taken out of open (resolveAppTools)
+        lines.push(`23. This video right now: silences ${state.silences_removed ? 'already removed' : 'not removed'}, audio ${state.audio_cleaned ? 'already cleaned up' : 'not cleaned up'}, ${state.music_added ? 'music added' : 'no music'}. When the user asks for something that is already done, or to undo something that wasn't done, say so in a short cannot_do(other).`);
     }
     return lines.join('\n');
 }
@@ -161,8 +152,23 @@ export function resolveAppTools(body) {
     const open = known(body.app_tools.open);
     const comingSoon = known(body.app_tools.coming_soon).filter((name) => !open.includes(name));
     const state = body.app_state ? Object.fromEntries(APP_STATE_KEYS.map((key) => [key, body.app_state[key] === true])) : null;
-    if (!open.length && !comingSoon.length) return null;
-    return { open, comingSoon, state };
+    // With the clip's state, only the tools that fit it are offered: a tool and its undo are
+    // never both available, so the model can't pick the wrong one. add_music stays either way
+    // (it also changes the music).
+    const fits = (name) => {
+        if (!state) return true;
+        switch (name) {
+        case 'remove_silences': return !state.silences_removed;
+        case 'restore_silences': return state.silences_removed;
+        case 'cleanup_audio': return !state.audio_cleaned;
+        case 'undo_cleanup_audio': return state.audio_cleaned;
+        case 'remove_music': return state.music_added;
+        default: return true;
+        }
+    };
+    const offered = open.filter(fits);
+    if (!offered.length && !comingSoon.length) return null;
+    return { open: offered, comingSoon, state };
 }
 
 const TAGS = ['presets', 'fonts', 'snapshot', 'previous', 'instruction', 'clarification', 'validation_errors'];

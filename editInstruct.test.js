@@ -265,9 +265,10 @@ test('a build only gets the tools it lists, and the clip state it sends', async 
         assert.equal(status, 200);
         const { instructions, tools } = calls[0].request;
         const openTool = tools.find((entry) => entry.name === 'open_tool');
-        assert.deepEqual(openTool.parameters.properties.tool.enum, ['remove_silences', 'restore_silences']);
+        // silences are removed, so only their undo is offered
+        assert.deepEqual(openTool.parameters.properties.tool.enum, ['restore_silences']);
         assert.deepEqual(tools.find((entry) => entry.name === 'coming_soon').parameters.properties.feature.enum, ['ai_zooms']);
-        assert.match(instructions, /silences removed, audio not cleaned up, no music/);
+        assert.match(instructions, /silences already removed, audio not cleaned up, no music/);
         assert.doesNotMatch(instructions, /b-roll|clean up audio and/);
         assert.equal((await post(validBody({ app_tools: { open: 'remove_silences' } }))).status, 400);
         assert.equal((await post(validBody({ app_tools: { open: [] }, app_state: { silences_removed: 'yes' } }))).status, 400);
@@ -275,6 +276,10 @@ test('a build only gets the tools it lists, and the clip state it sends', async 
     // a feature that shipped moves to open; listing it in both keeps it open
     assert.deepEqual(resolveAppTools({ app_tools: { open: ['ai_zooms'], coming_soon: ['ai_zooms', 'ai_b_roll'] } }), { open: ['ai_zooms'], comingSoon: ['ai_b_roll'], state: null });
     assert.equal(resolveAppTools({ app_tools: { open: ['teleport'] } }), null);
+    // a tool and its undo are never offered together once the state is known
+    const all = { open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio', 'add_music', 'remove_music'] };
+    assert.deepEqual(resolveAppTools({ app_tools: all, app_state: { silences_removed: false, audio_cleaned: true, music_added: false } }).open, ['remove_silences', 'undo_cleanup_audio', 'add_music']);
+    assert.deepEqual(resolveAppTools({ app_tools: all }).open, all.open);
 });
 
 test('a malformed previous is a 400', async () => {
