@@ -263,12 +263,15 @@ test('a build only gets the tools it lists, and the clip state it sends', async 
             app_state: { silences_removed: true, audio_cleaned: false },
         }));
         assert.equal(status, 200);
-        const { instructions, tools } = calls[0].request;
+        const { instructions, tools, input } = calls[0].request;
         const openTool = tools.find((entry) => entry.name === 'open_tool');
-        // silences are removed, so only their undo is offered
-        assert.deepEqual(openTool.parameters.properties.tool.enum, ['restore_silences']);
+        // the same tools whatever the clip's state; the state is data next to the captions
+        assert.deepEqual(openTool.parameters.properties.tool.enum, ['remove_silences', 'restore_silences']);
         assert.deepEqual(tools.find((entry) => entry.name === 'coming_soon').parameters.properties.feature.enum, ['ai_zooms']);
-        assert.match(instructions, /the silent pauses have been cut out \(Restore Silences puts them back\); the audio is the original recording; it has no music\./);
+        const user = input.find((item) => item.role === 'user').content;
+        assert.match(user, /<clip>\nSilences: removed \(cut out by Remove Silences\)\nAudio: the original recording\nBackground music: none\n<\/clip>/);
+        // the rules are the same for every clip: nothing about this clip's state in them
+        assert.doesNotMatch(instructions, /Silences: removed|cut out by Remove Silences/);
         assert.doesNotMatch(instructions, /b-roll|clean up audio and/);
         assert.equal((await post(validBody({ app_tools: { open: 'remove_silences' } }))).status, 400);
         assert.equal((await post(validBody({ app_tools: { open: [] }, app_state: { silences_removed: 'yes' } }))).status, 400);
@@ -276,16 +279,16 @@ test('a build only gets the tools it lists, and the clip state it sends', async 
     // a feature that shipped moves to open; listing it in both keeps it open
     assert.deepEqual(resolveAppTools({ app_tools: { open: ['ai_zooms'], coming_soon: ['ai_zooms', 'ai_b_roll'] } }), { open: ['ai_zooms'], comingSoon: ['ai_b_roll'], state: null, settings: [] });
     assert.equal(resolveAppTools({ app_tools: { open: ['teleport'] } }), null);
-    // a tool and its undo are never offered together once the state is known
+    // the state never changes the tools or the rules
     const all = { open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio', 'add_music', 'remove_music'] };
-    assert.deepEqual(resolveAppTools({ app_tools: all, app_state: { silences_removed: false, audio_cleaned: true, music_added: false } }).open, ['remove_silences', 'undo_cleanup_audio', 'add_music']);
-    assert.deepEqual(resolveAppTools({ app_tools: all }).open, all.open);
+    const cleaned = resolveAppTools({ app_tools: all, app_state: { silences_removed: false, audio_cleaned: true, music_added: false } });
+    assert.deepEqual(cleaned.open, all.open);
+    assert.equal(appToolsPrompt(cleaned), appToolsPrompt(resolveAppTools({ app_tools: all })));
 });
 
-test('a build that applies settings gets their fields, the redo tool and rule 24', async () => {
+test('a build that applies settings gets their fields and rule 24', async () => {
     const withSettings = { open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio'], settings: ['remove_silences', 'cleanup_audio'] };
     const removed = resolveAppTools({ app_tools: withSettings, app_state: { silences_removed: true, audio_cleaned: true, music_added: false } });
-    // with settings, running again is a redo, so the tool stays next to its undo
     assert.deepEqual(removed.open, ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio']);
     const openTool = appToolDefinitions(removed).find((entry) => entry.name === 'open_tool');
     assert.deepEqual(Object.keys(openTool.parameters.properties).sort(), ['aggressiveness', 'breath_control', 'mastering', 'message', 'min_gap_ms', 'mouth_noises', 'padding_ms', 'preset', 'tool']);
@@ -294,9 +297,9 @@ test('a build that applies settings gets their fields, the redo tool and rule 24
     const run = { name: 'open_tool', arguments: { tool: 'remove_silences', message: 'Yes.', min_gap_ms: 300, padding_ms: 120, aggressiveness: null, preset: null, breath_control: null, mouth_noises: null, mastering: null } };
     assert.equal(validateToolCalls([run], { appTools: removed }).length, 1);
     assert.throws(() => validateToolCalls([{ name: 'open_tool', arguments: { tool: 'remove_silences', message: 'Yes.' } }], { appTools: removed }), /bad_arguments/);
-    // a build without settings keeps the old shape and the old state filter
+    // a build without settings keeps the old shape
     const plain = resolveAppTools({ app_tools: { open: withSettings.open }, app_state: { silences_removed: true, audio_cleaned: false } });
-    assert.deepEqual(plain.open, ['restore_silences', 'cleanup_audio']);
+    assert.deepEqual(plain.open, withSettings.open);
     assert.deepEqual(Object.keys(appToolDefinitions(plain).find((entry) => entry.name === 'open_tool').parameters.properties).sort(), ['message', 'tool']);
     assert.doesNotMatch(appToolsPrompt(plain), /24\./);
 });

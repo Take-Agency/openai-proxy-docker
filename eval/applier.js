@@ -354,7 +354,34 @@ const CATEGORY = {
 
 // Returns { errors: [] , edit } like EditValidator.validate. `presets` is the catalog array.
 // `fonts` is the font catalog (array of names); without it set_style font is rejected.
-export function validate(calls, state, presets, fonts = []) {
+// A tool that doesn't fit what the app's tools have already done to the clip (app_state). Same
+// wording as the app's EditValidator, which rejects these so the model gets a repair turn.
+export function appToolStateError(args, appState) {
+    if (!appState) return null;
+    const changed = (value, fallback) => value !== null && value !== undefined && value !== fallback;
+    switch (args.tool) {
+    case 'remove_silences':
+        if (appState.silences_removed && !(changed(args.min_gap_ms, 100) || changed(args.padding_ms, 60) || changed(args.aggressiveness, 0.5))) {
+            return 'open_tool remove_silences: silences are already removed (see <clip>). To bring the pauses back call restore_silences; to cut them differently pass settings that differ from the defaults; if the user just asked again, say they already are with cannot_do(other).';
+        }
+        return null;
+    case 'restore_silences':
+        return appState.silences_removed ? null : 'open_tool restore_silences: no silences were removed from this video (see <clip>), so there is nothing to bring back; say so with cannot_do(other).';
+    case 'cleanup_audio':
+        if (appState.audio_cleaned && ['preset', 'breath_control', 'mouth_noises', 'mastering'].every((key) => args[key] === null || args[key] === undefined)) {
+            return 'open_tool cleanup_audio: the audio is already cleaned up (see <clip>). To change the treatment pass new settings; to go back to the original call undo_cleanup_audio; if the user just asked again, say it already is with cannot_do(other).';
+        }
+        return null;
+    case 'undo_cleanup_audio':
+        return appState.audio_cleaned ? null : "open_tool undo_cleanup_audio: the audio hasn't been cleaned up (see <clip>), so there is nothing to undo; say so with cannot_do(other).";
+    case 'remove_music':
+        return appState.music_added ? null : 'open_tool remove_music: this video has no background music (see <clip>); say so with cannot_do(other).';
+    default:
+        return null;
+    }
+}
+
+export function validate(calls, state, presets, fonts = [], appState = null) {
     if (!calls.length) return { errors: ['no tool calls'] };
     if (calls.length > MAX_OPERATIONS) return { errors: [`${calls.length} edits in one batch; the limit is ${MAX_OPERATIONS}`] };
 
@@ -800,10 +827,13 @@ export function validate(calls, state, presets, fonts = []) {
             if (!args.message.trim()) errors.push(`${name}: message is empty`);
             edit.cannotDo.push({ reason: args.reason, message: args.message, suggestion: args.suggestion ?? null });
             break;
-        case 'open_tool':
+        case 'open_tool': {
             if (!args.message.trim()) errors.push(`${name}: message is empty`);
+            const stateError = appToolStateError(args, appState);
+            if (stateError) errors.push(stateError);
             edit.openTools.push(args.tool);
             break;
+        }
         case 'coming_soon':
             if (!args.message.trim()) errors.push(`${name}: message is empty`);
             edit.comingSoon.push(args.feature);
@@ -1140,8 +1170,8 @@ export function apply(edit, original) {
 }
 
 // Validate and apply. Returns { errors } or { state, edit }.
-export function run(calls, state, presets, fonts = []) {
-    const { errors, edit } = validate(calls, state, presets, fonts);
+export function run(calls, state, presets, fonts = [], appState = null) {
+    const { errors, edit } = validate(calls, state, presets, fonts, appState);
     if (errors.length) return { errors };
     return { errors: [], edit, state: apply(edit, state) };
 }

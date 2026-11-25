@@ -349,7 +349,7 @@ async function main() {
             if (testCase.history) body.history = testCase.history;
             const { response, request } = await send(body, { caseId: testCase.id, run: runIndex, repair: false });
             const calls = response.json.tool_calls || [];
-            let result = response.status === 200 ? run(calls, fixture, presets) : { errors: [`http ${response.status}`] };
+            let result = response.status === 200 ? run(calls, fixture, presets, [], body.app_state) : { errors: [`http ${response.status}`] };
             request.validatorErrors = response.status === 200 ? result.errors : [];
             const validFirst = response.status === 200 && result.errors.length === 0;
             let finalCalls = calls;
@@ -358,7 +358,7 @@ async function main() {
                 const repaired = await send(repairBody, { caseId: testCase.id, run: runIndex, repair: true });
                 if (repaired.response.status === 200) {
                     finalCalls = repaired.response.json.tool_calls || [];
-                    result = run(finalCalls, fixture, presets);
+                    result = run(finalCalls, fixture, presets, [], body.app_state);
                     repaired.request.validatorErrors = result.errors;
                 }
             }
