@@ -197,13 +197,36 @@ export const LEGACY_APP_TOOLS = {
     comingSoon: ['remove_filler', 'ai_zooms', 'ai_b_roll'],
 };
 
-export function appToolDefinitions({ open, comingSoon }) {
+// Settings a build can apply itself (app_tools.settings), so its button runs the tool at once
+// instead of opening the tool's screen. Null leaves a setting at the app's default; each set only
+// applies to its own tool and is null for every other.
+const SILENCE_SETTINGS = {
+    min_gap_ms: { type: ['integer', 'null'], description: 'remove_silences only: the shortest pause that gets cut, 50-500 ms (default 100). Longer means only long pauses go ("only cut the long pauses": 300-500).' },
+    padding_ms: { type: ['integer', 'null'], description: 'remove_silences only: how much of each pause to keep around speech, 0-500 ms (default 60). More keeps it natural and less rushed ("keep it natural": 120-200; "tight", "fast-paced": 0-40).' },
+    aggressiveness: { type: ['number', 'null'], description: 'remove_silences only: how quiet a moment must be to count as silence, 0.1-0.9 (default 0.5). Higher cuts more, including quiet breaths; lower keeps soft speech safe.' },
+};
+const CLEANUP_SETTINGS = {
+    preset: { type: ['string', 'null'], enum: ['studio_sound', 'remove_noise', null], description: 'cleanup_audio only: studio_sound polishes the voice itself to studio quality ("sound professional", "like a podcast"); remove_noise clears steady background noise (a fan, hum, traffic, wind) and rebalances the audio. Default studio_sound.' },
+    breath_control: { type: ['boolean', 'null'], description: 'cleanup_audio only: soften loud breath sounds (default on).' },
+    mouth_noises: { type: ['boolean', 'null'], description: 'cleanup_audio only: remove clicks and smacks (default on).' },
+    mastering: { type: ['boolean', 'null'], description: 'cleanup_audio only: even out overall loudness (default on).' },
+};
+
+export function appToolDefinitions({ open, comingSoon, settings = [] }) {
     const describe = (names) => names.map((name) => `${name} ${APP_TOOL_CATALOG[name].does}.`).join(' ');
     const definitions = [];
     if (open.length) {
-        definitions.push(tool('open_tool', `Offer one of the app's own tools. The app shows message as your reply, with a button under it that opens the tool, and the user confirms there. ${describe(open)} message answers the user in a full sentence and names the button, e.g. "Yes, I can put back the pauses that were removed. Tap ${APP_TOOL_CATALOG[open[0]].button} below." May be combined with edits.`, {
+        const silences = settings.includes('remove_silences') && open.includes('remove_silences');
+        const cleanup = settings.includes('cleanup_audio') && open.includes('cleanup_audio');
+        const runs = [silences && 'remove_silences', cleanup && 'cleanup_audio'].filter(Boolean);
+        const runNote = runs.length
+            ? ` For ${runs.join(' and ')} the button runs the tool at once with the settings you pass (the user taps it to confirm), so pick them from what the user asked and say them in plain words in message ("I'll cut pauses longer than 0.3 seconds and keep a little room around each sentence"); the app lists them under it.`
+            : '';
+        definitions.push(tool('open_tool', `Offer one of the app's own tools. The app shows message as your reply, with a button under it that opens the tool, and the user confirms there. ${describe(open)} message answers the user in a full sentence and names the button, e.g. "Yes, I can put back the pauses that were removed. Tap ${APP_TOOL_CATALOG[open[0]].button} below."${runNote} May be combined with edits.`, {
             tool: { type: 'string', enum: open },
             message: { type: 'string' },
+            ...(silences ? SILENCE_SETTINGS : {}),
+            ...(cleanup ? CLEANUP_SETTINGS : {}),
         }));
     }
     if (comingSoon.length) {
@@ -219,6 +242,7 @@ export function appToolDefinitions({ open, comingSoon }) {
 export const APP_TOOLS = appToolDefinitions({
     open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio', 'add_music', 'remove_music'],
     comingSoon: ['remove_filler', 'ai_zooms', 'ai_b_roll'],
+    settings: ['remove_silences', 'cleanup_audio'],
 });
 export const APP_TOOL_NAMES = APP_TOOLS.map((entry) => entry.name);
 

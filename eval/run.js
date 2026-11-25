@@ -32,6 +32,8 @@ import { EDIT_TOOLS, APP_TOOLS } from '../editInstructTools.js';
 const EVAL_APP_TOOLS = {
     open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio', 'add_music', 'remove_music'],
     coming_soon: ['remove_filler', 'ai_zooms', 'ai_b_roll'],
+    // the tools whose settings the app applies itself (their button runs the tool at once)
+    settings: ['remove_silences', 'cleanup_audio'],
 };
 
 const presets = JSON.parse(readFileSync(new URL('./presets.json', import.meta.url), 'utf8'));
