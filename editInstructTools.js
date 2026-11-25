@@ -181,7 +181,9 @@ export const APP_TOOL_CATALOG = {
     remove_silences: { label: 'remove silences', does: 'cuts the silent pauses out of the video and its audio', asks: '"remove the pauses", "cut the dead air"' },
     restore_silences: { label: 'restore silences', does: 'puts back the pauses that removing silences cut', asks: '"un-remove the silences", "put the pauses back"' },
     cleanup_audio: { label: 'clean up audio', does: 'removes background noise and makes the voice clearer', asks: '"get rid of the background noise"' },
-    add_music: { label: 'add music', does: 'adds background music', asks: '"add a song"' },
+    undo_cleanup_audio: { label: 'undo audio cleanup', does: 'puts back the audio from before it was cleaned up', asks: '"undo the audio cleanup", "the cleaned audio sounds weird"' },
+    add_music: { label: 'add music', does: 'adds background music, or changes the music already added', asks: '"add a song", "change the music"' },
+    remove_music: { label: 'remove music', does: 'removes the background music', asks: '"remove the music", "no music"' },
     remove_filler: { label: 'cutting filler words out of the audio', does: 'cuts filler words (um, uh) out of the audio' },
     ai_zooms: { label: 'automatic zoom-ins', does: 'adds automatic zoom-ins' },
     ai_b_roll: { label: 'b-roll', does: 'adds b-roll footage' },
@@ -213,7 +215,7 @@ export function appToolDefinitions({ open, comingSoon }) {
 
 // Every catalog entry offered, for the schema test and the argument-key re-check.
 export const APP_TOOLS = appToolDefinitions({
-    open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'add_music'],
+    open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio', 'add_music', 'remove_music'],
     comingSoon: ['remove_filler', 'ai_zooms', 'ai_b_roll'],
 });
 export const APP_TOOL_NAMES = APP_TOOLS.map((entry) => entry.name);

@@ -138,8 +138,14 @@ export function appToolsPrompt({ open, comingSoon, state }) {
     lines.push(`22. "What can you do?" gets cannot_do(other) alone, with a message that names caption edits${open.length ? ` and the app's tools: ${joinWords(labels(open))}` : ''}.`);
     if (state) {
         let rule = `23. This video right now: silences ${state.silences_removed ? 'removed' : 'not removed'}, audio ${state.audio_cleaned ? 'cleaned up' : 'not cleaned up'}, ${state.music_added ? 'music added' : 'no music'}. When the user asks to remove silences that are already removed or clean up audio that already is, say so with cannot_do(other) instead of open_tool.`;
-        if (open.includes('restore_silences')) {
-            rule += ' Offer restore_silences only when silences are removed; when none are, say so with cannot_do(other).';
+        // the undo tools only make sense once their tool has been used
+        const undos = [
+            ['restore_silences', 'silences are removed'],
+            ['undo_cleanup_audio', 'audio is cleaned up'],
+            ['remove_music', 'music is added'],
+        ].filter(([name]) => open.includes(name));
+        if (undos.length) {
+            rule += ` Offer ${joinWords(undos.map(([name, when]) => `${name} only when ${when}`))}; otherwise say there's nothing to undo with cannot_do(other).`;
         }
         lines.push(rule);
     }

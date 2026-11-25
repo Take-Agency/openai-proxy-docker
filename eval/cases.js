@@ -347,4 +347,7 @@ export const CASES = [
     { id: 126, group: 'apptools', appState: { silences_removed: true }, instruction: 'put the pauses back in', accept: [{ calls: [], open: ['restore_silences'] }] },
     { id: 127, group: 'apptools', appState: { silences_removed: true }, instruction: 'remove the silences', accept: [{ calls: [], cannot: ['other'] }, { calls: [], open: ['restore_silences'] }] },
     { id: 128, group: 'apptools', instruction: 'bring back the silences', accept: [{ calls: [], cannot: ['other'] }] },
+    { id: 129, group: 'apptools', appState: { audio_cleaned: true }, instruction: 'undo the audio cleanup', accept: [{ calls: [], open: ['undo_cleanup_audio'] }] },
+    { id: 130, group: 'apptools', appState: { music_added: true }, instruction: 'remove the background music', accept: [{ calls: [], open: ['remove_music'] }] },
+    { id: 131, group: 'apptools', instruction: 'remove the music', accept: [{ calls: [], cannot: ['other'] }] },
 ];

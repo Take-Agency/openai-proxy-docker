@@ -30,7 +30,7 @@ import { EDIT_TOOLS, APP_TOOLS } from '../editInstructTools.js';
 
 // The tools 4.0 (6) lists: what the app can open, and the waitlists.
 const EVAL_APP_TOOLS = {
-    open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'add_music'],
+    open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio', 'add_music', 'remove_music'],
     coming_soon: ['remove_filler', 'ai_zooms', 'ai_b_roll'],
 };
 
