@@ -126,7 +126,7 @@ export function appToolsPrompt({ open, comingSoon, state }) {
     const lines = ['', '', "The app's own tools:"];
     if (open.length) {
         const asks = open.map((name) => APP_TOOL_CATALOG[name].asks).filter(Boolean).join(', ');
-        lines.push(`20. Besides captions, the app can ${joinWords(labels(open))}. When the user asks for one of those (${asks}) or asks whether the app can do it, call open_tool with that tool and a short message saying what it does, never cannot_do for it. It changes no captions.`);
+        lines.push(`20. Besides captions, the app can ${joinWords(labels(open))}. When the user asks for one of those (${asks}) or asks whether the app can do it, call open_tool with that tool, never cannot_do for it. Its message is your reply to the user: answer them in a full sentence ("Yes, I can …"), say what the tool does for this video, and tell them to tap the button, by its name (${open.map((name) => `${name}: "${APP_TOOL_CATALOG[name].button}"`).join(', ')}). Never just a label like "Remove silent pauses from the video." It changes no captions.`);
     }
     if (comingSoon.length) {
         let rule = `21. ${capitalized(joinWords(labels(comingSoon)))} ${comingSoon.length === 1 ? 'is' : 'are'} coming soon: call coming_soon with that feature and a short message, never cannot_do for it.`;

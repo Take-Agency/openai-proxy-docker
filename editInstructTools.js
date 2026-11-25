@@ -178,12 +178,13 @@ export const EDIT_TOOLS = [
 // it; older builds never see it, and a feature that ships moves from a build's coming_soon list
 // to its open list without breaking the builds that still have the waitlist.
 export const APP_TOOL_CATALOG = {
-    remove_silences: { label: 'remove silences', does: 'cuts the silent pauses out of the video and its audio', asks: '"remove the pauses", "cut the dead air"' },
-    restore_silences: { label: 'restore silences', does: 'puts back the pauses that removing silences cut', asks: '"un-remove the silences", "put the pauses back"' },
-    cleanup_audio: { label: 'clean up audio', does: 'removes background noise and makes the voice clearer', asks: '"get rid of the background noise"' },
-    undo_cleanup_audio: { label: 'undo audio cleanup', does: 'puts back the audio from before it was cleaned up', asks: '"undo the audio cleanup", "the cleaned audio sounds weird"' },
-    add_music: { label: 'add music', does: 'adds background music, or changes the music already added', asks: '"add a song", "change the music"' },
-    remove_music: { label: 'remove music', does: 'removes the background music', asks: '"remove the music", "no music"' },
+    // button: the title the app shows on the button (the Tools tab's names, not translated)
+    remove_silences: { label: 'remove silences', button: 'Remove Silences', does: 'cuts the silent pauses out of the video and its audio', asks: '"remove the pauses", "cut the dead air"' },
+    restore_silences: { label: 'restore silences', button: 'Restore Silences', does: 'puts back the pauses that removing silences cut', asks: '"un-remove the silences", "put the pauses back"' },
+    cleanup_audio: { label: 'clean up audio', button: 'Cleanup Audio', does: 'removes background noise and makes the voice clearer', asks: '"get rid of the background noise"' },
+    undo_cleanup_audio: { label: 'undo audio cleanup', button: 'Undo Audio Cleanup', does: 'puts back the audio from before it was cleaned up', asks: '"undo the audio cleanup", "the cleaned audio sounds weird"' },
+    add_music: { label: 'add music', button: 'Add Music', does: 'adds background music, or changes the music already added', asks: '"add a song", "change the music"' },
+    remove_music: { label: 'remove music', button: 'Remove Music', does: 'removes the background music', asks: '"remove the music", "no music"' },
     remove_filler: { label: 'cutting filler words out of the audio', does: 'cuts filler words (um, uh) out of the audio' },
     ai_zooms: { label: 'automatic zoom-ins', does: 'adds automatic zoom-ins' },
     ai_b_roll: { label: 'b-roll', does: 'adds b-roll footage' },
@@ -199,7 +200,7 @@ export function appToolDefinitions({ open, comingSoon }) {
     const describe = (names) => names.map((name) => `${name} ${APP_TOOL_CATALOG[name].does}.`).join(' ');
     const definitions = [];
     if (open.length) {
-        definitions.push(tool('open_tool', `Offer one of the app's own tools. The app shows message with a button that opens the tool, and the user confirms there. ${describe(open)} May be combined with edits.`, {
+        definitions.push(tool('open_tool', `Offer one of the app's own tools. The app shows message as your reply, with a button under it that opens the tool, and the user confirms there. ${describe(open)} message answers the user in a full sentence and names the button, e.g. "Yes, I can put back the pauses that were removed. Tap ${APP_TOOL_CATALOG[open[0]].button} below." May be combined with edits.`, {
             tool: { type: 'string', enum: open },
             message: { type: 'string' },
         }));
