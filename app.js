@@ -9,6 +9,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createHinglishFeedbackRouter } from './hinglishFeedback.js';
 import { createHindiConvertRouter } from './hindiConvert.js';
 import { createEditInstructRouter } from './editInstruct.js';
+import { createAIEditReportRouter } from './aiEditReport.js';
 
 const allowedTargets = [
     'https://api.openai.com/',
@@ -139,6 +140,10 @@ app.use(createHindiConvertRouter({ openaiApiKey: hindiConvertApiKey }));
 // Instruction-based caption editing. Mounted here for the same reasons as /hindi/convert: its own
 // 64kb body cap, and the passthrough below would 403 its models and log full request bodies.
 app.use(createEditInstructRouter({ openaiApiKey: editInstructApiKey }));
+
+// AI Edit "Report a problem": the last few messages of the conversation and the captions involved,
+// stored in the feedback bucket. Its own 96kb body cap, so it's mounted before the global parser.
+app.use(createAIEditReportRouter({ s3Client: feedbackS3Client, spacesBucket: feedbackBucket }));
 
 // parse json bodies
 app.use(express.json({ limit: '1000mb' }));
