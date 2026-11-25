@@ -343,6 +343,8 @@ async function main() {
             if (testCase.clarification) body.clarification = testCase.clarification;
             // a follow-up: the previous instruction, its calls and whether it's still applied
             if (testCase.previous) body.previous = testCase.previous;
+            // the conversation before this instruction, as the app sends it
+            if (testCase.history) body.history = testCase.history;
             const { response, request } = await send(body, { caseId: testCase.id, run: runIndex, repair: false });
             const calls = response.json.tool_calls || [];
             let result = response.status === 200 ? run(calls, fixture, presets) : { errors: [`http ${response.status}`] };
