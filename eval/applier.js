@@ -159,7 +159,7 @@ export const SCHEMAS = {
     save_style: { name: 'string' },
     cannot_do: { reason: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'], message: 'string', suggestion: 'string?' },
     // the app's own tools (builds that send app_tools): a button in the reply, no caption change
-    open_tool: { tool: ['remove_silences', 'cleanup_audio', 'add_music'], message: 'string' },
+    open_tool: { tool: ['remove_silences', 'restore_silences', 'cleanup_audio', 'undo_cleanup_audio', 'add_music', 'remove_music'], message: 'string' },
     coming_soon: { feature: ['remove_filler', 'ai_zooms', 'ai_b_roll'], message: 'string' },
 };
 export const TOOL_NAMES = Object.keys(SCHEMAS);

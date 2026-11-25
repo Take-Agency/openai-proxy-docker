@@ -149,10 +149,11 @@ export const CASES = [
     { id: 46, group: 'abstain', instruction: 'add emojis', accept: [{ calls: [], cannot: ['emoji'] }] },
     {
         id: 47, group: 'abstain', instruction: 'remove the ums from the audio too',
-        // "the ums": um alone, or every filler sound
+        // "the ums": um alone, or every filler sound; cutting them from the audio is a waitlist
+        // (coming_soon) since the app's tools are offered (proxy #23)
         accept: [
-            { calls: [['delete_words', { words: [{ id: 'c1.0', expect: 'um' }, { id: 'c3.1', expect: 'uh' }] }]], cannot: ['cut_audio'] },
-            { calls: [['delete_words', { words: [{ id: 'c1.0', expect: 'um' }] }]], cannot: ['cut_audio'] },
+            { calls: [['delete_words', { words: [{ id: 'c1.0', expect: 'um' }, { id: 'c3.1', expect: 'uh' }] }]], soon: ['remove_filler'] },
+            { calls: [['delete_words', { words: [{ id: 'c1.0', expect: 'um' }] }]], soon: ['remove_filler'] },
         ],
     },
     { id: 48, group: 'abstain', instruction: 'move the captions to the left', accept: [{ calls: [], cannot: ['horizontal_position'] }] },
@@ -341,4 +342,12 @@ export const CASES = [
     { id: 122, group: 'apptools', instruction: 'make the captions yellow and remove the silences', accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW }, open: ['remove_silences'] }] },
     { id: 123, group: 'apptools', instruction: 'add a sound effect when the title appears', accept: [{ calls: [], cannot: ['other'] }] },
     { id: 124, group: 'apptools', fixture: 'P3', locale: 'hi', instruction: 'वीडियो से साइलेंस हटा दो', accept: [{ calls: [], open: ['remove_silences'] }] },
+    // the clip's state (app_state): Dennis asked to "un-remove the silences" on 2026-11-25 and got "can't"
+    { id: 125, group: 'apptools', appState: { silences_removed: true }, instruction: 'un-remove the silences', accept: [{ calls: [], open: ['restore_silences'] }] },
+    { id: 126, group: 'apptools', appState: { silences_removed: true }, instruction: 'put the pauses back in', accept: [{ calls: [], open: ['restore_silences'] }] },
+    { id: 127, group: 'apptools', appState: { silences_removed: true }, instruction: 'remove the silences', accept: [{ calls: [], cannot: ['other'] }, { calls: [], open: ['restore_silences'] }] },
+    { id: 128, group: 'apptools', instruction: 'bring back the silences', accept: [{ calls: [], cannot: ['other'] }] },
+    { id: 129, group: 'apptools', appState: { audio_cleaned: true }, instruction: 'undo the audio cleanup', accept: [{ calls: [], open: ['undo_cleanup_audio'] }] },
+    { id: 130, group: 'apptools', appState: { music_added: true }, instruction: 'remove the background music', accept: [{ calls: [], open: ['remove_music'] }] },
+    { id: 131, group: 'apptools', instruction: 'remove the music', accept: [{ calls: [], cannot: ['other'] }] },
 ];
