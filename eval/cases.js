@@ -350,4 +350,22 @@ export const CASES = [
     { id: 129, group: 'apptools', appState: { audio_cleaned: true }, instruction: 'undo the audio cleanup', accept: [{ calls: [], open: ['undo_cleanup_audio'] }] },
     { id: 130, group: 'apptools', appState: { music_added: true }, instruction: 'remove the background music', accept: [{ calls: [], open: ['remove_music'] }] },
     { id: 131, group: 'apptools', instruction: 'remove the music', accept: [{ calls: [], cannot: ['other'] }] },
+    // the conversation so far (history): on device, "re-remove the silences" after restoring them
+    // got "remove what, the captions or their background?" (2026-11-25)
+    {
+        id: 132, group: 'apptools', instruction: 're-remove the silences',
+        history: [
+            'User: remove the silences',
+            'AI Edit: Yes, I can cut the silent pauses from this video. Tap Remove Silences below. [button: Remove Silences, used]',
+            'User: I think I removed silences. Can you restore it?',
+            'AI Edit: Yes, I can put the pauses back. Tap Restore Silences below. [button: Restore Silences, used]',
+        ],
+        accept: [{ calls: [], open: ['remove_silences'] }],
+    },
+    {
+        id: 133, group: 'apptools', instruction: 'do it again',
+        appState: { silences_removed: false },
+        history: ['User: cut out the pauses', 'AI Edit: Yes, I can cut the pauses out of this video. Tap Remove Silences below.'],
+        accept: [{ calls: [], open: ['remove_silences'] }],
+    },
 ];

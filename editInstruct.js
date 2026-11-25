@@ -30,6 +30,9 @@ const MAX_CLARIFICATION_CHARS = 300;
 const MAX_REPAIR_ERRORS = 20;
 const MAX_REPAIR_ERROR_CHARS = 500;
 const MAX_TOOL_CALLS = 50;
+// the conversation before this instruction, one line per message, oldest first
+const MAX_HISTORY_LINES = 12;
+const MAX_HISTORY_LINE_CHARS = 400;
 const MAX_INSERTS = 5;
 const MAX_OUTPUT_TOKENS = 4096;
 // Two attempts must fit inside the app's 15 s client timeout (worst case ~14 s).
@@ -179,7 +182,7 @@ export function resolveAppTools(body) {
     return { open: offered, comingSoon, state };
 }
 
-const TAGS = ['presets', 'fonts', 'snapshot', 'previous', 'instruction', 'clarification', 'validation_errors'];
+const TAGS = ['presets', 'fonts', 'snapshot', 'history', 'previous', 'instruction', 'clarification', 'validation_errors'];
 const TAG_PATTERN = new RegExp(`</?(${TAGS.join('|')})\\b[^>]*>`, 'gi');
 
 // Untrusted text must not be able to close its block and continue as instructions.
@@ -323,6 +326,10 @@ function validateBody(body) {
         && isNonEmptyString(clarification.choice) && clarification.choice.length <= MAX_CLARIFICATION_CHARS)) {
         return [400, { error: 'invalid_clarification' }];
     }
+    if (body.history != null && !(Array.isArray(body.history) && body.history.length <= MAX_HISTORY_LINES
+        && body.history.every((line) => isNonEmptyString(line) && line.length <= MAX_HISTORY_LINE_CHARS))) {
+        return [400, { error: 'invalid_history' }];
+    }
     if (previous != null) {
         const valid = isPlainObject(previous)
             && isNonEmptyString(previous.instruction) && previous.instruction.length <= MAX_INSTRUCTION_CHARS
@@ -344,8 +351,13 @@ function validateBody(body) {
 
 // Prompt order is cache-friendly: static instructions and tools, then the preset and font
 // catalogs (fixed per app version), then the per-request snapshot and instruction, then any repair turn.
-export function buildInput({ instruction, snapshot, presets, fonts, locale, clarification, repair, previous }) {
+export function buildInput({ instruction, snapshot, presets, fonts, locale, clarification, repair, previous, history }) {
     const userParts = [fence('snapshot', snapshot)];
+    // what was said before, so follow-ups ("again", "re-remove the silences", "do that to the rest")
+    // have their context; the snapshot is still the only source for the captions as they are now
+    if (history?.length) {
+        userParts.push(`The conversation so far, oldest first. Use it to understand what the instruction refers to; the snapshot shows the captions as they are now.\n${fence('history', history.join('\n'))}`);
+    }
     if (previous) {
         const calls = previous.tool_calls.map((call) => `${call.name} ${JSON.stringify(call.arguments)}`).join('\n') || '(none)';
         userParts.push(fence('previous', `Instruction: ${previous.instruction}\nApplied: ${previous.applied ? 'yes' : 'no'}\nYour calls:\n${calls}`));
