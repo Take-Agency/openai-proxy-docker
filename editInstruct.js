@@ -137,8 +137,16 @@ export function appToolsPrompt({ open, comingSoon, state }) {
     }
     lines.push(`22. "What can you do?" gets cannot_do(other) alone, with a message that names caption edits${open.length ? ` and the app's tools: ${joinWords(labels(open))}` : ''}.`);
     if (state) {
-        // the tools that don't fit the clip were already taken out of open (resolveAppTools)
-        lines.push(`23. This video right now: silences ${state.silences_removed ? 'already removed' : 'not removed'}, audio ${state.audio_cleaned ? 'already cleaned up' : 'not cleaned up'}, ${state.music_added ? 'music added' : 'no music'}. When the user asks for something that is already done, or to undo something that wasn't done, say so in a short cannot_do(other).`);
+        // Described by what each offered button does now, not as "already removed": the model
+        // read "already cleaned up" next to an undo as "already undone". The tools that don't fit
+        // the clip were taken out of open (resolveAppTools).
+        const button = (name) => (open.includes(name) ? ` (${APP_TOOL_CATALOG[name].button} ${APP_TOOL_CATALOG[name].now})` : '');
+        const parts = [
+            state.silences_removed ? `the silent pauses have been cut out${button('restore_silences')}` : `no pauses have been cut${button('remove_silences')}`,
+            state.audio_cleaned ? `the audio has been cleaned up${button('undo_cleanup_audio')}` : `the audio is the original recording${button('cleanup_audio')}`,
+            state.music_added ? `it has background music${button('remove_music')}${button('add_music')}` : `it has no music${open.includes('add_music') ? ' (Add Music adds some)' : ''}`,
+        ];
+        lines.push(`23. Right now in this video: ${parts.join('; ')}. Offer the button that does what the user asked. When what they ask can't apply to this video (removing music it doesn't have, bringing back pauses that were never cut), say so with cannot_do(other) and offer no other button. The message must match the button: never say something is already done over a button that does it.`);
     }
     return lines.join('\n');
 }

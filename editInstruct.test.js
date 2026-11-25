@@ -268,7 +268,7 @@ test('a build only gets the tools it lists, and the clip state it sends', async 
         // silences are removed, so only their undo is offered
         assert.deepEqual(openTool.parameters.properties.tool.enum, ['restore_silences']);
         assert.deepEqual(tools.find((entry) => entry.name === 'coming_soon').parameters.properties.feature.enum, ['ai_zooms']);
-        assert.match(instructions, /silences already removed, audio not cleaned up, no music/);
+        assert.match(instructions, /the silent pauses have been cut out \(Restore Silences puts them back\); the audio is the original recording; it has no music\./);
         assert.doesNotMatch(instructions, /b-roll|clean up audio and/);
         assert.equal((await post(validBody({ app_tools: { open: 'remove_silences' } }))).status, 400);
         assert.equal((await post(validBody({ app_tools: { open: [] }, app_state: { silences_removed: 'yes' } }))).status, 400);

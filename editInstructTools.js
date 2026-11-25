@@ -179,12 +179,13 @@ export const EDIT_TOOLS = [
 // to its open list without breaking the builds that still have the waitlist.
 export const APP_TOOL_CATALOG = {
     // button: the title the app shows on the button (the Tools tab's names, not translated)
-    remove_silences: { label: 'remove silences', button: 'Remove Silences', does: 'cuts the silent pauses out of the video and its audio', asks: '"remove the pauses", "cut the dead air"' },
-    restore_silences: { label: 'restore silences', button: 'Restore Silences', does: 'puts back the pauses that removing silences cut', asks: '"un-remove the silences", "put the pauses back"' },
-    cleanup_audio: { label: 'clean up audio', button: 'Cleanup Audio', does: 'removes background noise and makes the voice clearer', asks: '"get rid of the background noise"' },
-    undo_cleanup_audio: { label: 'undo audio cleanup', button: 'Undo Audio Cleanup', does: 'puts back the audio from before it was cleaned up', asks: '"undo the audio cleanup", "the cleaned audio sounds weird"' },
-    add_music: { label: 'add music', button: 'Add Music', does: 'adds background music, or changes the music already added', asks: '"add a song", "change the music"' },
-    remove_music: { label: 'remove music', button: 'Remove Music', does: 'removes the background music', asks: '"remove the music", "no music"' },
+    // now: what the button does for this clip, for rule 23's description of its state
+    remove_silences: { label: 'remove silences', button: 'Remove Silences', now: 'cuts them', does: 'cuts the silent pauses out of the video and its audio', asks: '"remove the pauses", "cut the dead air"' },
+    restore_silences: { label: 'restore silences', button: 'Restore Silences', now: 'puts them back', does: 'puts back the pauses that removing silences cut', asks: '"un-remove the silences", "put the pauses back"' },
+    cleanup_audio: { label: 'clean up audio', button: 'Cleanup Audio', now: 'cleans it up', does: 'removes background noise and makes the voice clearer', asks: '"get rid of the background noise"' },
+    undo_cleanup_audio: { label: 'undo audio cleanup', button: 'Undo Audio Cleanup', now: 'brings back the original recording', does: 'puts back the audio from before it was cleaned up', asks: '"undo the audio cleanup", "the cleaned audio sounds weird"' },
+    add_music: { label: 'add music', button: 'Add Music', now: 'adds or changes it', does: 'adds background music, or changes the music already added', asks: '"add a song", "change the music"' },
+    remove_music: { label: 'remove music', button: 'Remove Music', now: 'takes it out', does: 'removes the background music', asks: '"remove the music", "no music"' },
     remove_filler: { label: 'cutting filler words out of the audio', does: 'cuts filler words (um, uh) out of the audio' },
     ai_zooms: { label: 'automatic zoom-ins', does: 'adds automatic zoom-ins' },
     ai_b_roll: { label: 'b-roll', does: 'adds b-roll footage' },
