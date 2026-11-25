@@ -25,8 +25,14 @@ import { fixtureState, FONTS } from './fixtures.js';
 
 const run = (calls, state, catalog) => applyCalls(calls, state, catalog, FONTS);
 import { scoreCase } from './score.js';
-import { SYSTEM_PROMPT, APP_TOOLS_PROMPT } from '../editInstruct.js';
+import { SYSTEM_PROMPT, appToolsPrompt } from '../editInstruct.js';
 import { EDIT_TOOLS, APP_TOOLS } from '../editInstructTools.js';
+
+// The tools 4.0 (6) lists: what the app can open, and the waitlists.
+const EVAL_APP_TOOLS = {
+    open: ['remove_silences', 'restore_silences', 'cleanup_audio', 'add_music'],
+    coming_soon: ['remove_filler', 'ai_zooms', 'ai_b_roll'],
+};
 
 const presets = JSON.parse(readFileSync(new URL('./presets.json', import.meta.url), 'utf8'));
 const PRESETS = presetCatalog(presets);
@@ -174,7 +180,7 @@ function report(args, results, requests, startedAt, finishedAt = Date.now()) {
     lines.push(`# Instruction edit eval: ${args.label}`, '');
     lines.push(`- Endpoint: \`${args.url}\``);
     lines.push(`- Models answering: ${models.join(', ') || 'n/a'} · runs per case: ${args.runs} · cases: ${new Set(results.map((entry) => entry.caseId)).size}`);
-    lines.push(`- Prompt + tools hash (local files): \`${createHash('sha256').update(SYSTEM_PROMPT + APP_TOOLS_PROMPT + JSON.stringify([...EDIT_TOOLS, ...APP_TOOLS])).digest('hex').slice(0, 10)}\` · repair turn: ${args.repair ? 'on' : 'off'}`);
+    lines.push(`- Prompt + tools hash (local files): \`${createHash('sha256').update(SYSTEM_PROMPT + appToolsPrompt({ ...EVAL_APP_TOOLS, comingSoon: EVAL_APP_TOOLS.coming_soon, state: {} }) + JSON.stringify([...EDIT_TOOLS, ...APP_TOOLS])).digest('hex').slice(0, 10)}\` · repair turn: ${args.repair ? 'on' : 'off'}`);
     lines.push(`- Started ${new Date(startedAt).toISOString()}, ${requests.length} requests, ${((finishedAt - startedAt) / 60000).toFixed(1)} min`, '');
 
     lines.push('## Summary', '', '| Metric | Value | Ship bar |', '|---|---|---|');
@@ -329,8 +335,9 @@ async function main() {
                 fonts: FONTS.join('\n'),
                 revision: String(fixture.revision),
                 locale: testCase.locale || 'en',
-                // as 4.0 (6) and later send it: the app's own tools are offered
-                app_tools: true,
+                // as 4.0 (6) and later send it: the build's own tools and the clip's state
+                app_tools: EVAL_APP_TOOLS,
+                app_state: { silences_removed: false, audio_cleaned: false, music_added: false, ...testCase.appState },
             };
             // a follow-up turn: the user's answer to the model's earlier question
             if (testCase.clarification) body.clarification = testCase.clarification;

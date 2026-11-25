@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import express from 'express';
-import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, APP_TOOLS_PROMPT, languageName, cleanFontOptions, INTENT_PROMPT } from './editInstruct.js';
-import { EDIT_TOOLS, APP_TOOLS, TOOL_NAMES } from './editInstructTools.js';
+import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, appToolsPrompt, resolveAppTools, languageName, cleanFontOptions, INTENT_PROMPT } from './editInstruct.js';
+import { EDIT_TOOLS, APP_TOOLS, LEGACY_APP_TOOLS, appToolDefinitions, TOOL_NAMES } from './editInstructTools.js';
 
 const INSTALL_ID = 'test-install-0001';
 
@@ -238,8 +238,9 @@ test('the app tools are offered and accepted only when the build sends app_tools
         const { status, body } = await post(validBody({ instruction: 'remove the silences', app_tools: true }));
         assert.equal(status, 200);
         assert.deepEqual(body.tool_calls, [{ name: 'open_tool', arguments: { tool: 'remove_silences', message: 'Remove Silences cuts the pauses out of your video.' } }]);
-        assert.equal(calls[0].request.instructions, SYSTEM_PROMPT + APP_TOOLS_PROMPT);
-        assert.deepEqual(calls[0].request.tools, [...EDIT_TOOLS, ...APP_TOOLS]);
+        // app_tools: true (the first dev builds) is the original three tools and three waitlists
+        assert.equal(calls[0].request.instructions, SYSTEM_PROMPT + appToolsPrompt({ ...LEGACY_APP_TOOLS, state: null }));
+        assert.deepEqual(calls[0].request.tools, [...EDIT_TOOLS, ...appToolDefinitions(LEGACY_APP_TOOLS)]);
         // an older build: the model never sees the tools, and a stray call is rejected
         const older = await post(validBody({ instruction: 'remove the silences' }));
         assert.equal(older.status, 502);
@@ -250,6 +251,30 @@ test('the app tools are offered and accepted only when the build sends app_tools
     });
     assert.throws(() => validateToolCalls([{ name: 'coming_soon', arguments: { feature: 'ai_zooms', message: 'Soon.' } }]), /unknown_tool/);
     assert.equal(validateToolCalls([{ name: 'coming_soon', arguments: { feature: 'ai_zooms', message: 'Soon.' } }], { appTools: true }).length, 1);
+});
+
+test('a build only gets the tools it lists, and the clip state it sends', async () => {
+    const { fetch, calls } = fakeFetch(() => [call('open_tool', { tool: 'restore_silences', message: 'Tap to put the pauses back.' })]);
+    await withServer({ fetch }, async (post) => {
+        const { status } = await post(validBody({
+            instruction: 'un-remove the silences',
+            // a newer build's tool this server doesn't know yet is ignored, not an error
+            app_tools: { open: ['remove_silences', 'restore_silences', 'teleport'], coming_soon: ['ai_zooms'] },
+            app_state: { silences_removed: true, audio_cleaned: false },
+        }));
+        assert.equal(status, 200);
+        const { instructions, tools } = calls[0].request;
+        const openTool = tools.find((entry) => entry.name === 'open_tool');
+        assert.deepEqual(openTool.parameters.properties.tool.enum, ['remove_silences', 'restore_silences']);
+        assert.deepEqual(tools.find((entry) => entry.name === 'coming_soon').parameters.properties.feature.enum, ['ai_zooms']);
+        assert.match(instructions, /silences removed, audio not cleaned up, no music/);
+        assert.doesNotMatch(instructions, /b-roll|clean up audio and/);
+        assert.equal((await post(validBody({ app_tools: { open: 'remove_silences' } }))).status, 400);
+        assert.equal((await post(validBody({ app_tools: { open: [] }, app_state: { silences_removed: 'yes' } }))).status, 400);
+    });
+    // a feature that shipped moves to open; listing it in both keeps it open
+    assert.deepEqual(resolveAppTools({ app_tools: { open: ['ai_zooms'], coming_soon: ['ai_zooms', 'ai_b_roll'] } }), { open: ['ai_zooms'], comingSoon: ['ai_b_roll'], state: null });
+    assert.equal(resolveAppTools({ app_tools: { open: ['teleport'] } }), null);
 });
 
 test('a malformed previous is a 400', async () => {

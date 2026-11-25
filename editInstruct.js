@@ -12,7 +12,7 @@
 
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
-import { EDIT_TOOLS, APP_TOOLS, APP_TOOL_NAMES, TOOL_NAMES, TOOL_ARGUMENT_KEYS } from './editInstructTools.js';
+import { EDIT_TOOLS, APP_TOOL_NAMES, APP_TOOL_CATALOG, LEGACY_APP_TOOLS, appToolDefinitions, TOOL_NAMES, TOOL_ARGUMENT_KEYS } from './editInstructTools.js';
 
 const PRIMARY_MODEL = process.env.EDIT_INSTRUCT_MODEL || 'gpt-6-luna';
 const FALLBACK_MODEL = process.env.EDIT_INSTRUCT_FALLBACK_MODEL || 'gpt-5.6-luna';
@@ -113,13 +113,51 @@ Deciding:
 18. <previous> is context. When the new instruction corrects, narrows or redoes the previous one ("just the music", "no, only line 2", "bigger than that", "you removed too much"): if previous is applied, call undo_last_edit alone (the app undoes it and asks you again with both); if it isn't applied, the captions are as they were before it, so do the previous instruction the way the new one corrects it. Any other instruction is done on its own: never undo or redo the previous one for it. Without <previous>, or when it isn't applied, never call undo_last_edit.
 19. Never tell the user to use another app, editor or tool, or to do something themselves somewhere else.`;
 
-// Appended to the system prompt for builds that send app_tools: true, with APP_TOOLS added to the tools.
-export const APP_TOOLS_PROMPT = `
+// Appended to the system prompt for builds that list their own tools (app_tools), with
+// appToolDefinitions added to the tools. Built from the build's lists, so it only names tools
+// that build has.
+const APP_STATE_KEYS = ['silences_removed', 'audio_cleaned', 'music_added'];
 
-The app's own tools:
-20. Besides captions, the app can remove silences, clean up audio and add music. When the user asks for one of those ("remove the pauses", "cut the dead air", "get rid of the background noise", "add a song") or asks whether the app can do it, call open_tool with that tool and a short message saying what it does, never cannot_do for it. It changes no captions.
-21. Cutting filler words out of the audio, automatic zoom-ins and b-roll are coming soon: call coming_soon with that feature and a short message, never cannot_do for it. Removing fillers from the captions still follows rule 9; when the user asks to cut them from the audio or video, add coming_soon(remove_filler) instead of cannot_do(cut_audio).
-22. "What can you do?" gets cannot_do(other) alone, with a message that names caption edits and the app's tools: removing silences, cleaning up audio and adding music.`;
+const joinWords = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`);
+const capitalized = (text) => text.charAt(0).toUpperCase() + text.slice(1);
+
+export function appToolsPrompt({ open, comingSoon, state }) {
+    const labels = (names) => names.map((name) => APP_TOOL_CATALOG[name].label);
+    const lines = ['', '', "The app's own tools:"];
+    if (open.length) {
+        const asks = open.map((name) => APP_TOOL_CATALOG[name].asks).filter(Boolean).join(', ');
+        lines.push(`20. Besides captions, the app can ${joinWords(labels(open))}. When the user asks for one of those (${asks}) or asks whether the app can do it, call open_tool with that tool and a short message saying what it does, never cannot_do for it. It changes no captions.`);
+    }
+    if (comingSoon.length) {
+        let rule = `21. ${capitalized(joinWords(labels(comingSoon)))} ${comingSoon.length === 1 ? 'is' : 'are'} coming soon: call coming_soon with that feature and a short message, never cannot_do for it.`;
+        if (comingSoon.includes('remove_filler')) {
+            rule += ' Removing fillers from the captions still follows rule 9; when the user asks to cut them from the audio or video, add coming_soon(remove_filler) instead of cannot_do(cut_audio).';
+        }
+        lines.push(rule);
+    }
+    lines.push(`22. "What can you do?" gets cannot_do(other) alone, with a message that names caption edits${open.length ? ` and the app's tools: ${joinWords(labels(open))}` : ''}.`);
+    if (state) {
+        let rule = `23. This video right now: silences ${state.silences_removed ? 'removed' : 'not removed'}, audio ${state.audio_cleaned ? 'cleaned up' : 'not cleaned up'}, ${state.music_added ? 'music added' : 'no music'}. When the user asks to remove silences that are already removed or clean up audio that already is, say so with cannot_do(other) instead of open_tool.`;
+        if (open.includes('restore_silences')) {
+            rule += ' Offer restore_silences only when silences are removed; when none are, say so with cannot_do(other).';
+        }
+        lines.push(rule);
+    }
+    return lines.join('\n');
+}
+
+// The build's tools: app_tools: true is what the first 4.0 (6) dev builds sent.
+export function resolveAppTools(body) {
+    if (body.app_tools === true) return { ...LEGACY_APP_TOOLS, state: null };
+    if (!body.app_tools || typeof body.app_tools !== 'object') return null;
+    // names this server doesn't know are ignored, so a newer build never breaks an older server
+    const known = (names) => [...new Set((names || []).filter((name) => Object.hasOwn(APP_TOOL_CATALOG, name)))];
+    const open = known(body.app_tools.open);
+    const comingSoon = known(body.app_tools.coming_soon).filter((name) => !open.includes(name));
+    const state = body.app_state ? Object.fromEntries(APP_STATE_KEYS.map((key) => [key, body.app_state[key] === true])) : null;
+    if (!open.length && !comingSoon.length) return null;
+    return { open, comingSoon, state };
+}
 
 const TAGS = ['presets', 'fonts', 'snapshot', 'previous', 'instruction', 'clarification', 'validation_errors'];
 const TAG_PATTERN = new RegExp(`</?(${TAGS.join('|')})\\b[^>]*>`, 'gi');
@@ -242,6 +280,10 @@ function parseArguments(raw) {
     }
 }
 
+const isNameList = (value) => value == null || (Array.isArray(value) && value.length <= 30 && value.every((name) => typeof name === 'string' && name.length <= 40));
+const isAppToolList = (value) => typeof value === 'object' && !Array.isArray(value) && isNameList(value.open) && isNameList(value.coming_soon);
+const isAppState = (value) => typeof value === 'object' && !Array.isArray(value) && Object.values(value).every((flag) => typeof flag === 'boolean');
+
 // Returns null when the body is valid, else the error response to send.
 function validateBody(body) {
     const { instruction, snapshot, presets, fonts, revision, locale, clarification, repair, previous, app_tools: appTools } = body;
@@ -254,7 +296,8 @@ function validateBody(body) {
     if (fonts != null && (!isNonEmptyString(fonts) || fonts.length > MAX_FONTS_CHARS)) return [400, { error: 'invalid_fonts' }];
     if (!isNonEmptyString(revision) || revision.length > MAX_REVISION_CHARS) return [400, { error: 'revision_required' }];
     if (locale != null && (typeof locale !== 'string' || !LOCALE.test(locale))) return [400, { error: 'invalid_locale' }];
-    if (appTools != null && typeof appTools !== 'boolean') return [400, { error: 'invalid_app_tools' }];
+    if (appTools != null && appTools !== true && !isAppToolList(appTools)) return [400, { error: 'invalid_app_tools' }];
+    if (body.app_state != null && !isAppState(body.app_state)) return [400, { error: 'invalid_app_state' }];
     if (clarification != null && !(isPlainObject(clarification)
         && isNonEmptyString(clarification.question) && clarification.question.length <= MAX_CLARIFICATION_CHARS
         && isNonEmptyString(clarification.choice) && clarification.choice.length <= MAX_CLARIFICATION_CHARS)) {
@@ -375,8 +418,8 @@ export function createEditInstructRouter({
             },
             body: JSON.stringify({
                 model,
-                instructions: appTools ? SYSTEM_PROMPT + APP_TOOLS_PROMPT : SYSTEM_PROMPT,
-                tools: appTools ? [...EDIT_TOOLS, ...APP_TOOLS] : EDIT_TOOLS,
+                instructions: appTools ? SYSTEM_PROMPT + appToolsPrompt(appTools) : SYSTEM_PROMPT,
+                tools: appTools ? [...EDIT_TOOLS, ...appToolDefinitions(appTools)] : EDIT_TOOLS,
                 tool_choice: 'required',
                 parallel_tool_calls: true,
                 reasoning: { effort: REASONING_EFFORT },
@@ -439,12 +482,13 @@ export function createEditInstructRouter({
 
         const startedAt = Date.now();
         const input = buildInput(body);
+        const appTools = resolveAppTools(body);
         const failures = [];
         let intent = '-';
         const log = (outcome, { model = '-', calls = [], usage = {} } = {}) => console.log(
             `edit/instruct ${outcome} model=${model} calls=${calls.length} tools=${calls.map((call) => call.name).join(',') || '-'} `
             + `instructionChars=${body.instruction.length} snapshotLines=${body.snapshot.split('\n').length} `
-            + `clarification=${body.clarification ? 1 : 0} repair=${body.repair ? 1 : 0} previous=${body.previous ? (body.previous.applied ? 'applied' : 'unapplied') : 0} appTools=${body.app_tools === true ? 1 : 0} latencyMs=${Date.now() - startedAt} `
+            + `clarification=${body.clarification ? 1 : 0} repair=${body.repair ? 1 : 0} previous=${body.previous ? (body.previous.applied ? 'applied' : 'unapplied') : 0} appTools=${appTools ? appTools.open.length + appTools.comingSoon.length : 0} latencyMs=${Date.now() - startedAt} `
             + `inputTokens=${usage.input_tokens || 0} cachedTokens=${usage.input_tokens_details?.cached_tokens || 0} `
             + `outputTokens=${usage.output_tokens || 0} intentCheck=${intent}${failures.length ? ` failures=${failures.join(',')}` : ''}`,
         );
@@ -455,7 +499,7 @@ export function createEditInstructRouter({
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), attemptTimeoutMs);
             try {
-                const result = await callModel({ model, input, signal: controller.signal, canUndo: body.previous?.applied === true, appTools: body.app_tools === true });
+                const result = await callModel({ model, input, signal: controller.signal, canUndo: body.previous?.applied === true, appTools });
                 clearTimeout(timer);
                 let calls = cleanFontOptions(result.calls, body.fonts);
                 const { usage } = result;
