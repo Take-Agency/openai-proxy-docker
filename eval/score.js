@@ -35,18 +35,18 @@ export function expectedOutcomes(testCase, fixture, presets) {
     const outcomes = [];
     for (const alternative of testCase.accept || []) {
         if (alternative.clarify) {
-            outcomes.push({ state: fixture, cannot: [], clarify: true, style: {} });
+            outcomes.push({ state: fixture, cannot: [], open: [], soon: [], clarify: true, style: {} });
             continue;
         }
         // undo_last_edit alone: the app undoes and asks again, so nothing changes in this turn
         if (alternative.undo) {
-            outcomes.push({ state: fixture, cannot: [], clarify: false, undo: true, style: {} });
+            outcomes.push({ state: fixture, cannot: [], open: [], soon: [], clarify: false, undo: true, style: {} });
             continue;
         }
         for (const calls of expandCalls(alternative.calls)) {
             const result = calls.length ? run(calls, fixture, presets) : { errors: [], state: fixture };
             if (result.errors.length) throw new Error(`case ${testCase.id}: accept batch is invalid: ${result.errors.join('; ')}`);
-            outcomes.push({ state: result.state, cannot: alternative.cannot || [], clarify: false, undo: false, style: alternative.style || {} });
+            outcomes.push({ state: result.state, cannot: alternative.cannot || [], open: alternative.open || [], soon: alternative.soon || [], clarify: false, undo: false, style: alternative.style || {} });
         }
     }
     Object.defineProperty(testCase, 'cachedOutcomes', { value: outcomes, enumerable: false });
@@ -327,6 +327,9 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
             ...(edit.undo ? ['undid instead'] : []),
             ...checkFailures,
             ...extraCannot.map((reason) => `unexpected cannot_do(${reason})`),
+            ...(testCase.soon || []).filter((feature) => !(edit.comingSoon || []).includes(feature)).map((feature) => `missing coming_soon(${feature})`),
+            ...(edit.comingSoon || []).filter((feature) => ![...(testCase.soon || []), ...(testCase.soonOptional || [])].includes(feature)).map((feature) => `unexpected coming_soon(${feature})`),
+            ...(edit.openTools || []).map((tool) => `unexpected open_tool(${tool})`),
             ...scored.collateral.map((entry) => `collateral: ${entry}`),
         ];
         return { success: failures.length === 0, overAsked: Boolean(edit.clarification), collateral: scored.collateral, reasons: failures, precision: scored.precision, recall: scored.recall, noOps };
@@ -339,6 +342,12 @@ export function scoreCase(testCase, fixture, presets, result, { systemPrompt = '
         if (Boolean(outcome.undo) !== Boolean(edit.undo)) failures.push(outcome.undo ? 'did not undo' : 'undid instead');
         for (const reason of outcome.cannot) if (!reasons.includes(reason)) failures.push(`missing cannot_do(${reason})`);
         for (const reason of reasons) if (!outcome.cannot.includes(reason) && !optional.has(reason)) failures.push(`unexpected cannot_do(${reason})`);
+        // the app's tools: exactly the expected open_tool / coming_soon buttons, no others
+        const opened = edit.openTools || [], soon = edit.comingSoon || [];
+        for (const tool of outcome.open) if (!opened.includes(tool)) failures.push(`missing open_tool(${tool})`);
+        for (const tool of opened) if (!outcome.open.includes(tool)) failures.push(`unexpected open_tool(${tool})`);
+        for (const feature of outcome.soon) if (!soon.includes(feature)) failures.push(`missing coming_soon(${feature})`);
+        for (const feature of soon) if (!outcome.soon.includes(feature)) failures.push(`unexpected coming_soon(${feature})`);
         failures.push(...stateDiffs(state, outcome.state, outcome.style));
         failures.push(...checkFailures);
         const collateral = collateralAgainst(state, outcome, fixture);

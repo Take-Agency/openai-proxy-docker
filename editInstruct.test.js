@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import express from 'express';
-import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, languageName, cleanFontOptions, INTENT_PROMPT } from './editInstruct.js';
-import { EDIT_TOOLS, TOOL_NAMES } from './editInstructTools.js';
+import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, APP_TOOLS_PROMPT, languageName, cleanFontOptions, INTENT_PROMPT } from './editInstruct.js';
+import { EDIT_TOOLS, APP_TOOLS, TOOL_NAMES } from './editInstructTools.js';
 
 const INSTALL_ID = 'test-install-0001';
 
@@ -231,6 +231,27 @@ test('undo_last_edit is returned only alone and only while the previous edit is 
     assert.throws(() => validateToolCalls([JSON.parse(JSON.stringify({ name: 'undo_last_edit', arguments: {} })), { name: 'set_pacing', arguments: { pacing: 'fast' } }], { canUndo: true }), /bad_undo/);
 });
 
+test('the app tools are offered and accepted only when the build sends app_tools', async () => {
+    const openTool = call('open_tool', { tool: 'remove_silences', message: 'Remove Silences cuts the pauses out of your video.' });
+    const { fetch, calls } = fakeFetch(() => [openTool]);
+    await withServer({ fetch }, async (post) => {
+        const { status, body } = await post(validBody({ instruction: 'remove the silences', app_tools: true }));
+        assert.equal(status, 200);
+        assert.deepEqual(body.tool_calls, [{ name: 'open_tool', arguments: { tool: 'remove_silences', message: 'Remove Silences cuts the pauses out of your video.' } }]);
+        assert.equal(calls[0].request.instructions, SYSTEM_PROMPT + APP_TOOLS_PROMPT);
+        assert.deepEqual(calls[0].request.tools, [...EDIT_TOOLS, ...APP_TOOLS]);
+        // an older build: the model never sees the tools, and a stray call is rejected
+        const older = await post(validBody({ instruction: 'remove the silences' }));
+        assert.equal(older.status, 502);
+        const last = calls[calls.length - 1].request;
+        assert.equal(last.instructions, SYSTEM_PROMPT);
+        assert.deepEqual(last.tools, EDIT_TOOLS);
+        assert.equal((await post(validBody({ app_tools: 'yes' }))).status, 400);
+    });
+    assert.throws(() => validateToolCalls([{ name: 'coming_soon', arguments: { feature: 'ai_zooms', message: 'Soon.' } }]), /unknown_tool/);
+    assert.equal(validateToolCalls([{ name: 'coming_soon', arguments: { feature: 'ai_zooms', message: 'Soon.' } }], { appTools: true }).length, 1);
+});
+
 test('a malformed previous is a 400', async () => {
     const { fetch, calls } = fakeFetch(() => [findReplace]);
     await withServer({ fetch }, async (post) => {
@@ -448,7 +469,7 @@ test('tool schemas are strict: all 23 tools, every property required, no extra p
             if (Array.isArray(child.enum) && Array.isArray(child.type)) assert.ok(child.enum.includes(null), `${path}.${key}`);
         }
     };
-    for (const entry of EDIT_TOOLS) {
+    for (const entry of [...EDIT_TOOLS, ...APP_TOOLS]) {
         assert.equal(entry.type, 'function');
         assert.equal(entry.strict, true);
         checkObject(entry.parameters, entry.name);

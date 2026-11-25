@@ -164,7 +164,7 @@ export const CASES = [
 
     // Cases added after the plan, from QA and staging pressure tests (not in the ship-bar denominators)
     {
-        id: 51, group: 'regression', fixture: 'F1L', instruction: 'remove the filler words', cannotOptional: ['cut_audio'],
+        id: 51, group: 'regression', fixture: 'F1L', instruction: 'remove the filler words', cannotOptional: ['cut_audio'], soonOptional: ['remove_filler'],
         deletions: { required: ['c1.0', 'c2.2', 'c3.1'], optional: ['c3.0', 'c5.5', 'c5.6'] },
     },
 
@@ -324,4 +324,21 @@ export const CASES = [
         id: 86, group: 'defaults', fixture: 'F1u', instruction: 'capitalize the first word of every line', cannotOptional: ['other'],
         accept: [{ calls: FIRST_WORDS }, { calls: FIRST_WORDS_AFTER_FILLER }],
     },
+
+    // The app's own tools (app_tools): from the 2026-11-24 staging probe, where every one of these
+    // got a flat "I can't", and two sent the user to another editing app
+    { id: 114, group: 'apptools', instruction: 'can I remove the silences?', accept: [{ calls: [], open: ['remove_silences'] }] },
+    { id: 115, group: 'apptools', instruction: 'cut out the pauses between sentences', accept: [{ calls: [], open: ['remove_silences'] }] },
+    { id: 116, group: 'apptools', instruction: 'clean up the audio, there is a lot of background noise', accept: [{ calls: [], open: ['cleanup_audio'] }] },
+    { id: 117, group: 'apptools', instruction: 'add some background music', accept: [{ calls: [], open: ['add_music'] }] },
+    { id: 118, group: 'apptools', instruction: 'add zoom ins on the important parts', accept: [{ calls: [], soon: ['ai_zooms'] }] },
+    { id: 119, group: 'apptools', instruction: 'can you add b-roll?', accept: [{ calls: [], soon: ['ai_b_roll'] }] },
+    {
+        id: 120, group: 'apptools', instruction: 'remove the ums and uhs from the video', soon: ['remove_filler'], cannotOptional: ['cut_audio'],
+        deletions: { required: ['c1.0', 'c3.1'], optional: ['c2.2'] },
+    },
+    { id: 121, group: 'apptools', instruction: 'what can you do?', accept: [{ calls: [], cannot: ['other'] }] },
+    { id: 122, group: 'apptools', instruction: 'make the captions yellow and remove the silences', accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW }, open: ['remove_silences'] }] },
+    { id: 123, group: 'apptools', instruction: 'add a sound effect when the title appears', accept: [{ calls: [], cannot: ['other'] }] },
+    { id: 124, group: 'apptools', fixture: 'P3', locale: 'hi', instruction: 'वीडियो से साइलेंस हटा दो', accept: [{ calls: [], open: ['remove_silences'] }] },
 ];

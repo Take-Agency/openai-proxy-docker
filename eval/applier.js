@@ -158,6 +158,9 @@ export const SCHEMAS = {
     rewrite_sentence: { first: 'string', last: 'string', expect: 'string', text: 'string' },
     save_style: { name: 'string' },
     cannot_do: { reason: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'], message: 'string', suggestion: 'string?' },
+    // the app's own tools (builds that send app_tools): a button in the reply, no caption change
+    open_tool: { tool: ['remove_silences', 'cleanup_audio', 'add_music'], message: 'string' },
+    coming_soon: { feature: ['remove_filler', 'ai_zooms', 'ai_b_roll'], message: 'string' },
 };
 export const TOOL_NAMES = Object.keys(SCHEMAS);
 
@@ -363,7 +366,7 @@ export function validate(calls, state, presets, fonts = []) {
 
     const edit = {
         preset: null, styles: [], wordEdits: new Map(), emphasis: new Map(), splits: new Map(), merges: [],
-        deletions: new Set(), inserts: [], shifts: [], timings: [], pacing: null, clarification: null, undo: false, cannotDo: [], saveStyleName: null,
+        deletions: new Set(), inserts: [], shifts: [], timings: [], pacing: null, clarification: null, undo: false, cannotDo: [], openTools: [], comingSoon: [], saveStyleName: null,
     };
     const wordOwners = new Map();
     const notFound = [];
@@ -791,6 +794,14 @@ export function validate(calls, state, presets, fonts = []) {
         case 'cannot_do':
             if (!args.message.trim()) errors.push(`${name}: message is empty`);
             edit.cannotDo.push({ reason: args.reason, message: args.message, suggestion: args.suggestion ?? null });
+            break;
+        case 'open_tool':
+            if (!args.message.trim()) errors.push(`${name}: message is empty`);
+            edit.openTools.push(args.tool);
+            break;
+        case 'coming_soon':
+            if (!args.message.trim()) errors.push(`${name}: message is empty`);
+            edit.comingSoon.push(args.feature);
             break;
         default:
             break;

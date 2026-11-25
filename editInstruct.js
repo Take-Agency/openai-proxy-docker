@@ -12,7 +12,7 @@
 
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
-import { EDIT_TOOLS, TOOL_NAMES, TOOL_ARGUMENT_KEYS } from './editInstructTools.js';
+import { EDIT_TOOLS, APP_TOOLS, APP_TOOL_NAMES, TOOL_NAMES, TOOL_ARGUMENT_KEYS } from './editInstructTools.js';
 
 const PRIMARY_MODEL = process.env.EDIT_INSTRUCT_MODEL || 'gpt-6-luna';
 const FALLBACK_MODEL = process.env.EDIT_INSTRUCT_FALLBACK_MODEL || 'gpt-5.6-luna';
@@ -110,7 +110,16 @@ Deciding:
 15. Write question, options and message in the reply language, in under 25 words. Name presets by name, never by id. Exception: if the instruction is Hindi or Urdu written in Latin letters (Hinglish), reply in Hinglish in Latin letters, even when the reply language is Hindi or Urdu. Never translate caption text in tool arguments: expect, find, replace and text stay in the captions' own language and script.
 16. An instruction that only asks a question about the captions or the app ("why are some lines tiny?") gets an answer, not an edit: call cannot_do(other) alone with the answer in message, in plain words (no field names). When the instruction asks for a change, rule 7 applies: no cannot_do for what you did.
 17. In cannot_do, set suggestion to one change you can make with your tools that gets the user what they are after, worded as a short instruction they could send ("Turn off Fit on one line", "Make Dennis an emphasized word"), in the reply language, under 8 words. Use null when nothing you can do helps, or when this batch already makes that change.
-18. <previous> is context. When the new instruction corrects, narrows or redoes the previous one ("just the music", "no, only line 2", "bigger than that", "you removed too much"): if previous is applied, call undo_last_edit alone (the app undoes it and asks you again with both); if it isn't applied, the captions are as they were before it, so do the previous instruction the way the new one corrects it. Any other instruction is done on its own: never undo or redo the previous one for it. Without <previous>, or when it isn't applied, never call undo_last_edit.`;
+18. <previous> is context. When the new instruction corrects, narrows or redoes the previous one ("just the music", "no, only line 2", "bigger than that", "you removed too much"): if previous is applied, call undo_last_edit alone (the app undoes it and asks you again with both); if it isn't applied, the captions are as they were before it, so do the previous instruction the way the new one corrects it. Any other instruction is done on its own: never undo or redo the previous one for it. Without <previous>, or when it isn't applied, never call undo_last_edit.
+19. Never tell the user to use another app, editor or tool, or to do something themselves somewhere else.`;
+
+// Appended to the system prompt for builds that send app_tools: true, with APP_TOOLS added to the tools.
+export const APP_TOOLS_PROMPT = `
+
+The app's own tools:
+20. Besides captions, the app can remove silences, clean up audio and add music. When the user asks for one of those ("remove the pauses", "cut the dead air", "get rid of the background noise", "add a song") or asks whether the app can do it, call open_tool with that tool and a short message saying what it does, never cannot_do for it. It changes no captions.
+21. Cutting filler words out of the audio, automatic zoom-ins and b-roll are coming soon: call coming_soon with that feature and a short message, never cannot_do for it. Removing fillers from the captions still follows rule 9; when the user asks to cut them from the audio or video, add coming_soon(remove_filler) instead of cannot_do(cut_audio).
+22. "What can you do?" gets cannot_do(other) alone, with a message that names caption edits and the app's tools: removing silences, cleaning up audio and adding music.`;
 
 const TAGS = ['presets', 'fonts', 'snapshot', 'previous', 'instruction', 'clarification', 'validation_errors'];
 const TAG_PATTERN = new RegExp(`</?(${TAGS.join('|')})\\b[^>]*>`, 'gi');
@@ -144,13 +153,14 @@ const isNonEmptyString = (value) => typeof value === 'string' && value.trim().le
 const isPlainObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 
 // Throws with a short code (never model output, which may echo caption text into the logs).
-// undo_last_edit only when the request's previous edit is still applied, and alone.
-export function validateToolCalls(calls, { canUndo = false } = {}) {
+// undo_last_edit only when the request's previous edit is still applied, and alone. The app
+// tools only for builds that offered them.
+export function validateToolCalls(calls, { canUndo = false, appTools = false } = {}) {
     if (calls.length === 0) throw new Error('no_tool_calls');
     if (calls.length > MAX_TOOL_CALLS) throw new Error('too_many_calls');
     for (const call of calls) {
         const keys = TOOL_ARGUMENT_KEYS.get(call.name);
-        if (!keys) throw new Error('unknown_tool');
+        if (!keys || (!appTools && APP_TOOL_NAMES.includes(call.name))) throw new Error('unknown_tool');
         if (!isPlainObject(call.arguments)) throw new Error('bad_arguments');
         const actual = Object.keys(call.arguments).sort();
         if (actual.length !== keys.length || actual.some((key, index) => key !== keys[index])) {
@@ -234,7 +244,7 @@ function parseArguments(raw) {
 
 // Returns null when the body is valid, else the error response to send.
 function validateBody(body) {
-    const { instruction, snapshot, presets, fonts, revision, locale, clarification, repair, previous } = body;
+    const { instruction, snapshot, presets, fonts, revision, locale, clarification, repair, previous, app_tools: appTools } = body;
     if (!isNonEmptyString(instruction)) return [400, { error: 'instruction_required' }];
     if (instruction.length > MAX_INSTRUCTION_CHARS) {
         return [413, { error: 'instruction_too_long', maxChars: MAX_INSTRUCTION_CHARS }];
@@ -244,6 +254,7 @@ function validateBody(body) {
     if (fonts != null && (!isNonEmptyString(fonts) || fonts.length > MAX_FONTS_CHARS)) return [400, { error: 'invalid_fonts' }];
     if (!isNonEmptyString(revision) || revision.length > MAX_REVISION_CHARS) return [400, { error: 'revision_required' }];
     if (locale != null && (typeof locale !== 'string' || !LOCALE.test(locale))) return [400, { error: 'invalid_locale' }];
+    if (appTools != null && typeof appTools !== 'boolean') return [400, { error: 'invalid_app_tools' }];
     if (clarification != null && !(isPlainObject(clarification)
         && isNonEmptyString(clarification.question) && clarification.question.length <= MAX_CLARIFICATION_CHARS
         && isNonEmptyString(clarification.choice) && clarification.choice.length <= MAX_CLARIFICATION_CHARS)) {
@@ -353,7 +364,7 @@ export function createEditInstructRouter({
         next();
     }
 
-    async function callModel({ model, input, signal, canUndo }) {
+    async function callModel({ model, input, signal, canUndo, appTools }) {
         // x-install-id is deliberately not forwarded (no `user` / `safety_identifier`).
         const response = await fetch(OPENAI_RESPONSES_URL, {
             method: 'POST',
@@ -364,8 +375,8 @@ export function createEditInstructRouter({
             },
             body: JSON.stringify({
                 model,
-                instructions: SYSTEM_PROMPT,
-                tools: EDIT_TOOLS,
+                instructions: appTools ? SYSTEM_PROMPT + APP_TOOLS_PROMPT : SYSTEM_PROMPT,
+                tools: appTools ? [...EDIT_TOOLS, ...APP_TOOLS] : EDIT_TOOLS,
                 tool_choice: 'required',
                 parallel_tool_calls: true,
                 reasoning: { effort: REASONING_EFFORT },
@@ -380,7 +391,7 @@ export function createEditInstructRouter({
         const calls = (Array.isArray(json.output) ? json.output : [])
             .filter((item) => item?.type === 'function_call')
             .map((item) => ({ name: item.name, arguments: parseArguments(item.arguments) }));
-        return { calls: validateToolCalls(calls, { canUndo }), usage: json.usage || {} };
+        return { calls: validateToolCalls(calls, { canUndo, appTools }), usage: json.usage || {} };
     }
 
     // true / false, or null when the check failed (then the batch is kept as it is)
@@ -433,7 +444,7 @@ export function createEditInstructRouter({
         const log = (outcome, { model = '-', calls = [], usage = {} } = {}) => console.log(
             `edit/instruct ${outcome} model=${model} calls=${calls.length} tools=${calls.map((call) => call.name).join(',') || '-'} `
             + `instructionChars=${body.instruction.length} snapshotLines=${body.snapshot.split('\n').length} `
-            + `clarification=${body.clarification ? 1 : 0} repair=${body.repair ? 1 : 0} previous=${body.previous ? (body.previous.applied ? 'applied' : 'unapplied') : 0} latencyMs=${Date.now() - startedAt} `
+            + `clarification=${body.clarification ? 1 : 0} repair=${body.repair ? 1 : 0} previous=${body.previous ? (body.previous.applied ? 'applied' : 'unapplied') : 0} appTools=${body.app_tools === true ? 1 : 0} latencyMs=${Date.now() - startedAt} `
             + `inputTokens=${usage.input_tokens || 0} cachedTokens=${usage.input_tokens_details?.cached_tokens || 0} `
             + `outputTokens=${usage.output_tokens || 0} intentCheck=${intent}${failures.length ? ` failures=${failures.join(',')}` : ''}`,
         );
@@ -444,7 +455,7 @@ export function createEditInstructRouter({
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), attemptTimeoutMs);
             try {
-                const result = await callModel({ model, input, signal: controller.signal, canUndo: body.previous?.applied === true });
+                const result = await callModel({ model, input, signal: controller.signal, canUndo: body.previous?.applied === true, appTools: body.app_tools === true });
                 clearTimeout(timer);
                 let calls = cleanFontOptions(result.calls, body.fonts);
                 const { usage } = result;
