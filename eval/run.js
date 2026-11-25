@@ -25,8 +25,8 @@ import { fixtureState, FONTS } from './fixtures.js';
 
 const run = (calls, state, catalog) => applyCalls(calls, state, catalog, FONTS);
 import { scoreCase } from './score.js';
-import { SYSTEM_PROMPT } from '../editInstruct.js';
-import { EDIT_TOOLS } from '../editInstructTools.js';
+import { SYSTEM_PROMPT, APP_TOOLS_PROMPT } from '../editInstruct.js';
+import { EDIT_TOOLS, APP_TOOLS } from '../editInstructTools.js';
 
 const presets = JSON.parse(readFileSync(new URL('./presets.json', import.meta.url), 'utf8'));
 const PRESETS = presetCatalog(presets);
@@ -174,7 +174,7 @@ function report(args, results, requests, startedAt, finishedAt = Date.now()) {
     lines.push(`# Instruction edit eval: ${args.label}`, '');
     lines.push(`- Endpoint: \`${args.url}\``);
     lines.push(`- Models answering: ${models.join(', ') || 'n/a'} · runs per case: ${args.runs} · cases: ${new Set(results.map((entry) => entry.caseId)).size}`);
-    lines.push(`- Prompt + tools hash (local files): \`${createHash('sha256').update(SYSTEM_PROMPT + JSON.stringify(EDIT_TOOLS)).digest('hex').slice(0, 10)}\` · repair turn: ${args.repair ? 'on' : 'off'}`);
+    lines.push(`- Prompt + tools hash (local files): \`${createHash('sha256').update(SYSTEM_PROMPT + APP_TOOLS_PROMPT + JSON.stringify([...EDIT_TOOLS, ...APP_TOOLS])).digest('hex').slice(0, 10)}\` · repair turn: ${args.repair ? 'on' : 'off'}`);
     lines.push(`- Started ${new Date(startedAt).toISOString()}, ${requests.length} requests, ${((finishedAt - startedAt) / 60000).toFixed(1)} min`, '');
 
     lines.push('## Summary', '', '| Metric | Value | Ship bar |', '|---|---|---|');
@@ -329,6 +329,8 @@ async function main() {
                 fonts: FONTS.join('\n'),
                 revision: String(fixture.revision),
                 locale: testCase.locale || 'en',
+                // as 4.0 (6) and later send it: the app's own tools are offered
+                app_tools: true,
             };
             // a follow-up turn: the user's answer to the model's earlier question
             if (testCase.clarification) body.clarification = testCase.clarification;

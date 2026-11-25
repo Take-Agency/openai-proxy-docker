@@ -172,9 +172,25 @@ export const EDIT_TOOLS = [
     }),
 ];
 
+// The app's own tools outside the caption editor. Offered only to builds that send
+// app_tools: true (4.0 (6) and later); older builds reject an unknown tool name.
+export const OPEN_TOOLS = ['remove_silences', 'cleanup_audio', 'add_music'];
+export const COMING_SOON_FEATURES = ['remove_filler', 'ai_zooms', 'ai_b_roll'];
+export const APP_TOOLS = [
+    tool('open_tool', 'Offer one of the app\'s own tools. The app shows message with a button that opens the tool, and the user confirms there. remove_silences cuts the silent pauses out of the video and its audio. cleanup_audio removes background noise and makes the voice clearer. add_music adds background music. May be combined with edits.', {
+        tool: { type: 'string', enum: OPEN_TOOLS },
+        message: { type: 'string' },
+    }),
+    tool('coming_soon', 'Say that a feature the app is building isn\'t available yet. The app shows message with a button to join its waitlist. remove_filler cuts filler words (um, uh) out of the audio. ai_zooms adds automatic zoom-ins. ai_b_roll adds b-roll footage. May be combined with edits.', {
+        feature: { type: 'string', enum: COMING_SOON_FEATURES },
+        message: { type: 'string' },
+    }),
+];
+
 export const TOOL_NAMES = EDIT_TOOLS.map((entry) => entry.name);
+export const APP_TOOL_NAMES = APP_TOOLS.map((entry) => entry.name);
 
 // name -> sorted top-level argument keys, for the server-side shape re-check.
 export const TOOL_ARGUMENT_KEYS = new Map(
-    EDIT_TOOLS.map((entry) => [entry.name, Object.keys(entry.parameters.properties).sort()]),
+    [...EDIT_TOOLS, ...APP_TOOLS].map((entry) => [entry.name, Object.keys(entry.parameters.properties).sort()]),
 );
