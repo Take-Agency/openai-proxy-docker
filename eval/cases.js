@@ -368,4 +368,10 @@ export const CASES = [
         history: ['User: cut out the pauses', 'AI Edit: Yes, I can cut the pauses out of this video. Tap Remove Silences below.'],
         accept: [{ calls: [], open: ['remove_silences'] }],
     },
+    // settings the app applies itself (app_tools.settings); the score checks the tool, the run's
+    // report lists the settings chosen
+    { id: 134, group: 'apptools', instruction: 'remove the silences but keep it natural', accept: [{ calls: [], open: ['remove_silences'] }] },
+    { id: 135, group: 'apptools', appState: { silences_removed: true }, instruction: 'you cut too much, it sounds rushed', accept: [{ calls: [], open: ['remove_silences'] }] },
+    { id: 136, group: 'apptools', instruction: "there's a fan humming the whole time", accept: [{ calls: [], open: ['cleanup_audio'] }] },
+    { id: 137, group: 'apptools', appState: { audio_cleaned: true }, instruction: 'now make my voice sound more professional', accept: [{ calls: [], open: ['cleanup_audio'] }] },
 ];

@@ -124,7 +124,7 @@ const APP_STATE_KEYS = ['silences_removed', 'audio_cleaned', 'music_added'];
 const joinWords = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`);
 const capitalized = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
-export function appToolsPrompt({ open, comingSoon, state }) {
+export function appToolsPrompt({ open, comingSoon, state, settings = [] }) {
     const labels = (names) => names.map((name) => APP_TOOL_CATALOG[name].label);
     const lines = ['', '', "The app's own tools:"];
     if (open.length) {
@@ -151,6 +151,17 @@ export function appToolsPrompt({ open, comingSoon, state }) {
         ];
         lines.push(`23. Right now in this video: ${parts.join('; ')}. Offer the button that does what the user asked. When what they ask can't apply to this video (removing music it doesn't have, bringing back pauses that were never cut), say so with cannot_do(other) and offer no other button. The message must match the button: never say something is already done over a button that does it.`);
     }
+    const runs = (settings || []).filter((name) => open.includes(name));
+    if (runs.length) {
+        let rule = `24. ${joinWords(runs)} run${runs.length === 1 ? 's' : ''} at once with the settings you choose: choose them from what the user asked (open_tool's setting fields explain each), leave a setting null when the user said nothing that bears on it, and say what you chose in plain words in message.`;
+        if (runs.includes('remove_silences')) {
+            rule += ' When silences are already removed and the user wants a different result ("you cut too much", "less aggressive", "cut more"), call remove_silences with new settings: the app puts the pauses back and cuts again. When they only ask to remove silences again with nothing to change, say they already are, with cannot_do(other).';
+        }
+        if (runs.includes('cleanup_audio')) {
+            rule += ' When the audio is already cleaned up and the user wants a different treatment ("make my voice sound more professional", "now remove the hum"), call cleanup_audio with the new settings: it replaces the earlier cleanup.';
+        }
+        lines.push(rule);
+    }
     return lines.join('\n');
 }
 
@@ -163,15 +174,18 @@ export function resolveAppTools(body) {
     const open = known(body.app_tools.open);
     const comingSoon = known(body.app_tools.coming_soon).filter((name) => !open.includes(name));
     const state = body.app_state ? Object.fromEntries(APP_STATE_KEYS.map((key) => [key, body.app_state[key] === true])) : null;
+    // tools whose settings this build applies itself; their button runs the tool at once
+    const settings = known(body.app_tools.settings).filter((name) => name === 'remove_silences' || name === 'cleanup_audio');
     // With the clip's state, only the tools that fit it are offered: a tool and its undo are
     // never both available, so the model can't pick the wrong one. add_music stays either way
-    // (it also changes the music).
+    // (it also changes the music). A tool the build runs with settings stays too: run again, it
+    // redoes the job with new settings (the app restores the original first).
     const fits = (name) => {
         if (!state) return true;
         switch (name) {
-        case 'remove_silences': return !state.silences_removed;
+        case 'remove_silences': return !state.silences_removed || settings.includes('remove_silences');
         case 'restore_silences': return state.silences_removed;
-        case 'cleanup_audio': return !state.audio_cleaned;
+        case 'cleanup_audio': return !state.audio_cleaned || settings.includes('cleanup_audio');
         case 'undo_cleanup_audio': return state.audio_cleaned;
         case 'remove_music': return state.music_added;
         default: return true;
@@ -179,7 +193,7 @@ export function resolveAppTools(body) {
     };
     const offered = open.filter(fits);
     if (!offered.length && !comingSoon.length) return null;
-    return { open: offered, comingSoon, state };
+    return { open: offered, comingSoon, state, settings };
 }
 
 const TAGS = ['presets', 'fonts', 'snapshot', 'history', 'previous', 'instruction', 'clarification', 'validation_errors'];
@@ -218,9 +232,14 @@ const isPlainObject = (value) => value !== null && typeof value === 'object' && 
 // tools only for builds that offered them.
 export function validateToolCalls(calls, { canUndo = false, appTools = false } = {}) {
     if (calls.length === 0) throw new Error('no_tool_calls');
+    const appToolKeys = appTools && typeof appTools === 'object'
+        ? new Map(appToolDefinitions(appTools).map((entry) => [entry.name, Object.keys(entry.parameters.properties).sort()]))
+        : null;
     if (calls.length > MAX_TOOL_CALLS) throw new Error('too_many_calls');
     for (const call of calls) {
-        const keys = TOOL_ARGUMENT_KEYS.get(call.name);
+        // the app tools' arguments depend on what the build supports (settings), so their keys
+        // come from this build's definitions
+        const keys = appToolKeys?.get(call.name) ?? TOOL_ARGUMENT_KEYS.get(call.name);
         if (!keys || (!appTools && APP_TOOL_NAMES.includes(call.name))) throw new Error('unknown_tool');
         if (!isPlainObject(call.arguments)) throw new Error('bad_arguments');
         const actual = Object.keys(call.arguments).sort();
@@ -304,7 +323,7 @@ function parseArguments(raw) {
 }
 
 const isNameList = (value) => value == null || (Array.isArray(value) && value.length <= 30 && value.every((name) => typeof name === 'string' && name.length <= 40));
-const isAppToolList = (value) => typeof value === 'object' && !Array.isArray(value) && isNameList(value.open) && isNameList(value.coming_soon);
+const isAppToolList = (value) => typeof value === 'object' && !Array.isArray(value) && isNameList(value.open) && isNameList(value.coming_soon) && isNameList(value.settings);
 const isAppState = (value) => typeof value === 'object' && !Array.isArray(value) && Object.values(value).every((flag) => typeof flag === 'boolean');
 
 // Returns null when the body is valid, else the error response to send.
