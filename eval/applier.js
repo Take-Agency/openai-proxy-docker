@@ -117,9 +117,9 @@ export function looksText(style, boxes = { word: true, caption: false }) {
     if (style.highlight === 'spoken_word') parts.push(`word being spoken: ${colorName(style.emphasis)} letters (emphasis)`);
     else if (style.highlight === 'static') parts.push(`words listed after highlight: ${colorName(style.emphasis)} letters (emphasis)`);
     else parts.push('no colored words (emphasis does nothing while highlight is none)');
+    // caption_bg adds a caption box to a style that has none
     if (boxes.caption && style.caption_bg !== 'none') parts.push(`${colorName(style.caption_bg)} box behind each caption (caption_bg)`);
-    else if (boxes.caption) parts.push('no box behind captions yet (caption_bg adds one)');
-    else parts.push('no box behind captions (caption_bg does nothing in this style)');
+    else parts.push('no box behind captions yet (caption_bg adds one)');
     return parts.join('; ');
 }
 
@@ -1045,7 +1045,11 @@ export function apply(edit, original) {
         const color = (value) => (value === 'none' ? 'none' : value.toUpperCase());
         if (args.fill_color != null) state.style.fill = color(args.fill_color);
         if (args.emphasis_color != null) state.style.emphasis = color(args.emphasis_color);
-        if (args.caption_background_color != null) state.style.caption_bg = color(args.caption_background_color);
+        if (args.caption_background_color != null) {
+            state.style.caption_bg = color(args.caption_background_color);
+            // the app adds a caption box to a style that has none (EditApplier)
+            if (state.style.caption_bg !== 'none' && state.boxes) state.boxes.caption = true;
+        }
         if (args.word_background_color != null) state.style.word_bg = color(args.word_background_color);
         if (args.font_size != null) state.style.size = args.font_size;
         if (args.overflow != null) state.style.overflow = args.overflow;

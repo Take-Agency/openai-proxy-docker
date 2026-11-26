@@ -263,9 +263,9 @@ export const CASES = [
     { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, optionsMatch: /box|background/i, accept: [{ clarify: true }] },
     { id: 99, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Yellow text' }, accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW } }] },
     // Parts named the way they look (the snapshot's "looks" line)
-    { id: 100, group: 'looks', instruction: 'add a black box behind the captions', cannotOptional: ['other'],
-        // Mosy can't draw a caption box: say so (a preset with one is fine too), never a color that shows nothing
-        accept: [{ calls: [], cannot: ['other'] }, { clarify: true }] },
+    // Mosy has no caption box: caption_bg adds one, as the style editor's Caption Background toggle does
+    { id: 100, group: 'looks', instruction: 'add a black box behind the captions',
+        accept: [{ calls: [['set_style', { caption_background_color: '#000000' }]], style: { caption_bg: DARK } }] },
     { id: 101, group: 'looks', fixture: 'F1pw', instruction: 'make the highlight brighter', cannotOptional: ['other'],
         accept: [{ calls: [['set_style', { word_background_color: '#A970FF' }]], style: { word_bg: { hue: [250, 300], minSaturation: 0.3 } } }, { clarify: true }] },
     { id: 102, group: 'looks', fixture: 'F1pw', instruction: 'make the purple brighter', cannotOptional: ['other'],
