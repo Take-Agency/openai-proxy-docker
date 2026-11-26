@@ -19,7 +19,7 @@
 // the new text of an insertion), keepStyleOption (presets other than the current one, and no
 // keep option: the app adds "Keep as is" to every question), fontOptions (every option is an exact catalog font name; the app adds its own
 // "Keep current font"), presetOptions (every option is a catalog preset name, not the current one),
-// kindOptions (options name kinds of style, no preset names). `offered` lists options asked before
+// kindOptions (options name kinds of style, not all of them preset names). `offered` lists options asked before
 // in the conversation; offering one again fails (noRepeatOptions).
 // No-op edits (a word replaced by itself, a style field set to its current value) are reported,
 // not failed: the app drops them. Every case fails on a question or message in the wrong language: `reply` names it (en, es,
@@ -76,7 +76,7 @@ export const CASES = [
     { id: 11, group: 'preset', instruction: 'use the Boo Cute style', accept: [{ calls: [['apply_preset', { preset_id: presetId('Boo Cute') }]] }] },
     { id: 12, group: 'preset', instruction: 'Boo Cute but with white text', accept: [{ calls: [['apply_preset', { preset_id: presetId('Boo Cute') }], ['set_style', { fill_color: '#FFFFFF' }]] }] },
     {
-        id: 13, group: 'preset', instruction: 'something spooky for Halloween',
+        id: 13, group: 'preset', instruction: 'something spooky for Halloween', checks: ['presetOptions'],
         accept: [{ calls: [['apply_preset', { preset_id: { anyOf: category('halloween') } }]] }, { clarify: true }],
     },
     { id: 14, group: 'preset', instruction: 'one word at a time', accept: [{ calls: [['set_pacing', { pacing: 'fast' }]] }] },
