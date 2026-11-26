@@ -124,7 +124,7 @@ const APP_STATE_KEYS = ['silences_removed', 'audio_cleaned', 'music_added'];
 const joinWords = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`);
 const capitalized = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
-export function appToolsPrompt({ open, comingSoon, state, settings = [] }) {
+export function appToolsPrompt({ open, comingSoon, settings = [] }) {
     const labels = (names) => names.map((name) => APP_TOOL_CATALOG[name].label);
     const lines = ['', '', "The app's own tools:"];
     if (open.length) {
@@ -139,17 +139,16 @@ export function appToolsPrompt({ open, comingSoon, state, settings = [] }) {
         lines.push(rule);
     }
     lines.push(`22. "What can you do?" gets cannot_do(other) alone, with a message that names caption edits${open.length ? ` and the app's tools: ${joinWords(labels(open))}` : ''}.`);
-    if (state) {
-        // Described by what each offered button does now, not as "already removed": the model
-        // read "already cleaned up" next to an undo as "already undone". The tools that don't fit
-        // the clip were taken out of open (resolveAppTools).
-        const button = (name) => (open.includes(name) ? ` (${APP_TOOL_CATALOG[name].button} ${APP_TOOL_CATALOG[name].now})` : '');
-        const parts = [
-            state.silences_removed ? `the silent pauses have been cut out${button('restore_silences')}` : `no pauses have been cut${button('remove_silences')}`,
-            state.audio_cleaned ? `the audio has been cleaned up${button('undo_cleanup_audio')}` : `the audio is the original recording${button('cleanup_audio')}`,
-            state.music_added ? `it has background music${button('remove_music')}${button('add_music')}` : `it has no music${open.includes('add_music') ? ' (Add Music adds some)' : ''}`,
-        ];
-        lines.push(`23. Right now in this video: ${parts.join('; ')}. Offer the button that does what the user asked. When what they ask can't apply to this video (removing music it doesn't have, bringing back pauses that were never cut), say so with cannot_do(other) and offer no other button. The message must match the button: never say something is already done over a button that does it.`);
+    // The clip's state comes as facts in the <clip> block (buildInput), not here, so this
+    // prompt is the same for every clip of a build. A tool that doesn't fit the clip is
+    // rejected by the app's validator and comes back as a repair.
+    const undoTools = [
+        ['restore_silences', 'brings back pauses that were cut'],
+        ['undo_cleanup_audio', 'undoes a cleanup'],
+        ['remove_music', 'takes out music that was added'],
+    ].filter(([name]) => open.includes(name));
+    if (undoTools.length) {
+        lines.push(`23. The <clip> block says what the app's tools have already done to this video; read it before choosing a tool. Of the tools, ${joinWords(undoTools.map(([name, does]) => `${name} only ${does}`))}. When what the user asks is already done or can't apply to this video (removing silences that are already removed, bringing back pauses that were never cut, removing music it doesn't have), say so in a short cannot_do(other) and call no tool. The message must agree with the <clip> block and with the button under it.`);
     }
     const runs = (settings || []).filter((name) => open.includes(name));
     if (runs.length) {
@@ -176,27 +175,13 @@ export function resolveAppTools(body) {
     const state = body.app_state ? Object.fromEntries(APP_STATE_KEYS.map((key) => [key, body.app_state[key] === true])) : null;
     // tools whose settings this build applies itself; their button runs the tool at once
     const settings = known(body.app_tools.settings).filter((name) => name === 'remove_silences' || name === 'cleanup_audio');
-    // With the clip's state, only the tools that fit it are offered: a tool and its undo are
-    // never both available, so the model can't pick the wrong one. add_music stays either way
-    // (it also changes the music). A tool the build runs with settings stays too: run again, it
-    // redoes the job with new settings (the app restores the original first).
-    const fits = (name) => {
-        if (!state) return true;
-        switch (name) {
-        case 'remove_silences': return !state.silences_removed || settings.includes('remove_silences');
-        case 'restore_silences': return state.silences_removed;
-        case 'cleanup_audio': return !state.audio_cleaned || settings.includes('cleanup_audio');
-        case 'undo_cleanup_audio': return state.audio_cleaned;
-        case 'remove_music': return state.music_added;
-        default: return true;
-        }
-    };
-    const offered = open.filter(fits);
-    if (!offered.length && !comingSoon.length) return null;
-    return { open: offered, comingSoon, state, settings };
+    // The same tools whatever the clip's state: the state is data in the <clip> block, and a
+    // tool that doesn't fit it is the app validator's to reject (a repair turn).
+    if (!open.length && !comingSoon.length) return null;
+    return { open, comingSoon, state, settings };
 }
 
-const TAGS = ['presets', 'fonts', 'snapshot', 'history', 'previous', 'instruction', 'clarification', 'validation_errors'];
+const TAGS = ['presets', 'fonts', 'snapshot', 'clip', 'history', 'previous', 'instruction', 'clarification', 'validation_errors'];
 const TAG_PATTERN = new RegExp(`</?(${TAGS.join('|')})\\b[^>]*>`, 'gi');
 
 // Untrusted text must not be able to close its block and continue as instructions.
@@ -370,8 +355,20 @@ function validateBody(body) {
 
 // Prompt order is cache-friendly: static instructions and tools, then the preset and font
 // catalogs (fixed per app version), then the per-request snapshot and instruction, then any repair turn.
-export function buildInput({ instruction, snapshot, presets, fonts, locale, clarification, repair, previous, history }) {
+// What the app's tools have done to this clip, as plain facts next to the captions.
+export function clipFacts(state) {
+    return [
+        `Silences: ${state.silences_removed ? 'removed (cut out by Remove Silences)' : 'not removed'}`,
+        `Audio: ${state.audio_cleaned ? 'cleaned up by Cleanup Audio' : 'the original recording'}`,
+        `Background music: ${state.music_added ? 'added' : 'none'}`,
+    ].join('\n');
+}
+
+export function buildInput({ instruction, snapshot, presets, fonts, locale, clarification, repair, previous, history, app_state: appState }) {
     const userParts = [fence('snapshot', snapshot)];
+    if (appState && typeof appState === 'object') {
+        userParts.push(fence('clip', clipFacts(Object.fromEntries(APP_STATE_KEYS.map((key) => [key, appState[key] === true])))));
+    }
     // what was said before, so follow-ups ("again", "re-remove the silences", "do that to the rest")
     // have their context; the snapshot is still the only source for the captions as they are now
     if (history?.length) {
