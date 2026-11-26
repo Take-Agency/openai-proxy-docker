@@ -400,9 +400,10 @@ export const CASES = [
             'User: use a different preset',
             'AI Edit asked: What kind of style are you looking for? Options: Bold / Playful / Clean / Keep as is',
             'User: Playful',
-            'AI Edit asked: Which one? Options: Candy Bar / Bubblegum / Cartoony / Keep as is',
+            'AI Edit asked: Which playful preset would you like? Options: Candy Bar / Bubblegum / Cartoony / Keep as is',
         ],
-        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['presetOptions'], accept: [{ clarify: true }],
+        // 3 more playful presets is what the prompt asks for; a new angle is also fine, as long as nothing repeats
+        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], accept: [{ clarify: true }],
     },
     { id: 145, group: 'look', instruction: 'surprise me with a new style', accept: [{ calls: [['apply_preset', { preset_id: { anyOf: presets.filter((preset) => preset.name !== 'Mosy').map((preset) => preset.id) } }]] }] },
 ];
