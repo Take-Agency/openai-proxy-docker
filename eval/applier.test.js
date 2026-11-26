@@ -142,5 +142,5 @@ test('delete_all with listed occurrences that miss the word is an error (app tes
 
 test('the looks line matches the app (InstructionEditTests.testSnapshotTextFormat)', () => {
     const lines = snapshotText(fixture).split('\n');
-    assert.equal(lines.at(-2), 'looks text: white letters (fill); no box behind words yet (word_bg adds one); word being spoken: cyan letters (emphasis); no box behind captions (caption_bg does nothing in this style)');
+    assert.equal(lines.at(-2), 'looks text: white letters (fill); no box behind words yet (word_bg adds one); word being spoken: cyan letters (emphasis); no box behind captions yet (caption_bg adds one)');
 });
