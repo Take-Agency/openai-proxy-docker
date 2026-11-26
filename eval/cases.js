@@ -18,7 +18,9 @@
 // `checks` are extra pass conditions: noPromptLeak, noTextCram (no word edit or merge may carry
 // the new text of an insertion), keepStyleOption (presets other than the current one, and no
 // keep option: the app adds "Keep as is" to every question), fontOptions (every option is an exact catalog font name; the app adds its own
-// "Keep current font").
+// "Keep current font"), presetOptions (every option is a catalog preset name, not the current one),
+// kindOptions (options name kinds of style, no preset names). `offered` lists options asked before
+// in the conversation; offering one again fails (noRepeatOptions).
 // No-op edits (a word replaced by itself, a style field set to its current value) are reported,
 // not failed: the app drops them. Every case fails on a question or message in the wrong language: `reply` names it (en, es,
 // ja, hi-deva, hi-latn), defaulting to en for the en locale. Every case with an English locale also
@@ -374,4 +376,33 @@ export const CASES = [
     { id: 135, group: 'apptools', appState: { silences_removed: true }, instruction: 'you cut too much, it sounds rushed', accept: [{ calls: [], open: ['remove_silences'] }] },
     { id: 136, group: 'apptools', instruction: "there's a fan humming the whole time", accept: [{ calls: [], open: ['cleanup_audio'] }] },
     { id: 137, group: 'apptools', appState: { audio_cleaned: true }, instruction: 'now make my voice sound more professional', accept: [{ calls: [], open: ['cleanup_audio'] }] },
+    // a new look is taste (prompt rule 20): narrow it down with questions, kinds first, then 3 presets
+    // as previews, and a new angle when the user turns options down. Dennis's report 2026-11-26:
+    // "Use a different preset" applied Sunshine without asking.
+    { id: 138, group: 'look', instruction: 'use a different preset', checks: ['kindOptions'], accept: [{ clarify: true }] },
+    { id: 139, group: 'look', instruction: 'Better caption style', checks: ['kindOptions'], accept: [{ clarify: true }] },
+    { id: 140, group: 'look', instruction: 'make the captions better', clarification: { question: 'How do you want the captions better?', choice: 'A different style' }, checks: ['kindOptions'], accept: [{ clarify: true }] },
+    { id: 141, group: 'look', instruction: 'A different style', clarification: { question: 'What kind of style are you looking for?', choice: 'Playful' }, checks: ['presetOptions'], accept: [{ clarify: true }] },
+    { id: 142, group: 'look', instruction: 'something playful', checks: ['presetOptions'], accept: [{ clarify: true }] },
+    {
+        id: 143, group: 'look', instruction: 'none of those really',
+        history: [
+            'User: make the captions better',
+            'AI Edit asked: How do you want the captions better? Options: Brighter colors / Bigger text / A different style / Keep as is',
+            'User: A different style',
+            'AI Edit asked: What kind of style are you looking for? Options: Bold / Playful / Clean / Keep as is',
+        ],
+        offered: ['Bold', 'Playful', 'Clean'], checks: ['kindOptions'], accept: [{ clarify: true }],
+    },
+    {
+        id: 144, group: 'look', instruction: 'none of those',
+        history: [
+            'User: use a different preset',
+            'AI Edit asked: What kind of style are you looking for? Options: Bold / Playful / Clean / Keep as is',
+            'User: Playful',
+            'AI Edit asked: Which one? Options: Candy Bar / Bubblegum / Cartoony / Keep as is',
+        ],
+        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['presetOptions'], accept: [{ clarify: true }],
+    },
+    { id: 145, group: 'look', instruction: 'surprise me with a new style', accept: [{ calls: [['apply_preset', { preset_id: { anyOf: presets.filter((preset) => preset.name !== 'Mosy').map((preset) => preset.id) } }]] }] },
 ];

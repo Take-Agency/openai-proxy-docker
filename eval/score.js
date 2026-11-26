@@ -258,7 +258,18 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
             const options = edit.clarification?.options || [];
             if (!options.length || !options.every((option) => FONTS.includes(option))) failures.push(check);
         }
+        if (check === 'presetOptions' || check === 'kindOptions') {
+            // narrowing a new look (prompt rule 20): kinds first, then exactly 3 preset names
+            const options = edit.clarification?.options || [];
+            const current = presets.find((preset) => preset.id === fixture.style.preset)?.name;
+            const isPreset = (option) => presets.some((preset) => preset.name.toLowerCase() === option.trim().toLowerCase());
+            if (check === 'presetOptions' && (!options.length || !options.every(isPreset) || options.some((option) => current && option.trim() === current))) failures.push(check);
+            if (check === 'kindOptions' && (!options.length || options.some(isPreset))) failures.push(check);
+        }
     }
+    // offered: options already offered earlier in the conversation must not come back
+    const offered = (testCase.offered || []).map((option) => option.toLowerCase());
+    if (offered.length && (edit.clarification?.options || []).some((option) => offered.includes(option.trim().toLowerCase()))) failures.push('noRepeatOptions');
     // optionsMatch: some option must match (a background-box option when the style has a box)
     if (testCase.optionsMatch && !(edit.clarification?.options || []).some((option) => testCase.optionsMatch.test(option))) failures.push('optionsMatch');
     // suggestionMatch: a cannot_do must offer a matching one-tap change (a question's fix)
