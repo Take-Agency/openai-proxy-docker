@@ -46,26 +46,24 @@ const STYLE_FIELDS = {
     font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
 };
 
-// One answer the user can tap. type says what tapping it does: a change to the style carries its
-// set_style fields and is previewed and applied by the app, any other change is sent back to you as
-// the answer and applied; a preset or font is shown as a preview and applied by the app itself; a
-// direction is sent back to you as the answer and leads to the next question.
+// One answer the user can tap. type says what tapping it does: a look (a preset, changes to the
+// current style, or a preset with changes) is previewed and applied by the app itself; a change
+// that isn't about the look and a direction (narrowing to the next question) go back to you.
 const CLARIFICATION_OPTION = {
     type: 'object',
     properties: {
-        label: { type: 'string', description: 'What the user sees, in the reply language. For a preset or font the app shows its own name instead.' },
-        type: { type: 'string', enum: ['change', 'preset', 'font', 'direction'] },
-        preset_id: { type: ['string', 'null'], description: 'type preset only: the id from <presets>. Null otherwise.' },
-        font: { type: ['string', 'null'], description: 'type font only: exactly one name from <fonts>. Null otherwise.' },
+        label: { type: 'string', description: 'What the user sees, in the reply language: what the look is ("Showgirl with white text", "Bright yellow text, red box"), or what the change or direction is.' },
+        type: { type: 'string', enum: ['look', 'change', 'direction'] },
+        preset_id: { type: ['string', 'null'], description: 'type look only: the preset it starts from, an id from <presets>; null starts from the current style.' },
         style: {
             anyOf: [
                 { type: 'object', properties: STYLE_FIELDS, required: Object.keys(STYLE_FIELDS), additionalProperties: false },
                 { type: 'null' },
             ],
-            description: 'type change only, when the change is to the current style: the set_style fields it sets (null leaves a field as is). The app shows it as a preview and applies it when tapped. Null otherwise.',
+            description: 'type look only: the set_style fields it changes, on top of the preset or the current style (null leaves a field as is); null for a preset as it is.',
         },
     },
-    required: ['label', 'type', 'preset_id', 'font', 'style'],
+    required: ['label', 'type', 'preset_id', 'style'],
     additionalProperties: false,
 };
 

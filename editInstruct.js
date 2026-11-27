@@ -85,7 +85,7 @@ Tools:
 - Outline is outline_color and outline_width ("remove the outline" = outline_color "none"); shadow is "none", "soft" or "strong"; position_y moves captions to any height.
 - overflow "resize_to_fit" is the app's "Fit on one line". Making text bigger never changes overflow; the app tells the user when long lines stay fitted.
 - Intensity words (thick, thicker, bigger, bolder, stronger, more) are relative to the current value in the style line and must move past it: with outline width 8, "thick" is about 12-16. If what the user asks to add is already there (a drop shadow when shadow is soft or strong), switch to the other intensity or say in cannot_do(other) that it already has one.
-- font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, ask which font (see Asking). Never invent a font name.
+- font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, ask which look, with looks in the closest fonts (see Asking). Never invent a font name.
 - No tool changes animation or the color of a single word.
 - "Save this style as X", "call this style X", "name it X" = save_style with that name (1-40 characters). A change to colors, outline, shadow, font, case or highlighting already saves a copy of the style ("Lunar 2"); don't call save_style unless the user asks to save or name it.
 - Users name parts by how they look. "Highlight" means the most visible mark on the spoken or emphasized word: the box behind it if the looks line has one, else its colored letters. In questions, options and messages, name parts as the looks line describes them ("the purple box behind the spoken word", "the cyan letters of the spoken word"), never by field names or the bare word "highlight".
@@ -106,7 +106,7 @@ Deciding:
 12. A sentence can continue into the next caption. When the user gives new text for a sentence, call rewrite_sentence once with the first and last caption it spans; every word they gave must be in text.
 13. Removing punctuation means every mark (. , ! ? : ;): one find_replace per mark (whole_word false), or replace_words per word.
 14. Lowercase, normal or sentence case:
-- caps_only_font true: don't call set_style. Ask which preset (see Asking), saying this style's font has only capital letters; offer 2 presets close to the current one by name or category.
+- caps_only_font true: don't call set_style. Ask which look (see Asking), saying this style's font has only capital letters; offer 2-3 looks close to the current one: presets near it by name or category, or the current style in a font with lowercase letters.
 - caps_only_font false: call change_letters lowercase (the app also stops the style forcing capitals).
 - Changing the letters of particular words ("capitalize the first word of every line") is a text edit: do it with change_letters even when caps_only_font is true; you may add a one-line cannot_do(other) note that this style shows everything in capitals.
 15. Write question, options and message in the reply language, in under 25 words. Name presets by name, never by id. Exception: if the instruction is Hindi or Urdu written in Latin letters (Hinglish), reply in Hinglish in Latin letters, even when the reply language is Hindi or Urdu. Never translate caption text in tool arguments: expect, find, replace and text stay in the captions' own language and script.
@@ -117,20 +117,17 @@ Deciding:
 
 Asking:
 - Ask one question with ask_clarification, alone. Each option has a type, which says what tapping it does:
-  - change: an edit you can apply as it is, fitted to the current style line; the label says what changes and how ("Yellow text", "Black box behind the captions", "Thicker outline"). A change to the style sets style to its set_style fields: the app shows it as a preview of the user's captions and applies it when tapped. Offer a change to the background box only when the style has one (caption_bg or word_bg isn't "none"), or adding one when it has none.
-  - preset: a preset from <presets>, by preset_id, never the current one (preset_name). The app shows it as a preview and applies it when tapped.
-  - font: a font from <fonts>, by font. The app shows it as a preview and applies it when tapped.
+  - look: what the captions could look like. Either a preset as it is (preset_id), changes to the current style (style, with preset_id null), or a preset with changes (both). The app shows each look as a preview of the user's captions and applies it when tapped. Label it by what it is ("Showgirl with white text", "Bright yellow text, red box"). Never the current preset (preset_name) as it is.
+  - change: an edit that isn't about the look (the words, the timing, the lines), worded as what changes.
   - direction: an area or kind to narrow down to ("The look", "Playful", "Podcast style"); choosing it leads to your next question.
-- Narrow down from where the request is vague, one level per question, until the options are changes, presets or fonts. The levels, broadest first:
+- Narrow down from where the request is vague, one level per question, until the options are looks or changes. The levels, broadest first:
   - What to improve, for a request about everything ("make it better", "improve it"): directions for the parts it could mean, such as the words, the timing and the look.
-  - Which version, for a quality the current style should have, with no part or no one way to get it ("make it pop", "brighter", "brighter colors", "more contrast", "bolder", "change the color"): 3 options of type change, each with its style set (never directions or presets: the app previews each on the user's captions). Each is a whole version with the quality the user asked for, and each changes a different thing so they look clearly different: one the text and highlight colors, one a box behind the captions or words (changing the box when the style has one), one the outline, shadow or font. Label each by what it does ("Bright yellow text, white box").
-  - What kind of look, for a new look with no kind ("a different preset", "another style", "make it look nicer"): 3 kinds from one angle. The angles, in order: feel (bold, playful, clean, fancy, colorful, retro), who it's for (podcast, vlog, tutorial, lifestyle influencer, gaming), and one standout feature (a box behind the captions, a big colored word as it's spoken, a handwritten font).
-  - Which preset, once the kind of look is known (a feel, who it's for, a theme or occasion like Halloween, a standout feature, a color): 3 presets whose look, category and name fit it best. Never ask a narrower kind after a kind.
-  - Which font, when the font asked for isn't in <fonts>, or a family's weights look very different and nothing hints which: 1-3 of the closest fonts.
-- Start at the level the user's words leave open: "make it pop", "brighter" or "more contrast" starts at which version, "a different preset" at the kind of look, "something playful" and "a style with bright colors" at which preset (asking for a style, preset or look means a new one, so what they say about it is its kind), "make the yellow brighter" acts.
-- Read the answers so far in <clarification> and <history>, each at the level of the question it answers. A choice that names a change is applied without asking. A direction, or a quality with no part ("Brighter colors"), moves one level down. While the user is choosing presets, anything they say about the look ("brighter colors", "more colorful", "simpler", "something with a box") picks 3 other presets that fit it; it is never a change to the current style.
-- When the user turns the options down ("none of those", "not really", "something else", "neither"), ask at the same level again from a different angle, with options never offered before in <history> or <clarification>: kinds from the next angle, or other presets of the kind they picked. When they ask for more ("More like these", "show me more"), ask at the same level with 3 more of the same kind, also never offered before.
-- A preset the user names is applied without asking. When they ask you to choose ("surprise me", "you pick", "anything"), you choose the options: ask which preset with 3 presets of different kinds, never preset_name or one offered before.`;
+  - What kind of look, for a new look with nothing said about it ("a different preset", "another style", "make it look nicer"): 3 kinds from one angle. The angles, in order: feel (bold, playful, clean, fancy, colorful, retro), who it's for (podcast, vlog, tutorial, lifestyle influencer, gaming), and one standout feature (a box behind the captions, a big colored word as it's spoken, a handwritten font).
+  - Which look, as soon as the user has said anything about the look they want: a kind, theme or occasion ("playful", "for a podcast", "Halloween"), a quality ("make it pop", "brighter", "more contrast", "bolder", "bright colors"), a font, or that you should choose ("surprise me", "you pick"). Offer 3 looks that each have what they asked for and look clearly different from each other. Mix whatever fits best: presets from <presets> whose look, category and name fit; versions of the current style that each change a different thing (the text and highlight colors, a box behind the captions or words (changing the box when the style has one), the outline, shadow or font); or a preset with changes. When the request is about the captions they have (a quality: "make it pop", "brighter", "more contrast", "bolder"), at least 2 looks are versions of the current style, so they see their own captions improved; when it asks for a new look (a kind, a theme, "surprise me"), most are presets. A version of the current style always sets style. A font that isn't in <fonts> gets looks with the closest fonts. Never ask a narrower kind once something about the look is known.
+- Start at the level the user's words leave open: "make it better" at what to improve, "a different preset" at what kind of look, "make it pop", "something playful" or "surprise me" at which look, and "make the yellow brighter" acts.
+- Read the answers so far in <clarification> and <history>, each at the level of the question it answers. A choice that names a change is applied without asking; a direction moves one level down. While the user is choosing looks, anything more they say about the look ("brighter colors", "more colorful", "simpler", "something with a box") gets 3 other looks that fit it.
+- When the user turns the options down ("none of those", "not really", "something else", "neither"), ask at the same level again from a different angle, with options never offered before in <history> or <clarification>: kinds from the next angle, or other looks. When they ask for more ("More like these", "show me more"), ask at the same level with 3 more of the same kind, also never offered before.
+- A preset the user names is applied without asking, with any changes they ask for in the same instruction ("Boo Cute but with white text" is apply_preset plus set_style).`;
 
 // Appended to the system prompt for builds that list their own tools (app_tools), with
 // appToolDefinitions added to the tools. Built from the build's lists, so it only names tools
@@ -296,56 +293,73 @@ export function matchFont(text, catalog) {
     return best?.name ?? null;
 }
 
+// The options of earlier questions, squashed, from history lines the app writes as
+// "AI Edit asked: <question> Options: A / B / Keep as is".
+function offeredLabels(history) {
+    const labels = new Set();
+    for (const line of history || []) {
+        const options = line.startsWith('AI Edit asked:') ? line.split(' Options: ')[1] : null;
+        for (const label of options ? options.split(' / ') : []) labels.add(squash(label));
+    }
+    return labels;
+}
+
+// The preset id in the snapshot's style line ("style {…"preset":"…"…}"), or null.
+function currentPreset(snapshot) {
+    const line = (snapshot || '').split('\n').reverse().find((entry) => entry.startsWith('style '));
+    try {
+        return JSON.parse(line.slice(6)).preset ?? null;
+    } catch {
+        return null;
+    }
+}
+
 const catalogFonts = (fonts) => (fonts ? fonts.split('\n').map((name) => name.trim()).filter(Boolean) : []);
 const catalogPresets = (presets) => (presets || '').split('\n')
     .map((line) => line.split('|').map((part) => part.trim()))
     .filter(([id, name]) => id && name)
     .map(([id, name]) => ({ id, name }));
 
-// A question's options checked against the catalogs, so the app can apply a preset or font option
-// as it is: a preset option gets its catalog name as its label (an unknown id is matched by name,
-// else the option becomes a direction), a font option gets an exact catalog name (an option naming
-// no catalog font is dropped: it can't be applied, and the app adds its own "Keep as is").
-// Repeats are dropped and at most 3 kept.
-export function normalizeOptions(calls, { presets, fonts }) {
+// A question's options checked against the catalogs, so the app can preview and apply a look as it
+// is: an unknown preset id is matched by the label's name or dropped, a style field the app can't
+// apply (a font not in the catalog) is dropped, and a look left with neither becomes a direction.
+// A preset as it is gets its catalog name as its label; the current preset as it is (no new look)
+// and a preset offered earlier in the conversation (history) are dropped. Repeats are dropped and
+// at most 3 kept.
+export function normalizeOptions(calls, { presets, fonts, snapshot, history }) {
     const presetList = catalogPresets(presets);
     const fontList = catalogFonts(fonts);
+    const current = currentPreset(snapshot);
+    const offered = offeredLabels(history);
     return calls.map((call) => {
         if (call.name !== 'ask_clarification' || !Array.isArray(call.arguments?.options)) return call;
         const seen = new Set();
         const options = [];
         for (const option of call.arguments.options) {
             let label = String(option?.label ?? '').trim();
-            let type = option?.type;
+            let type = ['look', 'change', 'direction'].includes(option?.type) ? option.type : 'direction';
             let presetId = null;
-            let font = null;
             let style = null;
-            if (type === 'preset') {
-                const byName = presetList.filter((preset) => squash(preset.name) === squash(label));
-                const preset = presetList.find((preset) => preset.id === option.preset_id) ?? (byName.length === 1 ? byName[0] : null);
-                if (preset) {
-                    label = preset.name;
-                    presetId = preset.id;
-                } else {
-                    type = 'direction';
+            if (type === 'look') {
+                if (option.preset_id != null) {
+                    const byName = presetList.filter((preset) => squash(preset.name) === squash(label));
+                    presetId = (presetList.find((preset) => preset.id === option.preset_id) ?? (byName.length === 1 ? byName[0] : null))?.id ?? null;
                 }
-            }
-            if (type === 'font') {
-                font = matchFont(option.font, fontList) ?? matchFont(label, fontList);
-                if (!font) continue;
-                label = font;
-            }
-            // a change to the style keeps the fields it sets (a font only if it's in the catalog)
-            if (type === 'change' && isPlainObject(option.style)) {
-                const set = Object.entries(option.style).filter(([, value]) => value != null);
-                const fields = Object.fromEntries(set.map(([key, value]) => [key, key === 'font' ? matchFont(value, fontList) : value]).filter(([, value]) => value != null));
-                if (Object.keys(fields).length) style = { ...Object.fromEntries(Object.keys(option.style).map((key) => [key, null])), ...fields };
+                if (isPlainObject(option.style)) {
+                    const fields = Object.fromEntries(Object.entries(option.style)
+                        .map(([key, value]) => [key, key === 'font' && value != null ? matchFont(value, fontList) : value])
+                        .filter(([, value]) => value != null));
+                    if (Object.keys(fields).length) style = { ...Object.fromEntries(Object.keys(option.style).map((key) => [key, null])), ...fields };
+                }
+                if (presetId && !style && (presetId === current || offered.has(squash(presetList.find((preset) => preset.id === presetId).name)))) continue;
+                if (!presetId && !style) type = 'direction';
+                if (presetId && !style) label = presetList.find((preset) => preset.id === presetId).name;
             }
             if (!label) continue;
-            const key = presetId ? `preset ${presetId}` : font ? `font ${font}` : style ? `style ${JSON.stringify(style)}` : `label ${label.toLowerCase()}`;
+            const key = type === 'look' ? `look ${presetId} ${JSON.stringify(style)}` : `label ${label.toLowerCase()}`;
             if (seen.has(key)) continue;
             seen.add(key);
-            options.push({ label, type, preset_id: presetId, font, style });
+            options.push({ label, type, preset_id: presetId, style });
         }
         return { ...call, arguments: { ...call.arguments, options: options.slice(0, 3) } };
     });

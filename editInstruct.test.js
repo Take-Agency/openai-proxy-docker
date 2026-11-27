@@ -30,7 +30,7 @@ const setStyle = call('set_style', {
     font_size: 104, position: null, case: null, highlight: null, overflow: null,
     position_y: null, outline_color: null, outline_width: null, shadow: null, font: null,
 });
-const option = (label, type = 'change', presetId = null, font = null, style = null) => ({ label, type, preset_id: presetId, font, style });
+const option = (label, type = 'change', presetId = null, style = null) => ({ label, type, preset_id: presetId, style });
 const askClarification = call('ask_clarification', { question: 'Which color?', options: [option('Text'), option('Emphasis')] });
 
 // Builds a fake OpenAI Responses endpoint. `respond({ model, request })` returns the `output`
@@ -588,24 +588,27 @@ test('options are checked against the catalogs', () => {
     const presets = 'clean|Clean|minimalClean\nspook|Spookspire 🎃|halloween\nboo|Boo Cute|halloween';
     const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Which one?', options } }];
     const options = (calls) => normalizeOptions(calls, { presets, fonts })[0].arguments.options;
-    // a preset gets its catalog name; an unknown id is matched by name, else it is a direction
-    assert.deepEqual(options(ask(option('Spooky one', 'preset', 'spook'), option('boo cute', 'preset', 'nope'), option('Witchy', 'preset', 'nope'))),
-        [option('Spookspire 🎃', 'preset', 'spook'), option('Boo Cute', 'preset', 'boo'), option('Witchy', 'direction')]);
-    // a kind named like a preset stays a kind
-    assert.deepEqual(options(ask(option('Clean', 'direction', 'clean'), option('Playful', 'direction'))), [option('Clean', 'direction'), option('Playful', 'direction')]);
-    // a font gets an exact catalog name; one naming no catalog font is dropped
-    assert.deepEqual(options(ask(option('Chalkboard', 'font', null, 'ChalkboardSE-Bold'), option('Comic Sans', 'font', null, 'Comic Sans'), option('x', 'font', null, 'Comic Sans unavailable; choose Fredoka One'))),
-        [option('ChalkboardSE-Bold', 'font', null, 'ChalkboardSE-Bold'), option('Fredoka One', 'font', null, 'Fredoka One')]);
-    // repeats dropped, at most 3
-    assert.deepEqual(options(ask(option('Boo', 'preset', 'boo'), option('Boo Cute', 'preset', 'boo'), option('A'), option('B'), option('C'))).map((entry) => entry.label), ['Boo Cute', 'A', 'B']);
-    // a change to the style keeps the fields it sets; an unknown font is dropped, an empty style is null
     const nulls = { fill_color: null, font: null, shadow: null };
-    assert.deepEqual(options(ask(option('Yellow text, comic font', 'change', null, null, { ...nulls, fill_color: '#FFD600', font: 'Fredoka One' }), option('Comic Sans', 'change', null, null, { ...nulls, font: 'Comic Sans' }))),
-        [option('Yellow text, comic font', 'change', null, null, { ...nulls, fill_color: '#FFD600', font: 'Fredoka One' }), option('Comic Sans', 'change')]);
-    // other calls pass through
+    // a preset as it is gets its catalog name; an unknown id is matched by name, else the look is a direction
+    assert.deepEqual(options(ask(option('Spooky one', 'look', 'spook'), option('boo cute', 'look', 'nope'), option('Witchy', 'look', 'nope'))),
+        [option('Spookspire 🎃', 'look', 'spook'), option('Boo Cute', 'look', 'boo'), option('Witchy', 'direction')]);
+    // a preset with changes keeps its label; a version of the current style has no preset
+    assert.deepEqual(options(ask(option('Boo Cute, white text', 'look', 'boo', { ...nulls, fill_color: '#FFFFFF' }), option('Yellow text', 'look', null, { ...nulls, fill_color: '#FFD600' }))),
+        [option('Boo Cute, white text', 'look', 'boo', { ...nulls, fill_color: '#FFFFFF' }), option('Yellow text', 'look', null, { ...nulls, fill_color: '#FFD600' })]);
+    // a font is matched to the catalog; a look with only an unknown font is a direction
+    assert.deepEqual(options(ask(option('Fredoka', 'look', null, { ...nulls, font: 'Comic Sans unavailable; choose Fredoka One' }), option('Comic Sans', 'look', null, { ...nulls, font: 'Comic Sans' }))),
+        [option('Fredoka', 'look', null, { ...nulls, font: 'Fredoka One' }), option('Comic Sans', 'direction')]);
+    // a kind named like a preset stays a direction; repeats dropped, at most 3
+    assert.deepEqual(options(ask(option('Clean', 'direction'), option('Boo', 'look', 'boo'), option('Boo Cute', 'look', 'boo'), option('A'), option('B'))).map((entry) => entry.label), ['Clean', 'Boo Cute', 'A']);
+    // the current preset as it is is no new look (with changes it is)
+    const snapshot = 'rev 1\nstyle {"preset":"boo","fill":"#FFFFFF"}';
+    assert.deepEqual(normalizeOptions(ask(option('Boo Cute', 'look', 'boo'), option('Boo Cute, red', 'look', 'boo', { ...nulls, fill_color: '#FF0000' })), { presets, fonts, snapshot })[0].arguments.options.map((entry) => entry.label), ['Boo Cute, red']);
+    // a preset offered earlier in the conversation isn't offered again
+    const history = ['User: Halloween', 'AI Edit asked: Which one? Options: Spookspire 🎃 / Clean / Keep as is'];
+    assert.deepEqual(normalizeOptions(ask(option('Spookspire', 'look', 'spook'), option('Boo Cute', 'look', 'boo')), { presets, fonts, history })[0].arguments.options.map((entry) => entry.label), ['Boo Cute']);
     const other = [{ name: 'set_style', arguments: { font: 'x' } }];
     assert.deepEqual(normalizeOptions(other, { presets, fonts }), other);
-    assert.deepEqual(flattenOptions(ask(option('Boo Cute', 'preset', 'boo'), option('Text'))), [{ name: 'ask_clarification', arguments: { question: 'Which one?', options: ['Boo Cute', 'Text'] } }]);
+    assert.deepEqual(flattenOptions(ask(option('Boo Cute', 'look', 'boo'), option('Text'))), [{ name: 'ask_clarification', arguments: { question: 'Which one?', options: ['Boo Cute', 'Text'] } }]);
 });
 
 test('the bulk tools are strict and in the tool list', () => {

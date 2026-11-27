@@ -182,7 +182,7 @@ function typeOk(type, value) {
     case 'ids': return Array.isArray(value) && value.every((item) => typeof item === 'string');
     // ask_clarification options: plain strings from builds without typed_options, else {label, type, preset_id, font}
     case 'options': return Array.isArray(value) && (value.every((item) => typeof item === 'string')
-        || value.every((item) => item && typeof item.label === 'string' && ['change', 'preset', 'font', 'direction'].includes(item.type)));
+        || value.every((item) => item && typeof item.label === 'string' && ['look', 'change', 'direction'].includes(item.type)));
     case 'refs': return Array.isArray(value) && value.every((item) => item && typeof item.id === 'string' && typeof item.expect === 'string');
     default: return false;
     }
