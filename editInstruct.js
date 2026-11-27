@@ -85,14 +85,14 @@ Tools:
 - Outline is outline_color and outline_width ("remove the outline" = outline_color "none"); shadow is "none", "soft" or "strong"; position_y moves captions to any height.
 - overflow "resize_to_fit" is the app's "Fit on one line". Making text bigger never changes overflow; the app tells the user when long lines stay fitted.
 - Intensity words (thick, thicker, bigger, bolder, stronger, more) are relative to the current value in the style line and must move past it: with outline width 8, "thick" is about 12-16. If what the user asks to add is already there (a drop shadow when shadow is soft or strong), switch to the other intensity or say in cannot_do(other) that it already has one.
-- font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, ask which font (see Asking). Never invent a font name.
+- font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, call suggest_looks with versions in the closest fonts (see Asking). Never invent a font name.
 - No tool changes animation or the color of a single word.
 - "Save this style as X", "call this style X", "name it X" = save_style with that name (1-40 characters). A change to colors, outline, shadow, font, case or highlighting already saves a copy of the style ("Lunar 2"); don't call save_style unless the user asks to save or name it.
 - Users name parts by how they look. "Highlight" means the most visible mark on the spoken or emphasized word: the box behind it if the looks line has one, else its colored letters. In questions, options and messages, name parts as the looks line describes them ("the purple box behind the spoken word", "the cyan letters of the spoken word"), never by field names or the bare word "highlight".
 - Never set a field the looks line says does nothing in this style: say so in cannot_do(other) and offer what would work (a preset that has that part, or a part this style has).
 
 Deciding:
-1. Act when one reading is clearly the most likely or there is a sensible default: every text, line and timing edit is shown to the user for review, and everything is undoable. Otherwise ask (see Asking). Sensible defaults: "bigger" = current size +15%, "smaller" = -15%, "yellow" = #FFD600, a color for "the captions" or "the text" = the text color (fill), "brighter" or "darker" on a part that has a color = the same color, lighter or more vivid (or darker), "middle" = center, a split with no position given = near the middle of the line, "one word at a time" or "shorter/less text per line" = pacing fast, "fix the grammar" or "fix typos" = make only the obvious fixes.
+1. Act when one reading is clearly the most likely or there is a sensible default: every text, line and timing edit is shown to the user for review, and everything is undoable. Otherwise ask (see Asking). Sensible defaults: "bigger" = current size +15%, "smaller" = -15%, "yellow" = #FFD600, a color for "the captions" or "the text" = the text color (fill), a new outline = black on light letters and white on dark ones, "brighter" or "darker" on a part that has a color = the same color, lighter or more vivid (or darker), "middle" = center, a split with no position given = near the middle of the line, "one word at a time" or "shorter/less text per line" = pacing fast, "fix the grammar" or "fix typos" = make only the obvious fixes.
 2. "This line", "this one", "here" mean the focus caption.
 3. Ask (see Asking) when the choice is the user's to make: the readings lead to materially different results and nothing makes one the most likely, or it is a matter of taste.
 4. Change only what the user named: no other style field, word or line. A request about style, color, size, position, font or pacing never deletes or changes words, even fillers. When something has no tool, never change a different setting in its place (removing the outline doesn't mean removing backgrounds).
@@ -106,7 +106,7 @@ Deciding:
 12. A sentence can continue into the next caption. When the user gives new text for a sentence, call rewrite_sentence once with the first and last caption it spans; every word they gave must be in text.
 13. Removing punctuation means every mark (. , ! ? : ;): one find_replace per mark (whole_word false), or replace_words per word.
 14. Lowercase, normal or sentence case:
-- caps_only_font true: don't call set_style. Ask which preset (see Asking), saying this style's font has only capital letters; offer 2 presets close to the current one by name or category.
+- caps_only_font true: don't call set_style. Call suggest_looks (see Asking), saying in the question that this style's font has only capital letters; offer 2-3 looks close to the current one: presets near it by name or category, or the current style in a font with lowercase letters.
 - caps_only_font false: call change_letters lowercase (the app also stops the style forcing capitals).
 - Changing the letters of particular words ("capitalize the first word of every line") is a text edit: do it with change_letters even when caps_only_font is true; you may add a one-line cannot_do(other) note that this style shows everything in capitals.
 15. Write question, options and message in the reply language, in under 25 words. Name presets by name, never by id. Exception: if the instruction is Hindi or Urdu written in Latin letters (Hinglish), reply in Hinglish in Latin letters, even when the reply language is Hindi or Urdu. Never translate caption text in tool arguments: expect, find, replace and text stay in the captions' own language and script.
@@ -116,22 +116,22 @@ Deciding:
 19. Never tell the user to use another app, editor or tool, or to do something themselves somewhere else.
 
 Asking:
-- Ask one question with ask_clarification, alone. Each option has a type, which says what tapping it does:
-  - change: an edit you can apply as it is, fitted to the current style line; the label says what changes and how ("Yellow text", "Black box behind the captions", "Thicker outline"). Offer a change to the background box only when the style has one (caption_bg or word_bg isn't "none"), or adding one when it has none.
-  - preset: a preset from <presets>, by preset_id, never the current one (preset_name). The app shows it as a preview and applies it when tapped.
-  - font: a font from <fonts>, by font. The app shows it as a preview and applies it when tapped.
-  - direction: an area or kind to narrow down to ("The look", "Playful", "Podcast style"); choosing it leads to your next question.
-- Narrow down from where the request is vague, one level per question, until the options are changes, presets or fonts. The levels, broadest first:
-  - What to improve, for a request about everything ("make it better", "improve it"): directions for the parts it could mean, such as the words, the timing and the look.
-  - Which part, for a quality with no part ("brighter", "brighter colors", "more contrast", "make it pop", "change the color"): one change for each part the looks line shows, most visible first: the box behind the captions or words when there is one, the text, the highlight (or adding a box when there is none).
-  - Which way, for a quality that different changes give ("bolder", "thicker"): one change for each (a heavier font, a thicker outline).
-  - What kind of look, for a new look with no kind ("a different preset", "another style", "make it look nicer"): 3 kinds from one angle. The angles, in order: feel (bold, playful, clean, fancy, colorful, retro), who it's for (podcast, vlog, tutorial, lifestyle influencer, gaming), and one standout feature (a box behind the captions, a big colored word as it's spoken, a handwritten font).
-  - Which preset, once the kind of look is known (a feel, who it's for, a theme or occasion like Halloween, a standout feature, a color): 3 presets whose look, category and name fit it best. Never ask a narrower kind after a kind.
-  - Which font, when the font asked for isn't in <fonts>, or a family's weights look very different and nothing hints which: 1-3 of the closest fonts.
-- Start at the level the user's words leave open: "a different preset" starts at the kind of look, "something playful" and "a style with bright colors" at which preset (asking for a style, preset or look means a new one, so what they say about it is its kind), "make the yellow brighter" acts.
-- Read the answers so far in <clarification> and <history>, each at the level of the question it answers. A choice that names a change is applied without asking. A direction, or a quality with no part ("Brighter colors"), moves one level down. While the user is choosing presets, anything they say about the look ("brighter colors", "more colorful", "simpler", "something with a box") picks 3 other presets that fit it; it is never a change to the current style.
-- When the user turns the options down ("none of those", "not really", "something else", "neither"), ask at the same level again from a different angle, with options never offered before in <history> or <clarification>: kinds from the next angle, or other presets of the kind they picked. When they ask for more ("More like these", "show me more"), ask at the same level with 3 more of the same kind, also never offered before.
-- A preset the user names is applied without asking. When they ask you to choose ("surprise me", "you pick", "anything"), you choose the options: ask which preset with 3 presets of different kinds, never preset_name or one offered before.`;
+- Two ways to ask, each alone:
+  - ask_clarification: a question in words. Each option is a change that isn't about the look (the words, the timing, the lines), worded as what changes, or a direction to narrow down to ("The look", "Playful", "Brighter colors"), which leads to your next question. Set offer_presets only for how (below).
+  - suggest_looks: looks to pick from, each previewed on the user's captions and applied when tapped. versions are changes to the current style (preset_id null) or to a preset, each with its style set; presets are presets as they are, never the current one (preset_name).
+- Narrow down from where the request is vague, one level per question. The levels, broadest first:
+  - What to improve, for a request about everything ("make it better", "improve it"): ask_clarification with directions for the parts it could mean, such as the words, the timing and the look.
+  - How, for a look that should get better with nothing said about the way ("make it pop", "make it stand out", "make it look better"): ask_clarification with offer_presets true and 2-3 directions for ways that fit the current style line ("Brighter colors", "A box behind the words", "A bolder outline", "A different font"). The app adds "A different preset" itself. Only when no quality is named: "brighter", "more contrast", "bolder" or "more colorful" already name the way, so they get looks.
+  - What kind of look, for a new look with nothing said about it ("a different preset", "another style", "make it look nicer"): ask_clarification with 3 kinds from one angle (unless they ask you to choose, "surprise me with a new style", which gets looks). The angles, in order: feel (bold, playful, clean, fancy, colorful, retro), who it's for (podcast, vlog, tutorial, lifestyle influencer, gaming), and one standout feature (a box behind the captions, a big colored word as it's spoken, a handwritten font).
+  - Which look, as soon as the user has said or picked how or what kind: a way ("brighter colors", "brighter", "a box behind the words", "bolder", "more contrast"), a kind, theme or occasion ("playful", "for a podcast", "Halloween"), a font, or that you should choose ("surprise me", "you pick"). suggest_looks, never a question about which part (text, highlight, box):
+    - for a way to improve the captions they have: 2 versions of the current style, each changing a different thing (the text and highlight colors, a box behind the captions or words (changing the box when the style has one), the outline, shadow or font), and 2 presets that have that way;
+    - for a new look (a kind, a theme, "surprise me"): 3-4 presets whose look, category and name fit, and at most 1 version;
+    - for a font that isn't in <fonts>: 2-3 versions in the closest fonts, and presets in a similar font if any.
+    Every look has what the user asked for, and they look clearly different from each other. Every look must read: letters that stand out from a box behind them, the spoken word from its box, and an outline that contrasts with the letters (a dark outline on light letters, a light one on dark letters); never letters on a box of a similar color, or an outline the color of the letters.
+- Start at the level the user's words leave open: "make it better" at what to improve, "make it pop" at how, "a different preset" at what kind of look, "brighter colors", "something playful" or "surprise me" at which look, and "make the yellow brighter" acts.
+- Read the answers so far in <clarification> and <history>, each at the level of the question it answers. A choice that names a change is applied without asking; a direction moves one level down ("A different preset" to what kind of look). A way picked in answer to how that leaves the details open ("Thicker outline", "Brighter colors", "A box behind the words") gets looks, never a change applied as it is; one that names the exact change ("Yellow text") is applied. While the user is choosing looks, anything more they say about the look ("brighter colors", "more colorful", "simpler", "something with a box") gets other looks that fit it.
+- When the user turns the options down ("none of those", "not really", "something else", "neither"), ask at the same level again from a different angle, with options never offered before in <history> or <clarification>: kinds from the next angle, or other looks. When they ask for more ("More like these", "show me more"), suggest more looks of the same kind, also never offered before.
+- A preset the user names is applied without asking, with any changes they ask for in the same instruction (apply_preset plus set_style).`;
 
 // Appended to the system prompt for builds that list their own tools (app_tools), with
 // appToolDefinitions added to the tools. Built from the build's lists, so it only names tools
@@ -250,7 +250,7 @@ export function validateToolCalls(calls, { canUndo = false, appTools = false } =
         }
     }
     if (calls.filter((call) => call.name === 'insert_caption').length > MAX_INSERTS) throw new Error('too_many_inserts');
-    if (calls.length > 1 && calls.some((call) => call.name === 'ask_clarification')) {
+    if (calls.length > 1 && calls.some((call) => call.name === 'ask_clarification' || call.name === 'suggest_looks')) {
         throw new Error('clarification_mixed');
     }
     if (calls.some((call) => call.name === 'undo_last_edit') && (!canUndo || calls.length > 1)) throw new Error('bad_undo');
@@ -297,58 +297,113 @@ export function matchFont(text, catalog) {
     return best?.name ?? null;
 }
 
+// The options of earlier questions, squashed, from history lines the app writes as
+// "AI Edit asked: <question> Options: A / B / Keep as is".
+function offeredLabels(history) {
+    const labels = new Set();
+    for (const line of history || []) {
+        const options = line.startsWith('AI Edit asked:') ? line.split(' Options: ')[1] : null;
+        for (const label of options ? options.split(' / ') : []) labels.add(squash(label));
+    }
+    return labels;
+}
+
+// The preset id in the snapshot's style line ("style {…"preset":"…"…}"), or null.
+function currentPreset(snapshot) {
+    const line = (snapshot || '').split('\n').reverse().find((entry) => entry.startsWith('style '));
+    try {
+        return JSON.parse(line.slice(6)).preset ?? null;
+    } catch {
+        return null;
+    }
+}
+
 const catalogFonts = (fonts) => (fonts ? fonts.split('\n').map((name) => name.trim()).filter(Boolean) : []);
 const catalogPresets = (presets) => (presets || '').split('\n')
     .map((line) => line.split('|').map((part) => part.trim()))
     .filter(([id, name]) => id && name)
     .map(([id, name]) => ({ id, name }));
 
-// A question's options checked against the catalogs, so the app can apply a preset or font option
-// as it is: a preset option gets its catalog name as its label (an unknown id is matched by name,
-// else the option becomes a direction), a font option gets an exact catalog name (an option naming
-// no catalog font is dropped: it can't be applied, and the app adds its own "Keep as is").
-// Repeats are dropped and at most 3 kept.
-export function normalizeOptions(calls, { presets, fonts }) {
+// A question's options checked against the catalogs, so the app can preview and apply a look as it
+// is: an unknown preset id is matched by the label's name or dropped, a style field the app can't
+// apply (a font not in the catalog) is dropped, and a look left with neither becomes a direction.
+// A preset as it is gets its catalog name as its label; the current preset as it is (no new look)
+// and a preset offered earlier in the conversation (history) are dropped. Repeats are dropped and
+// at most 4 kept.
+export function normalizeOptions(calls, { presets, fonts, snapshot, history }) {
     const presetList = catalogPresets(presets);
     const fontList = catalogFonts(fonts);
+    const current = currentPreset(snapshot);
+    const offered = offeredLabels(history);
     return calls.map((call) => {
         if (call.name !== 'ask_clarification' || !Array.isArray(call.arguments?.options)) return call;
         const seen = new Set();
         const options = [];
         for (const option of call.arguments.options) {
             let label = String(option?.label ?? '').trim();
-            let type = option?.type;
+            let type = ['look', 'change', 'direction'].includes(option?.type) ? option.type : 'direction';
             let presetId = null;
-            let font = null;
-            if (type === 'preset') {
-                const byName = presetList.filter((preset) => squash(preset.name) === squash(label));
-                const preset = presetList.find((preset) => preset.id === option.preset_id) ?? (byName.length === 1 ? byName[0] : null);
-                if (preset) {
-                    label = preset.name;
-                    presetId = preset.id;
-                } else {
-                    type = 'direction';
+            let style = null;
+            if (type === 'look') {
+                if (option.preset_id != null) {
+                    // an id, else a name (in preset_id or the label) that matches one preset
+                    const byName = presetList.filter((preset) => squash(preset.name) === squash(option.preset_id) || (label && squash(preset.name) === squash(label)));
+                    presetId = (presetList.find((preset) => preset.id === option.preset_id) ?? (byName.length === 1 ? byName[0] : null))?.id ?? null;
                 }
-            }
-            if (type === 'font') {
-                font = matchFont(option.font, fontList) ?? matchFont(label, fontList);
-                if (!font) continue;
-                label = font;
+                if (isPlainObject(option.style)) {
+                    const fields = Object.fromEntries(Object.entries(option.style)
+                        .map(([key, value]) => [key, key === 'font' && value != null ? matchFont(value, fontList) : value])
+                        .filter(([, value]) => value != null));
+                    if (Object.keys(fields).length) style = { ...Object.fromEntries(Object.keys(option.style).map((key) => [key, null])), ...fields };
+                }
+                if (presetId && !style && (presetId === current || offered.has(squash(presetList.find((preset) => preset.id === presetId).name)))) continue;
+                if (!presetId && !style) type = 'direction';
+                if (presetId && !style) label = presetList.find((preset) => preset.id === presetId).name;
             }
             if (!label) continue;
-            const key = presetId ? `preset ${presetId}` : font ? `font ${font}` : `label ${label.toLowerCase()}`;
+            const key = type === 'look' ? `look ${presetId} ${JSON.stringify(style)}` : `label ${label.toLowerCase()}`;
             if (seen.has(key)) continue;
             seen.add(key);
-            options.push({ label, type, preset_id: presetId, font });
+            options.push({ label, type, preset_id: presetId, style });
         }
-        return { ...call, arguments: { ...call.arguments, options: options.slice(0, 3) } };
+        return { ...call, arguments: { ...call.arguments, options: options.slice(0, 4) } };
     });
 }
+
+// The catalog is one "id|name|…" line per preset, and the model sometimes copies the id from the
+// line after the preset the user named (Boo Cute's neighbour Magic Halloween). When apply_preset
+// names a preset the user didn't mention and the line just above it is one they did, that one is
+// meant. Only this slip is corrected: a preset the user didn't name is otherwise left alone.
+export function fixNamedPreset(calls, { presets, instruction, clarification }) {
+    const list = catalogPresets(presets);
+    const said = squash(`${instruction || ''} ${clarification?.choice || ''}`);
+    // 6+ letters, so a name that is an everyday word ("Pop", "Neon", "Clean") never counts as named
+    const named = (preset) => preset && squash(preset.name).length >= 6 && said.includes(squash(preset.name));
+    return calls.map((call) => {
+        if (call.name !== 'apply_preset') return call;
+        const index = list.findIndex((preset) => preset.id === call.arguments?.preset_id);
+        if (index < 1 || named(list[index]) || !named(list[index - 1])) return call;
+        return { ...call, arguments: { ...call.arguments, preset_id: list[index - 1].id } };
+    });
+}
+
+// suggest_looks is how the model offers looks; the app reads them as a question whose options are
+// looks (versions first, then presets), so its answer format stays one kind of question.
+export const looksAsQuestion = (calls) => calls.map((call) => {
+    if (call.name !== 'suggest_looks') return call;
+    const { question, versions = [], presets = [] } = call.arguments || {};
+    const options = [
+        ...(Array.isArray(versions) ? versions : []).map((version) => ({ label: version?.label ?? '', type: 'look', preset_id: version?.preset_id ?? null, style: version?.style ?? null })),
+        ...(Array.isArray(presets) ? presets : []).map((id) => ({ label: '', type: 'look', preset_id: id, style: null })),
+    ];
+    return { name: 'ask_clarification', arguments: { question, options, offer_presets: false } };
+});
 
 // Builds that don't send typed_options read options as plain strings: the labels, where a preset
 // or font option is its exact catalog name.
 export const flattenOptions = (calls) => calls.map((call) => (call.name === 'ask_clarification' && Array.isArray(call.arguments?.options)
-    ? { ...call, arguments: { ...call.arguments, options: call.arguments.options.map((option) => option.label) } }
+    // their validator takes at most 3
+    ? { ...call, arguments: { ...call.arguments, options: call.arguments.options.slice(0, 3).map((option) => option.label) } }
     : call));
 
 function parseArguments(raw) {
@@ -603,7 +658,7 @@ export function createEditInstructRouter({
             try {
                 const result = await callModel({ model, input, signal: controller.signal, canUndo: body.previous?.applied === true, appTools });
                 clearTimeout(timer);
-                let calls = normalizeOptions(result.calls, body);
+                let calls = normalizeOptions(looksAsQuestion(fixNamedPreset(result.calls, body)), body);
                 const { usage } = result;
                 const remainingMs = INTENT_DEADLINE_MS - (Date.now() - startedAt);
                 if (needsIntentCheck(calls) && remainingMs > 500) {

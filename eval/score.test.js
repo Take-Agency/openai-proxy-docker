@@ -123,13 +123,39 @@ test('outline, shadow, position and font', () => {
     assert.equal(score(61, style({ position: 'top' })).success, false);
     assert.equal(score(62, style({ font: 'Montserrat-ExtraBold' })).success, true);
     assert.equal(score(62, style({ font: 'Montserrat' })).success, false);
-    // font options are typed, with exact catalog names (the proxy maps them); the app adds "Keep current font"
-    const font = (name) => ({ label: name, type: 'font', preset_id: null, font: name });
+    // a missing font gets looks in catalog fonts (the proxy maps them); the app adds "Keep as is"
+    const blank = { fill_color: null, emphasis_color: null, caption_background_color: null, word_background_color: null, font_size: null, position: null, case: null, highlight: null, overflow: null, position_y: null, outline_color: null, outline_width: null, shadow: null, font: null };
+    const inFont = (name) => ({ label: name, type: 'look', preset_id: null, style: { ...blank, font: name } });
     const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available. Which of these?', options } }];
-    assert.equal(score(63, ask(font('Bangers-Regular'), font('LuckiestGuy-Regular'))).success, true);
-    assert.equal(score(63, ask(font('Fredoka One'))).success, true);
-    assert.equal(score(63, ask(font('Fredoka One'), { label: 'Keep current font', type: 'change', preset_id: null, font: null })).success, false);
-    assert.equal(score(63, ask(font('Bangers-Regular'), font('Comic-style Fredoka One'))).success, false);
+    assert.equal(score(63, ask(inFont('Bangers-Regular'), inFont('LuckiestGuy-Regular'))).success, true);
+    assert.equal(score(63, ask(inFont('Bangers-Regular'), { label: 'Keep current font', type: 'change', preset_id: null, style: null })).success, false);
+    assert.equal(score(63, ask(inFont('Bangers-Regular'), inFont('Comic-style Fredoka One'))).success, false);
     // an untyped answer (a build without typed options) can't pass a type check
     assert.equal(score(63, [{ name: 'ask_clarification', arguments: { question: 'Which?', options: ['Bangers-Regular'] } }]).success, false);
+});
+
+test('looks must each apply, change the captions and differ', () => {
+    const blank = { fill_color: null, emphasis_color: null, caption_background_color: null, word_background_color: null, font_size: null, position: null, case: null, highlight: null, overflow: null, position_y: null, outline_color: null, outline_width: null, shadow: null, font: null };
+    const look = (label, fields, presetId = null) => ({ label, type: 'look', preset_id: presetId, style: fields ? { ...blank, ...fields } : null });
+    const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Which look?', options } }];
+    const other = presets.find((preset) => preset.name !== 'Mosy');
+    // a version of the current style, a preset, and a preset with changes mix freely
+    assert.equal(score(151, ask(look('Yellow text', { fill_color: '#FFD600' }), look(other.name, null, other.id), look(`${other.name}, red text`, { fill_color: '#FF0000' }, other.id))).success, true);
+    assert.equal(score(151, ask(look('Yellow text', { fill_color: '#FFD600' }), look('Also yellow', { fill_color: '#FFD600' }))).success, false);
+    // the current preset as it is is no new look
+    assert.equal(score(151, ask(look('Yellow text', { fill_color: '#FFD600' }), look('Mosy', null, presets.find((preset) => preset.name === 'Mosy').id))).success, false);
+    assert.equal(score(151, ask(look('Yellow text', { fill_color: '#FFD600' }), { label: 'Playful', type: 'direction', preset_id: null, style: null })).success, false);
+});
+
+test('a look must read: letters against their box, outline against the letters', () => {
+    const blank = { fill_color: null, emphasis_color: null, caption_background_color: null, word_background_color: null, font_size: null, position: null, case: null, highlight: null, overflow: null, position_y: null, outline_color: null, outline_width: null, shadow: null, font: null };
+    const look = (label, fields) => ({ label, type: 'look', preset_id: null, style: { ...blank, ...fields } });
+    const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Which look?', options } }];
+    const yellow = look('Yellow text', { fill_color: '#FFD600' });
+    assert.equal(score(151, ask(yellow, look('Black outline', { outline_color: '#000000', outline_width: 8 }))).success, true);
+    // white outline on white letters, white letters on a white box
+    assert.equal(score(151, ask(yellow, look('White outline', { fill_color: '#FFFFFF', outline_color: '#FFFFFF', outline_width: 8 }))).success, false);
+    assert.equal(score(151, ask(yellow, look('White box', { fill_color: '#FFFFFF', caption_background_color: '#F5F5F5' }))).success, false);
+    // pink spoken word on a pink box
+    assert.equal(score(151, ask(yellow, look('Pink box', { emphasis_color: '#FF4F8B', word_background_color: '#F0457E' }))).success, false);
 });

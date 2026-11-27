@@ -78,6 +78,8 @@ export const FIXTURES = {
     F1pw: variant('F1pw', {}, { word_bg: '#8E3BFF', highlight: 'none' }),
     // an outline and a shadow already set (case 87: intensity words are relative)
     F1o: variant('F1o', {}, { outline: { color: '#000000', width: 8 }, shadow: 'strong' }),
+    // no outline yet (case 153: a new outline on white letters is dark)
+    F1n: variant('F1n', {}, { outline: 'none' }),
     // the staging pressure-test fixtures: English with numbers, Devanagari, Hinglish
     P2: read('P2.json'),
     P3: read('P3.json'),

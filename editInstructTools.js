@@ -28,18 +28,46 @@ const wordRefs = {
     },
 };
 
-// One answer the user can tap. type says what tapping it does: a change is sent back to you as
-// the answer and applied; a preset or font is shown as a preview and applied by the app itself; a
-// direction is sent back to you as the answer and leads to the next question.
+// set_style's fields; a change option carries the same fields as its style.
+const STYLE_FIELDS = {
+    fill_color: { type: ['string', 'null'], pattern: HEX },
+    emphasis_color: { type: ['string', 'null'], pattern: HEX },
+    caption_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
+    word_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
+    font_size: { type: ['integer', 'null'] },
+    position: nullableEnum(['bottom', 'center', 'top']),
+    case: nullableEnum(['none', 'uppercase', 'capitalized']),
+    highlight: nullableEnum(['none', 'static', 'spoken_word']),
+    overflow: nullableEnum(['none', 'resize_to_fit', 'wrap']),
+    position_y: { type: ['number', 'null'], description: 'Vertical position, 0 = bottom edge, 1 = top edge (the style line\'s y; the bottom/center/top presets are about 0.2/0.5/0.9). For "a bit higher/lower" move 0.08-0.12 from the current y. Keep within 0.05-0.95.' },
+    outline_color: { type: ['string', 'null'], pattern: HEX_OR_NONE, description: '"none" removes the outline.' },
+    outline_width: { type: ['number', 'null'], description: 'Without an outline yet: thin about 2, medium about 4, thick about 8. With one, relative words move from the current width (outline.width in the style line).' },
+    shadow: nullableEnum(['none', 'soft', 'strong']),
+    font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
+};
+
+// One answer the user can tap in a question: a change that isn't about the look (sent back to you
+// and applied), or a direction that narrows to the next question. Looks are suggest_looks.
 const CLARIFICATION_OPTION = {
     type: 'object',
     properties: {
-        label: { type: 'string', description: 'What the user sees, in the reply language. For a preset or font the app shows its own name instead.' },
-        type: { type: 'string', enum: ['change', 'preset', 'font', 'direction'] },
-        preset_id: { type: ['string', 'null'], description: 'type preset only: the id from <presets>. Null otherwise.' },
-        font: { type: ['string', 'null'], description: 'type font only: exactly one name from <fonts>. Null otherwise.' },
+        label: { type: 'string', description: 'What the user sees, in the reply language.' },
+        type: { type: 'string', enum: ['change', 'direction'] },
     },
-    required: ['label', 'type', 'preset_id', 'font'],
+    required: ['label', 'type'],
+    additionalProperties: false,
+};
+
+// A version in suggest_looks: changes to the current style, or to a preset. style is required, so a
+// version is always a real change the app can preview.
+const LOOK_VERSION = {
+    type: 'object',
+    properties: {
+        label: { type: 'string', description: 'What the look is, in the reply language ("Bright yellow text, red spoken word").' },
+        preset_id: { type: ['string', 'null'], description: 'The preset it starts from, an id from <presets>; null starts from the current style.' },
+        style: { type: 'object', properties: STYLE_FIELDS, required: Object.keys(STYLE_FIELDS), additionalProperties: false, description: 'The set_style fields it changes (null leaves a field as is). At least one is set.' },
+    },
+    required: ['label', 'preset_id', 'style'],
     additionalProperties: false,
 };
 
@@ -59,22 +87,7 @@ function tool(name, description, properties) {
 }
 
 export const EDIT_TOOLS = [
-    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. fill_color is the text color; emphasis_color is the highlight color (the spoken or emphasized word, "highlight the word being spoken in green"). case: "capitalized" = Every Word Capitalized, "none" = as written. position is one of three presets; position_y is any height.', {
-        fill_color: { type: ['string', 'null'], pattern: HEX },
-        emphasis_color: { type: ['string', 'null'], pattern: HEX },
-        caption_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
-        word_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
-        font_size: { type: ['integer', 'null'] },
-        position: nullableEnum(['bottom', 'center', 'top']),
-        case: nullableEnum(['none', 'uppercase', 'capitalized']),
-        highlight: nullableEnum(['none', 'static', 'spoken_word']),
-        overflow: nullableEnum(['none', 'resize_to_fit', 'wrap']),
-        position_y: { type: ['number', 'null'], description: 'Vertical position, 0 = bottom edge, 1 = top edge (the style line\'s y; the bottom/center/top presets are about 0.2/0.5/0.9). For "a bit higher/lower" move 0.08-0.12 from the current y. Keep within 0.05-0.95.' },
-        outline_color: { type: ['string', 'null'], pattern: HEX_OR_NONE, description: '"none" removes the outline.' },
-        outline_width: { type: ['number', 'null'], description: 'Without an outline yet: thin about 2, medium about 4, thick about 8. With one, relative words move from the current width (outline.width in the style line).' },
-        shadow: nullableEnum(['none', 'soft', 'strong']),
-        font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
-    }),
+    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. fill_color is the text color; emphasis_color is the highlight color (the spoken or emphasized word, "highlight the word being spoken in green"). case: "capitalized" = Every Word Capitalized, "none" = as written. position is one of three presets; position_y is any height.', STYLE_FIELDS),
     tool('apply_preset', 'Apply a style preset by its id from the presets list. Resets style overrides, so it is applied before set_style. When the user also asks for changes to the preset ("X but with white text"), also call set_style with those changes in the same batch.', {
         preset_id: { type: 'string' },
     }),
@@ -173,9 +186,15 @@ export const EDIT_TOOLS = [
         name: { type: 'string' },
     }),
     tool('undo_last_edit', 'Undo the previous edit because the new instruction corrects it. Only when <previous> says it is applied. The app undoes it and sends you both instructions again. Never combined with other calls.', {}),
-    tool('ask_clarification', 'Ask the user one question with 2-3 options (see Asking). The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. Never combined with other calls.', {
+    tool('ask_clarification', 'Ask the user one question with 2-4 options (see Asking). The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. Never combined with other calls.', {
         question: { type: 'string' },
         options: { type: 'array', items: CLARIFICATION_OPTION },
+        offer_presets: { type: 'boolean', description: 'true only when asking how to improve the look: the app then adds its own "A different preset" option, so never add one yourself.' },
+    }),
+    tool('suggest_looks', 'Show the user looks to pick from, each previewed on their captions and applied when tapped (see Asking). Never combined with other calls.', {
+        question: { type: 'string' },
+        versions: { type: 'array', items: LOOK_VERSION, description: 'Versions of the current style, or presets with changes.' },
+        presets: { type: 'array', items: { type: 'string' }, description: 'Presets as they are: ids from <presets>, never the current one.' },
     }),
     tool('cannot_do', 'Say that (part of) the instruction is not possible, and offer what is, or answer a question that asks for no change. May be combined with edits. Never a confirmation of edits you made.', {
         reason: { type: 'string', enum: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'] },

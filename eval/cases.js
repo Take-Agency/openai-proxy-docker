@@ -16,10 +16,9 @@
 //   deleting anything else is collateral, except `lowPrecision` words, which only lower precision.
 // Cases whose accept list has no `clarify` count an ask_clarification as over-asking.
 // `checks` are extra pass conditions: noPromptLeak, noTextCram (no word edit or merge may carry
-// the new text of an insertion), keepStyleOption (presets other than the current one, and no
-// keep option: the app adds "Keep as is" to every question), fontOptions (every option is an exact catalog font name; the app adds its own
-// "Keep current font"), presetOptions (every option is a catalog preset name, not the current one),
-// kindOptions (options name kinds of style, not all of them preset names). `offered` lists options asked before
+// the new text of an insertion), lookOptions (2-3 looks that each apply, change the captions, differ
+// from each other and aren't the current preset as it is), fontOptions (lookOptions where every
+// look sets an exact catalog font), kindOptions (every option is a direction). `offered` lists options asked before
 // in the conversation; offering one again fails (noRepeatOptions).
 // No-op edits (a word replaced by itself, a style field set to its current value) are reported,
 // not failed: the app drops them. Every case fails on a question or message in the wrong language: `reply` names it (en, es,
@@ -76,7 +75,7 @@ export const CASES = [
     { id: 11, group: 'preset', instruction: 'use the Boo Cute style', accept: [{ calls: [['apply_preset', { preset_id: presetId('Boo Cute') }]] }] },
     { id: 12, group: 'preset', instruction: 'Boo Cute but with white text', accept: [{ calls: [['apply_preset', { preset_id: presetId('Boo Cute') }], ['set_style', { fill_color: '#FFFFFF' }]] }] },
     {
-        id: 13, group: 'preset', instruction: 'something spooky for Halloween', checks: ['presetOptions'],
+        id: 13, group: 'preset', instruction: 'something spooky for Halloween', checks: ['lookOptions'],
         accept: [{ calls: [['apply_preset', { preset_id: { anyOf: category('halloween') } }]] }, { clarify: true }],
     },
     { id: 14, group: 'preset', instruction: 'one word at a time', accept: [{ calls: [['set_pacing', { pacing: 'fast' }]] }] },
@@ -181,7 +180,7 @@ export const CASES = [
     { id: 68, group: 'insert', fixture: 'P3', locale: 'hi', instruction: 'आखिर में "लाइक और सब्सक्राइब करो" जोड़ो', checks: ['noTextCram'], accept: [{ calls: [['insert_caption', { after: 'c3', text: { anyOf: ['लाइक और सब्सक्राइब करो', 'लाइक और सब्सक्राइब करो।', 'लाइक और सब्सक्राइब करो!'] } }]] }] },
 
     // Case, outline, shadow, position and font (PR #15)
-    { id: 55, group: 'style2', fixture: 'F1u', instruction: 'make them all lowercase', checks: ['keepStyleOption'], accept: [{ clarify: true }] },
+    { id: 55, group: 'style2', fixture: 'F1u', instruction: 'make them all lowercase', checks: ['lookOptions'], accept: [{ clarify: true }] },
     // the font has lowercase letters: the words become lowercase and the style stops forcing capitals
     { id: 56, group: 'style2', fixture: 'F1uc', instruction: 'make them all lowercase', cannotOptional: ['other'], accept: [{ calls: [['change_letters', { mode: 'lowercase' }], ['set_style', { case: 'none' }]] }] },
     { id: 57, group: 'style2', instruction: 'remove the outline', accept: [{ calls: [['set_style', { outline_color: 'none' }]] }] },
@@ -193,7 +192,7 @@ export const CASES = [
     { id: 62, group: 'style2', instruction: 'change the font to Montserrat', accept: [{ calls: [['set_style', { font: { anyOf: FONTS.filter((font) => font.startsWith('Montserrat')) } }]] }] },
     { id: 63, group: 'style2', instruction: 'use Comic Sans', checks: ['fontOptions'], accept: [{ clarify: true }] },
     { id: 64, group: 'style2', fixture: 'P3', locale: 'hi', instruction: 'आउटलाइन हटाओ', accept: [{ calls: [['set_style', { outline_color: 'none' }]] }] },
-    { id: 65, group: 'style2', instruction: 'make the text bolder', accept: [{ clarify: true }, { calls: [['set_style', { outline_width: 8 }]], style: { outline: { outline: { color: '#000000', minWidth: 5, maxWidth: 12 } } } }] },
+    { id: 65, group: 'style2', instruction: 'make the text bolder', checks: ['lookOptions'], accept: [{ clarify: true }, { calls: [['set_style', { outline_width: 8 }]], style: { outline: { outline: { color: '#000000', minWidth: 5, maxWidth: 12 } } } }] },
     {
         id: 69, group: 'style2', instruction: 'capitalize the first word of every line',
         // "um" counts as the first word, or the first real word after it
@@ -261,9 +260,11 @@ export const CASES = [
     },
     // "Make captions pop" (a starter chip): ask with concrete options, and when the answer is
     // still a quality ("brighter colors"), ask which part, in the context of the current style
-    { id: 96, group: 'pop', instruction: 'Make captions pop', accept: [{ clarify: true }] },
-    { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, accept: [{ clarify: true }] },
-    { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, optionsMatch: /box|background/i, accept: [{ clarify: true }] },
+    // a quality for the current style: 3 versions of it, previewed (prompt's "Which version")
+    // vague about how: ask how first, "a different preset" among the ways (user report 2026-11-27)
+    { id: 96, group: 'pop', instruction: 'Make captions pop', checks: ['kindOptions', 'offersPresets'], accept: [{ clarify: true }] },
+    { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['lookOptions', 'mixedLooks'], accept: [{ clarify: true }] },
+    { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['lookOptions', 'mixedLooks'], accept: [{ clarify: true }] },
     { id: 99, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Yellow text' }, accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW } }] },
     // Parts named the way they look (the snapshot's "looks" line)
     // Mosy has no caption box: caption_bg adds one, as the style editor's Caption Background toggle does
@@ -383,8 +384,8 @@ export const CASES = [
     { id: 138, group: 'look', instruction: 'use a different preset', checks: ['kindOptions'], accept: [{ clarify: true }] },
     { id: 139, group: 'look', instruction: 'Better caption style', checks: ['kindOptions'], accept: [{ clarify: true }] },
     { id: 140, group: 'look', instruction: 'make the captions better', clarification: { question: 'How do you want the captions better?', choice: 'A different style' }, checks: ['kindOptions'], accept: [{ clarify: true }] },
-    { id: 141, group: 'look', instruction: 'A different style', clarification: { question: 'What kind of style are you looking for?', choice: 'Playful' }, checks: ['presetOptions'], accept: [{ clarify: true }] },
-    { id: 142, group: 'look', instruction: 'something playful', checks: ['presetOptions'], accept: [{ clarify: true }] },
+    { id: 141, group: 'look', instruction: 'A different style', clarification: { question: 'What kind of style are you looking for?', choice: 'Playful' }, checks: ['lookOptions'], accept: [{ clarify: true }] },
+    { id: 142, group: 'look', instruction: 'something playful', checks: ['lookOptions'], accept: [{ clarify: true }] },
     {
         id: 143, group: 'look', instruction: 'none of those really',
         history: [
@@ -408,7 +409,7 @@ export const CASES = [
     },
     { id: 146, group: 'look', instruction: 'make the captions better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
     // a quality with no part: which part, as changes
-    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['changeOptions'], accept: [{ clarify: true }] },
+    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['lookOptions', 'mixedLooks'], accept: [{ clarify: true }] },
     // from a user report (2026-11-27): a quality said while choosing presets picks brighter presets, not a part of the current style
     {
         id: 148, group: 'look', instruction: 'More bright colors',
@@ -420,10 +421,10 @@ export const CASES = [
             'User: Different more colorful options',
             'AI Edit asked: Which colorful style would you like? Options: Showgirl / Pop Layers / Candy Bar / Keep as is',
         ],
-        offered: ['Showgirl', 'Pop Layers', 'Candy Bar', 'Bubblegum', 'Pastel'], checks: ['presetOptions'], accept: [{ clarify: true }],
+        offered: ['Showgirl', 'Pop Layers', 'Candy Bar', 'Bubblegum', 'Pastel'], checks: ['lookOptions'], accept: [{ clarify: true }],
     },
     // a new look with a color quality goes straight to presets that look like it
-    { id: 149, group: 'look', instruction: 'give me a style with bright colors', checks: ['presetOptions'], accept: [{ clarify: true }] },
+    { id: 149, group: 'look', instruction: 'give me a style with bright colors', checks: ['lookOptions'], accept: [{ clarify: true }] },
     // the app's "More like these" chip under preview cards: 3 more of the same kind, no repeats
     {
         id: 150, group: 'look', instruction: 'Playful',
@@ -434,8 +435,14 @@ export const CASES = [
             'AI Edit asked: Which playful style would you like? Options: Candy Bar / Bubblegum / Cartoony / More like these / Keep as is',
         ],
         clarification: { question: 'Which playful style would you like?', choice: 'More like these' },
-        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['presetOptions'], accept: [{ clarify: true }],
+        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['lookOptions'], accept: [{ clarify: true }],
     },
     // "surprise me" still shows choices (user report 2026-11-27): 3 presets the model picks
-    { id: 145, group: 'look', instruction: 'surprise me with a new style', checks: ['presetOptions'], accept: [{ clarify: true }] },
+    { id: 151, group: 'pop', fixture: 'F1bg', instruction: 'more contrast', checks: ['lookOptions'], accept: [{ clarify: true }] },
+    // a way picked in answer to how gets looks, never a direct change (user report 2026-11-27: a white
+    // outline on white letters was applied straight away)
+    { id: 152, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Thicker outline' }, checks: ['lookOptions'], accept: [{ clarify: true }] },
+    // a new outline on light letters is dark
+    { id: 153, group: 'style2', fixture: 'F1n', instruction: 'add an outline', accept: [{ calls: [['set_style', { outline_color: '#000000' }]], style: { outline: { outline: { color: '#000000', minWidth: 1, maxWidth: 12 } } } }] },
+    { id: 145, group: 'look', instruction: 'surprise me with a new style', checks: ['lookOptions'], accept: [{ clarify: true }] },
 ];

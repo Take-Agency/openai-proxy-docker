@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import express from 'express';
-import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, appToolsPrompt, resolveAppTools, languageName, normalizeOptions, flattenOptions, INTENT_PROMPT } from './editInstruct.js';
+import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, appToolsPrompt, resolveAppTools, languageName, normalizeOptions, flattenOptions, looksAsQuestion, fixNamedPreset, INTENT_PROMPT } from './editInstruct.js';
 import { EDIT_TOOLS, APP_TOOLS, LEGACY_APP_TOOLS, appToolDefinitions, TOOL_NAMES } from './editInstructTools.js';
 
 const INSTALL_ID = 'test-install-0001';
@@ -30,8 +30,8 @@ const setStyle = call('set_style', {
     font_size: 104, position: null, case: null, highlight: null, overflow: null,
     position_y: null, outline_color: null, outline_width: null, shadow: null, font: null,
 });
-const option = (label, type = 'change', presetId = null, font = null) => ({ label, type, preset_id: presetId, font });
-const askClarification = call('ask_clarification', { question: 'Which color?', options: [option('Text'), option('Emphasis')] });
+const option = (label, type = 'change', presetId = null, style = null) => ({ label, type, preset_id: presetId, style });
+const askClarification = call('ask_clarification', { question: 'Which color?', options: [option('Text'), option('Emphasis')], offer_presets: false });
 
 // Builds a fake OpenAI Responses endpoint. `respond({ model, request })` returns the `output`
 // array, a full response ({ status, json }), or throws, to exercise the failure paths.
@@ -199,7 +199,7 @@ test('ask_clarification on its own is returned, flattened to labels for builds w
     await withServer({ fetch }, async (post) => {
         const { status, body } = await post(validBody({ instruction: 'change the color' }));
         assert.equal(status, 200);
-        assert.deepEqual(body.tool_calls, [{ name: 'ask_clarification', arguments: { question: 'Which color?', options: ['Text', 'Emphasis'] } }]);
+        assert.deepEqual(body.tool_calls, [{ name: 'ask_clarification', arguments: { question: 'Which color?', options: ['Text', 'Emphasis'], offer_presets: false } }]);
     });
 });
 
@@ -541,12 +541,12 @@ test('the locale is rendered as a named reply language', () => {
     assert.equal(languageName('en', 'make it bigger'), 'English (en)');
 });
 
-test('tool schemas are strict: all 23 tools, every property required, no extra properties', () => {
+test('tool schemas are strict: all 24 tools, every property required, no extra properties', () => {
     assert.deepEqual(TOOL_NAMES, [
         'set_style', 'apply_preset', 'set_pacing', 'replace_words', 'delete_words', 'find_replace', 'set_caption_text',
         'split_caption', 'merge_captions', 'delete_captions', 'insert_caption', 'shift_timing', 'set_caption_timing', 'set_emphasis',
         'split_in_half', 'change_letters', 'merge_short_captions', 'delete_all', 'rewrite_sentence', 'save_style',
-        'undo_last_edit', 'ask_clarification', 'cannot_do',
+        'undo_last_edit', 'ask_clarification', 'suggest_looks', 'cannot_do',
     ]);
     const checkObject = (schema, path) => {
         assert.equal(schema.additionalProperties, false, path);
@@ -588,20 +588,54 @@ test('options are checked against the catalogs', () => {
     const presets = 'clean|Clean|minimalClean\nspook|Spookspire 🎃|halloween\nboo|Boo Cute|halloween';
     const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Which one?', options } }];
     const options = (calls) => normalizeOptions(calls, { presets, fonts })[0].arguments.options;
-    // a preset gets its catalog name; an unknown id is matched by name, else it is a direction
-    assert.deepEqual(options(ask(option('Spooky one', 'preset', 'spook'), option('boo cute', 'preset', 'nope'), option('Witchy', 'preset', 'nope'))),
-        [option('Spookspire 🎃', 'preset', 'spook'), option('Boo Cute', 'preset', 'boo'), option('Witchy', 'direction')]);
-    // a kind named like a preset stays a kind
-    assert.deepEqual(options(ask(option('Clean', 'direction', 'clean'), option('Playful', 'direction'))), [option('Clean', 'direction'), option('Playful', 'direction')]);
-    // a font gets an exact catalog name; one naming no catalog font is dropped
-    assert.deepEqual(options(ask(option('Chalkboard', 'font', null, 'ChalkboardSE-Bold'), option('Comic Sans', 'font', null, 'Comic Sans'), option('x', 'font', null, 'Comic Sans unavailable; choose Fredoka One'))),
-        [option('ChalkboardSE-Bold', 'font', null, 'ChalkboardSE-Bold'), option('Fredoka One', 'font', null, 'Fredoka One')]);
-    // repeats dropped, at most 3
-    assert.deepEqual(options(ask(option('Boo', 'preset', 'boo'), option('Boo Cute', 'preset', 'boo'), option('A'), option('B'), option('C'))).map((entry) => entry.label), ['Boo Cute', 'A', 'B']);
-    // other calls pass through
+    const nulls = { fill_color: null, font: null, shadow: null };
+    // a preset as it is gets its catalog name; an unknown id is matched by name, else the look is a direction
+    assert.deepEqual(options(ask(option('Spooky one', 'look', 'spook'), option('boo cute', 'look', 'nope'), option('Witchy', 'look', 'nope'))),
+        [option('Spookspire 🎃', 'look', 'spook'), option('Boo Cute', 'look', 'boo'), option('Witchy', 'direction')]);
+    // a preset with changes keeps its label; a version of the current style has no preset
+    assert.deepEqual(options(ask(option('Boo Cute, white text', 'look', 'boo', { ...nulls, fill_color: '#FFFFFF' }), option('Yellow text', 'look', null, { ...nulls, fill_color: '#FFD600' }))),
+        [option('Boo Cute, white text', 'look', 'boo', { ...nulls, fill_color: '#FFFFFF' }), option('Yellow text', 'look', null, { ...nulls, fill_color: '#FFD600' })]);
+    // a font is matched to the catalog; a look with only an unknown font is a direction
+    assert.deepEqual(options(ask(option('Fredoka', 'look', null, { ...nulls, font: 'Comic Sans unavailable; choose Fredoka One' }), option('Comic Sans', 'look', null, { ...nulls, font: 'Comic Sans' }))),
+        [option('Fredoka', 'look', null, { ...nulls, font: 'Fredoka One' }), option('Comic Sans', 'direction')]);
+    // a kind named like a preset stays a direction; repeats dropped, at most 4
+    assert.deepEqual(options(ask(option('Clean', 'direction'), option('Boo', 'look', 'boo'), option('Boo Cute', 'look', 'boo'), option('A'), option('B'), option('C'))).map((entry) => entry.label), ['Clean', 'Boo Cute', 'A', 'B']);
+    // builds without typed options take at most 3
+    assert.equal(flattenOptions(ask(option('A'), option('B'), option('C'), option('D')))[0].arguments.options.length, 3);
+    // the current preset as it is is no new look (with changes it is)
+    const snapshot = 'rev 1\nstyle {"preset":"boo","fill":"#FFFFFF"}';
+    assert.deepEqual(normalizeOptions(ask(option('Boo Cute', 'look', 'boo'), option('Boo Cute, red', 'look', 'boo', { ...nulls, fill_color: '#FF0000' })), { presets, fonts, snapshot })[0].arguments.options.map((entry) => entry.label), ['Boo Cute, red']);
+    // a preset offered earlier in the conversation isn't offered again
+    const history = ['User: Halloween', 'AI Edit asked: Which one? Options: Spookspire 🎃 / Clean / Keep as is'];
+    assert.deepEqual(normalizeOptions(ask(option('Spookspire', 'look', 'spook'), option('Boo Cute', 'look', 'boo')), { presets, fonts, history })[0].arguments.options.map((entry) => entry.label), ['Boo Cute']);
     const other = [{ name: 'set_style', arguments: { font: 'x' } }];
     assert.deepEqual(normalizeOptions(other, { presets, fonts }), other);
-    assert.deepEqual(flattenOptions(ask(option('Boo Cute', 'preset', 'boo'), option('Text'))), [{ name: 'ask_clarification', arguments: { question: 'Which one?', options: ['Boo Cute', 'Text'] } }]);
+    assert.deepEqual(flattenOptions(ask(option('Boo Cute', 'look', 'boo'), option('Text'))), [{ name: 'ask_clarification', arguments: { question: 'Which one?', options: ['Boo Cute', 'Text'] } }]);
+});
+
+test('suggest_looks becomes a question whose options are looks, versions first', () => {
+    const presets = 'clean|Clean|minimalClean\nspook|Spookspire 🎃|halloween\nboo|Boo Cute|halloween';
+    const style = { fill_color: '#FFD600', font: null };
+    const calls = [{ name: 'suggest_looks', arguments: { question: 'Which look?', versions: [{ label: 'Yellow text', preset_id: null, style }], presets: ['spook', 'Boo Cute', 'nope'] } }];
+    const [question] = normalizeOptions(looksAsQuestion(calls), { presets, fonts: '' });
+    assert.equal(question.name, 'ask_clarification');
+    assert.equal(question.arguments.offer_presets, false);
+    assert.deepEqual(question.arguments.options.map((option) => [option.label, option.preset_id]), [['Yellow text', null], ['Spookspire 🎃', 'spook'], ['Boo Cute', 'boo']]);
+});
+
+test('suggest_looks with an edit is rejected like a mixed question', () => {
+    const looks = { name: 'suggest_looks', arguments: { question: 'Which?', versions: [], presets: ['spook'] } };
+    assert.throws(() => validateToolCalls([looks, { name: 'find_replace', arguments: { find: 'a', replace: 'b', whole_word: true, match_case: false } }]), /clarification_mixed/);
+});
+
+test('a preset id copied from the next catalog line is put back to the preset the user named', () => {
+    const presets = 'pop|Pop|colorPop\nboo|Boo Cute 👻|halloween\nmagic|Magic Halloween 🧪|halloween';
+    const apply = (id) => [{ name: 'apply_preset', arguments: { preset_id: id } }];
+    assert.equal(fixNamedPreset(apply('magic'), { presets, instruction: 'use the Boo Cute style' })[0].arguments.preset_id, 'boo');
+    // the preset the user named, or one they didn't name with no named neighbour, is left alone
+    assert.equal(fixNamedPreset(apply('magic'), { presets, instruction: 'use magic halloween' })[0].arguments.preset_id, 'magic');
+    assert.equal(fixNamedPreset(apply('boo'), { presets, instruction: 'make it pop' })[0].arguments.preset_id, 'boo');
+    assert.equal(fixNamedPreset(apply('magic'), { presets, instruction: 'something spooky' })[0].arguments.preset_id, 'magic');
 });
 
 test('the bulk tools are strict and in the tool list', () => {
