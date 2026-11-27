@@ -3,6 +3,20 @@
 //
 //   node eval/run.js --url https://…/edit/instruct --runs 5 [--cases 1-10,19] [--label name]
 //                    [--rate 18] [--log /path/to/server.log] [--out dir] [--no-repair] [--local]
+//   node eval/run.js --inproc --runs 5 [--groups look,pop] [--sentinel] [--concurrency 6]
+//
+// --inproc    runs the proxy's router in this process (no deploy, no shared rate limit): the same
+//             prompt, tools and OpenAI request as staging, with the key from
+//             EDIT_INSTRUCT_OPENAI_API_KEY. Records each request's token usage. Latency includes
+//             this machine's network, so quote latency from staging runs.
+//               EDIT_INSTRUCT_OPENAI_API_KEY="$(security find-generic-password -s autocaption-edit-instruct-openai -w)" \
+//                 node eval/run.js --inproc --groups look --sentinel --runs 5 --label try-1
+// --concurrency  requests in flight at once (default 6 with --inproc, else 1)
+// --groups    only the cases in these groups (cases.js), e.g. look,pop,abstain
+// --sentinel  adds the cases that fail most often (SENTINEL_CASES) to the selection
+// --model / --fallback-model  with --inproc: the router's models (default: the router's own
+//             defaults, as staging uses unless its env overrides them). Reasoning effort comes
+//             from EDIT_INSTRUCT_REASONING, as on the server.
 //
 // --rate      requests per minute (default 18: under the proxy's 20/min per-IP limit)
 // --log       the proxy's stdout when running it locally: its count-only line per request gives
@@ -13,11 +27,13 @@
 //             repair turn, and task success is scored on the result)
 // --rescore   re-score a finished run (<out>/<label>.jsonl + .requests.jsonl) with the current
 //             cases and scorer, without sending requests
-// Install ids rotate over five synthetic `eval-<label>-<n>` ids, keeping each under the
-// per-install limits (10/min, 150/day).
+// Install ids rotate over five synthetic ids per run (`eval-<label>-<run token>-<n>`), keeping each
+// under the per-install minute limit; the run token keeps reruns of a label from sharing the
+// 5-hour and weekly caps. A 429 for those caps stops the run instead of scoring false failures.
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, statSync, openSync, readSync, closeSync } from 'node:fs';
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { join } from 'node:path';
 import { run as applyCalls, snapshotText, presetCatalog } from './applier.js';
 import { CASES } from './cases.js';
@@ -49,29 +65,93 @@ const PRICE_NOTE = 'gpt-6-luna list price from the plan (§2.2); gpt-5.6-luna pr
 // ---------------------------------------------------------------- args
 
 function parseArgs(argv) {
-    const args = { runs: 1, rate: 18, label: 'eval', repair: true, local: false, rescore: false };
+    const args = { runs: 1, rate: 18, label: 'eval', repair: true, local: false, rescore: false, inproc: false, sentinel: false };
     for (let index = 0; index < argv.length; index += 1) {
         const key = argv[index].replace(/^--/, '');
         if (key === 'no-repair') args.repair = false;
         else if (key === 'local') args.local = true;
         else if (key === 'rescore') args.rescore = true;
+        else if (key === 'inproc') args.inproc = true;
+        else if (key === 'sentinel') args.sentinel = true;
         else args[key] = argv[++index];
     }
-    if (!args.url && !args.rescore) throw new Error('--url is required');
+    if (!args.url && !args.rescore && !args.inproc) throw new Error('--url or --inproc is required');
+    if (args.url && args.inproc) throw new Error('--url and --inproc are exclusive');
     args.runs = Number(args.runs);
-    args.rate = Number(args.rate);
+    // in process there's no shared limit to stay under
+    args.rate = args.inproc && args.rate === 18 ? Infinity : Number(args.rate);
+    args.concurrency = Number(args.concurrency || (args.inproc ? 6 : 1));
     if (args.local && args.url && !/^https?:\/\/(127\.0\.0\.1|localhost)[:/]/.test(args.url)) throw new Error('--local is for localhost only');
     return args;
 }
 
-function selectCases(spec) {
-    if (!spec) return CASES;
-    const ids = new Set(spec.split(',').flatMap((part) => {
+// The cases that fail most often across past runs (eval-results history, 2026-11-27): added by
+// --sentinel to a group run so a change elsewhere in the prompt still meets them.
+export const SENTINEL_CASES = [13, 23, 65, 91, 96, 98, 142, 149];
+
+function selectCases({ cases: spec, groups, sentinel }) {
+    if (!spec && !groups) return CASES;
+    const ids = new Set(spec ? spec.split(',').flatMap((part) => {
         const [from, to] = part.split('-').map(Number);
         return Array.from({ length: (to || from) - from + 1 }, (_, index) => from + index);
-    }));
-    return CASES.filter((testCase) => ids.has(testCase.id));
+    }) : []);
+    const wanted = new Set(groups ? groups.split(',').map((group) => group.trim()) : []);
+    const unknown = [...wanted].filter((group) => !CASES.some((testCase) => testCase.group === group));
+    if (unknown.length) throw new Error(`unknown group: ${unknown.join(', ')} (groups: ${[...new Set(CASES.map((testCase) => testCase.group))].join(', ')})`);
+    if (sentinel) SENTINEL_CASES.forEach((id) => ids.add(id));
+    return CASES.filter((testCase) => ids.has(testCase.id) || wanted.has(testCase.group));
 }
+
+// ---------------------------------------------------------------- in process
+
+// Mounts the proxy's router on a local port. Each request's count-only log line is caught by the
+// request it belongs to (AsyncLocalStorage), so token usage is recorded with requests in parallel.
+async function startInproc(args) {
+    const key = process.env.EDIT_INSTRUCT_OPENAI_API_KEY;
+    if (!key) throw new Error('--inproc needs EDIT_INSTRUCT_OPENAI_API_KEY (see the usage at the top)');
+    const { default: express } = await import('express');
+    const { createEditInstructRouter } = await import('../editInstruct.js');
+    const context = new AsyncLocalStorage();
+    const lines = new Map();
+    const original = console.log;
+    console.log = (...parts) => {
+        const store = context.getStore();
+        const text = parts.join(' ');
+        if (store && text.startsWith('edit/instruct ')) lines.set(store, text);
+        else original(...parts);
+    };
+    const unlimited = { fiveHour: Number.MAX_SAFE_INTEGER, week: Number.MAX_SAFE_INTEGER };
+    const options = { openaiApiKey: key, planLimits: { free: unlimited, trial: unlimited, paid: unlimited } };
+    if (args.model) options.primaryModel = args.model;
+    if (args['fallback-model']) options.fallbackModel = args['fallback-model'];
+    const app = express();
+    // parsed here, outside the context: the router's own parser then skips it (req._body), so
+    // nothing after this point runs in a stream callback that would lose the context
+    app.use(express.json({ limit: '64kb' }));
+    app.use((req, res, next) => context.run(req.headers['x-eval-sequence'], next));
+    app.use(createEditInstructRouter(options));
+    const server = await new Promise((resolve) => { const listening = app.listen(0, '127.0.0.1', () => resolve(listening)); });
+    args.url = `http://127.0.0.1:${server.address().port}/edit/instruct`;
+    args.local = true;
+    return {
+        line: (sequence) => { const text = lines.get(String(sequence)); lines.delete(String(sequence)); return text; },
+        close: () => { console.log = original; server.close(); },
+    };
+}
+
+const parseLogLine = (line) => {
+    if (!line) return null;
+    const field = (name) => line.match(new RegExp(`\\b${name}=(\\S+)`))?.[1];
+    return {
+        outcome: line.split(' ')[1],
+        model: field('model'),
+        inputTokens: Number(field('inputTokens') || 0),
+        cachedTokens: Number(field('cachedTokens') || 0),
+        outputTokens: Number(field('outputTokens') || 0),
+        serverLatencyMs: Number(field('latencyMs') || 0),
+        failures: field('failures')?.split(',') || [],
+    };
+};
 
 // ---------------------------------------------------------------- server log
 
@@ -88,18 +168,7 @@ function logTail(path) {
         readSync(fd, buffer, 0, buffer.length, offset);
         closeSync(fd);
         offset = size;
-        const line = buffer.toString('utf8').split('\n').filter((entry) => entry.startsWith('edit/instruct ')).at(-1);
-        if (!line) return null;
-        const field = (name) => line.match(new RegExp(`\\b${name}=(\\S+)`))?.[1];
-        return {
-            outcome: line.split(' ')[1],
-            model: field('model'),
-            inputTokens: Number(field('inputTokens') || 0),
-            cachedTokens: Number(field('cachedTokens') || 0),
-            outputTokens: Number(field('outputTokens') || 0),
-            serverLatencyMs: Number(field('latencyMs') || 0),
-            failures: field('failures')?.split(',') || [],
-        };
+        return parseLogLine(buffer.toString('utf8').split('\n').filter((entry) => entry.startsWith('edit/instruct ')).at(-1));
     };
 }
 
@@ -107,8 +176,12 @@ function logTail(path) {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const RUN_TOKEN = randomBytes(3).toString('hex');
+
 async function post(args, body, sequence) {
-    const headers = { 'content-type': 'application/json', 'x-install-id': `eval-${args.label}-${sequence % 5}`.padEnd(8, '0') };
+    // in process every request gets its own install, so nothing is throttled
+    const install = args.inproc ? `eval-${RUN_TOKEN}-${sequence}` : `eval-${args.label}-${RUN_TOKEN}-${sequence % 5}`;
+    const headers = { 'content-type': 'application/json', 'x-install-id': install.slice(0, 64).padEnd(8, '0'), 'x-eval-sequence': String(sequence) };
     if (args.local) headers['do-connecting-ip'] = `10.99.${Math.floor(sequence / 250) % 250}.${sequence % 250}`;
     const startedAt = Date.now();
     try {
@@ -298,9 +371,11 @@ function rescore(args, outDir) {
 async function main() {
     const args = parseArgs(process.argv.slice(2));
     if (args.rescore) return rescore(args, args.out || join(process.cwd(), 'eval-results'));
-    const cases = selectCases(args.cases);
+    const cases = selectCases(args);
+    if (!cases.length) throw new Error('no cases selected');
     const outDir = args.out || join(process.cwd(), 'eval-results');
     mkdirSync(outDir, { recursive: true });
+    const inproc = args.inproc ? await startInproc(args) : null;
     const tail = logTail(args.log);
     const minInterval = 60_000 / args.rate;
     const results = [];
@@ -311,14 +386,26 @@ async function main() {
 
     const send = async (body, meta) => {
         for (let attempt = 0; ; attempt += 1) {
-            const wait = lastSent + minInterval - Date.now();
-            if (wait > 0) await sleep(wait);
-            lastSent = Date.now();
-            const response = await post(args, body, sequence);
+            if (minInterval > 0) {
+                const wait = lastSent + minInterval - Date.now();
+                lastSent = Math.max(Date.now(), lastSent + minInterval);
+                if (wait > 0) await sleep(wait);
+            }
+            const mine = sequence;
             sequence += 1;
-            await sleep(30); // let the proxy flush its log line
-            const log = tail();
-            // a 429 is the harness going too fast, not a model failure: back off and resend
+            const response = await post(args, body, mine);
+            let log;
+            if (inproc) {
+                log = parseLogLine(inproc.line(mine));
+            } else {
+                await sleep(30); // let the proxy flush its log line
+                log = tail();
+            }
+            // a 5-hour or weekly cap won't lift during the run: stop rather than score false failures
+            if (response.status === 429 && response.json.window && response.json.window !== 'minute') {
+                throw new Error(`stopped: the proxy's ${response.json.window} limit for eval installs was hit (retry in ${response.json.retryAfterSeconds}s, or rerun: install ids are new each run)`);
+            }
+            // a minute-limit 429 is the harness going too fast, not a model failure: back off and resend
             if (response.status === 429 && attempt < 3) {
                 await sleep(15_000);
                 continue;
@@ -330,8 +417,8 @@ async function main() {
         }
     };
 
-    for (let runIndex = 0; runIndex < args.runs; runIndex += 1) {
-        for (const testCase of cases) {
+    const evaluate = async (runIndex, testCase) => {
+        {
             const fixture = fixtureState(testCase.fixture || 'F1');
             const body = {
                 instruction: testCase.instruction,
@@ -376,9 +463,27 @@ async function main() {
             results.push(entry);
             process.stdout.write(`run ${runIndex + 1}/${args.runs} case ${testCase.id}: ${entry.success ? 'pass' : `FAIL ${entry.reasons.slice(0, 2).join('; ').slice(0, 140)}`} (${sec(request.latencyMs)})\n`);
         }
-    }
+    };
 
-    writeFileSync(join(outDir, `${args.label}.meta.json`), JSON.stringify({ url: args.url, runs: args.runs, repair: args.repair, startedAt, finishedAt: Date.now() }));
+    // runs are the outer loop, as before; with --concurrency several cases are in flight at once
+    const jobs = [];
+    for (let runIndex = 0; runIndex < args.runs; runIndex += 1) for (const testCase of cases) jobs.push([runIndex, testCase]);
+    let next = 0;
+    try {
+        await Promise.all(Array.from({ length: Math.min(args.concurrency, jobs.length) }, async () => {
+            while (next < jobs.length) {
+                const [runIndex, testCase] = jobs[next];
+                next += 1;
+                await evaluate(runIndex, testCase);
+            }
+        }));
+    } finally {
+        inproc?.close();
+    }
+    const order = new Map(cases.map((testCase, index) => [testCase.id, index]));
+    results.sort((a, b) => a.run - b.run || order.get(a.caseId) - order.get(b.caseId));
+
+    writeFileSync(join(outDir, `${args.label}.meta.json`), JSON.stringify({ url: args.inproc ? 'in process' : args.url, runs: args.runs, repair: args.repair, startedAt, finishedAt: Date.now() }));
     const markdown = report(args, results, requests, startedAt);
     writeFileSync(join(outDir, `${args.label}.md`), markdown);
     // tool calls hold fixture text only (synthetic / internal corpus)
