@@ -1,0 +1,169 @@
+6voux0|Mosy|signature|white text, red box behind the spoken word, The Bold Font font
+uzvhzk|Clean Bold|signature|white text, black box behind the spoken word, yellow spoken word, AvenirNext font
+j4zf4f|Sway|signature|white text, yellow highlighted words, Helvetica Neue LT Std font
+wv2rex|Swirl|signature|white text, yellow highlighted words, Helvetica Neue LT Std font
+wh0sil|Lunar|signature|white text, dark purple box behind captions, Instrument Sans font
+f7xsde|U Up?|signature|white text, blue box behind captions, .System font
+DC784E7D-2B7F-4E95-BA96-A29AF2A5D001|Viral|signature|cyan text, red spoken word, black box behind captions, Avenir font
+AAFCBD41-EE74-493A-9FF8-7EE3A707DA42|Keynote|signature|white text, gray box behind captions, Avenir font
+3C8FBD99-0237-409C-BEEC-4FF594306790|Blue Bubble|signature|white text, blue box behind the spoken word, Futura font
+93DEBF04-0D52-45B5-BB76-5DFF115B4707|Y2K Diva|bold|purple text, light yellow spoken word, TheBoldFont font
+6C53E44C-3CFA-417D-BA4A-C11F4BE653B2|Kitty 2|bold|white text, red box behind the spoken word, SourGummy font
+B3DA9FB9-46C2-4215-B7F8-0900B58BB781|Yellow Press|bold|yellow text, yellow highlighted words, Poppins font
+5A186B04-1DD7-4A7D-BDC5-9CA8609BC23C|Bolt|bold|white text, yellow box behind the spoken word, black spoken word, Montserrat font
+1137D9F0-7F93-486F-AD8B-A0218FD9F95A|Ignite|bold|white text, yellow spoken word, GillSans font
+6A58715B-1C8A-4D4C-A11A-5E30E6A71688|Header|bold|see-through text, black box behind captions, Futura font
+7EFC1A9F-06F1-4DA0-9388-3483556A3C4C|Bold Core|bold|white text, black box behind the spoken word, yellow spoken word, Roboto font
+D59E5B91-95F1-45F9-809B-CB9B20E3B8EF|Power|bold|white text, red box behind the spoken word, AvenirNextCondensed font
+8F8717E7-8F15-4DC3-82CA-A770F91A7CE8|Rouge|bold|white text, pink box behind the spoken word, red spoken word, Sen font
+0BFE5DB6-5802-4CDD-9B4D-42AF1FFD20AB|Energetic|bold|white text, orange spoken word, black box behind captions, Roboto font
+C4A5A2C6-6328-42C9-9BBE-D21FC568852F|Circuit|bold|white text, green spoken word, Fredoka font
+0AF6DE4F-80F2-43CE-A3B2-7D9FB9A86D77|Silent Night|playful|white text, light yellow spoken word, SavoyeLetPlain font
+9172EBC5-468F-4BEE-87AD-8A5E8F814313|December|playful|green text, red spoken word, Panton font
+2ACA772E-1AC2-41C6-955A-461C0D5769BC|Candy Bar|playful|white text, white box behind the spoken word, red spoken word, TamilSangamMN font
+73B8F3B5-CA9D-4EBD-A8F7-109E8C83C6D7|Kitty|playful|pink text, white spoken word, SourGummy font
+8506EE56-896F-431E-8897-3EB70ED4A876|Dream Sparkle|playful|white text, pink box behind the spoken word, Montserrat font
+8B8DC8E9-8B9A-4602-9D69-105BA40A7797|Sweet Monster|playful|light pink text, white spoken word, light yellow box behind captions, SourGummy font
+bbyz8z|Monster|playful|white text, yellow spoken word, Truculenta font
+B9D7331F-7818-408A-85F2-9DAD021E1B36|Pastel|playful|white text, green spoken word, Jua font
+ED76CCAC-6244-4A01-B433-3C1EEC7E47BD|Choco Treat|playful|orange text, pink spoken word, orange box behind captions, InclusiveSans font
+ndgw4w|Cartoony|playful|white text, yellow highlighted words, red box behind captions, FredokaOne font
+48ql8z|Disconnected|playful|see-through text, Fredoka One font
+F01875B1-4226-4081-9A28-9504210F042C|Dollhouse|playful|pink text, Impact font
+92886BB8-3455-49D0-8F63-169EF1999E1F|Bubblegum|playful|white text, SourGummy font
+w45mgp1|Valentine|playful|white text, Sahir Yesta font
+bvskbp|Comic Hero|playful|white text, yellow highlighted words, Bangers font
+59D5271F-DF13-48B9-9611-87ECE02C40DB|Spookspire|playful|orange text, yellow spoken word, black box behind captions, Creepster font
+CF05933C-17AA-4C61-9074-7526140146B4|Skyglen|basics|white text, dark cyan box behind the spoken word, Panton font
+998B2EA5-D707-4715-8F5D-A90C6761E4C1|Timeless|basics|white text, Panton font
+6b8tbg|Glow|basics|white text, Universal Serif font
+k3rowe|U-Bank|basics|white text, Poppins font
+21A5E4F6-02D6-4FA4-A001-49E817676C19|Academic|basics|white text, dark blue box behind the spoken word, HoeflerText font
+gjfh7r|Ghost|basics|see-through text, GoldenSans font
+AE4B19A3-83C7-48A2-9C72-B786FA322690|Woods|basics|white text, green box behind the spoken word, Avenir font
+AF7D9ECC-6A87-4277-9DEE-4AD80E002712|Paperback|basics|white text, Fraunces72pt font
+5eoff7|Youtuber|basics|white text, The Bold Font font
+D22D67DB-71BD-4E44-A1F2-D7E1C995E32B|Sunshine|basics|white text, yellow highlighted words, HelveticaNeueLTStd font
+D232E940-844F-45A3-83B7-99397A55F65E|Apple|basics|green text, white spoken word, Mulish font
+5B85A1ED-F2EB-4543-A5E0-10508A725278|Valentines|colorPop|white text, pink spoken word, Fredoka font
+27216C66-E407-4A58-99ED-9D7F9C83CAEB|Showgirl|colorPop|orange text, green box behind the spoken word, white spoken word, Rubik font
+DBC04809-C4C5-48EE-AA9B-C1604E54DC63|Memoir|colorPop|white text, purple box behind captions, Jua font
+4E3913DB-F18A-4B81-862F-7591797DF05E|Electra|colorPop|cyan text, HiraginoSans font
+82A8BCD6-9B09-4D61-9C61-0DDA19D63820|Blush|colorPop|white text, red box behind captions, Avenir font
+38672650-954A-4021-9BA7-1D692425BDD6|Power Sweet|colorPop|pink text, light cyan box behind the spoken word, green spoken word, Bangers font
+8D838146-8469-4F64-A2F5-323E340972B9|Spring Cottage|colorPop|light yellow text, box behind the spoken word, light pink spoken word, green box behind captions, ElsieSwashCaps font
+D15E30D7-FC0A-4781-9A96-A3D0BA01897D|Playful Easter|colorPop|white text, pink box behind the spoken word, yellow spoken word, GasoekOne font
+F0035BAF-D7A5-40FF-B8B8-ED65EEEE5AB6|Glare|colorPop|green text, The Bold Font font
+5C138265-C929-433F-AC5D-FD46DC9B3C27|Creamy|colorPop|white text, light orange spoken word, BioRhymeSemiExpanded font
+2B84BC82-A041-4838-8A3A-355F3768FDBA|Marina|colorPop|white text, green box behind the spoken word, dark cyan spoken word, Charter font
+mx3924|Neon|colorPop|white text, yellow highlighted words, Lovelo font
+60D0B746-5635-46A9-B201-E05320D1053F|Grapefruit|colorPop|yellow text, pink spoken word, Panton font
+50BDBDFD-C8CE-4C06-B46D-E5B57FD3FB32|Pop|colorPop|white text, red box behind the spoken word, light yellow spoken word, red box behind captions, BioRhyme font
+548CEAFC-95E7-45BA-9728-47715009F207|Anemone|colorPop|white text, dark blue box behind the spoken word, pink spoken word, Roboto font
+2DF409E8-D50D-4F34-9509-1AAA7FF3E8D9|Gelato|colorPop|white text, green box behind the spoken word, yellow spoken word, Barriecito font
+01B6062A-D602-44D9-BA97-351B501CAD22|Mario|colorPop|yellow text, red highlighted words, blue box behind captions, PressStart2P font
+902D48E7-178E-48B0-A9E1-2324B23EDD5D|Vanilla|minimalClean|white text, light yellow spoken word, AvenirNext font
+809D2ABD-4FE1-46DF-BEC7-48092EDE749C|Alternates|minimalClean|white text, Arial font
+4A3B6307-17DA-4F47-B0D9-8B3DDCAE6B92|Human|minimalClean|white text, Jua font
+E544EE1B-F63C-49AE-AA2D-61AE0B6122CF|Classy|minimalClean|white text, AbhayaLibre font
+14BA2546-91E4-4586-A43E-C8D4A71329CD|Dusk|minimalClean|blue text, white box behind captions, Fraunces72ptSoft font
+FC93B7ED-677F-4817-9F4E-2E9D59EB26C3|Minimal|minimalClean|white text, Avenir font
+260DD8EA-3B0B-45EA-AA37-70F121BB85A2|Notepad|minimalClean|white text, AvenirNextCondensed font
+0CD16410-8203-4665-A291-ABF456ABAF60|Whisper|minimalClean|white text, black box behind captions, Optima font
+D1F2538B-99B7-42AE-B3C7-E3E2B1D7B7E6|Grace|minimalClean|white text, Fraunces72ptSoft font
+E30290F1-8871-4575-916F-ED00EEC6D00B|Cloud|minimalClean|white text, ArialHebrew font
+3E6AE3D8-EE76-4A37-9CD7-BBAC8BFB0DF0|Piano|minimalClean|white text, white box behind the spoken word, black spoken word, AvenirNextCondensed font
+4888wt|Old School|minimalClean|white text, black box behind captions, Helvetica font
+BB33281A-AD01-4CC6-BB5C-D6853A7A5D66|Cupcake|minimalClean|white text, pink highlighted words, SnellRoundhand font
+B43964A4-AA78-4163-A231-2B2897EEF3E0|Fancy|minimalClean|white text, light purple highlighted words, STIXTwoText font
+EAC83355-FE76-4085-9DAF-DD9A6FCFD488|Terminal|retroTech|white text, green spoken word, DMMono font
+4m6y9o|Typewriter|retroTech|white text, AmericanTypewriter font
+394C39D1-B473-43B2-AEA7-6BFDDD71B710|Telegraph|retroTech|white text, AmericanTypewriter font
+FF8A81C1-146A-4B6C-8EBA-A3A99B505A45|Box|retroTech|white text, black box behind the spoken word, DMMono font
+kee7zm|Retro|retroTech|white text, red box behind the spoken word, Silkscreen font
+92E93F2F-F341-4AFC-9169-A89FA194D324|Maze|retroTech|blue text, yellow spoken word, black box behind captions, DMMono font
+fbqz51|Rogaine|influencerPack|white text, green spoken word, The Bold Font font
+htc34a|Goggins|influencerPack|white text, yellow spoken word, Panton font
+zn29ba|Diagonal|influencerPack|white text, yellow spoken word, The Bold Font font
+nj6k5e|Blowout|influencerPack|white text, yellow highlighted words, The Bold Font font
+4xu3d5|Mosying|influencerPack|white text, yellow highlighted words, The Bold Font font
+6D0E5CDF-BA11-483B-91B6-ACF47D9DE068|Buzz|influencerPack|white text, purple box behind the spoken word, TheBoldFont font
+23E0C2DD-59E7-4894-89FF-87073C4579A1|Frost|influencerPack|white text, blue box behind captions, HelveticaNeue font
+g54tq8|Confident 1|legacyConfident|white text, yellow highlighted words, AvenirNext font
+uerdoq|Confident 8|legacyConfident|white text, yellow highlighted words, AvenirNextCondensed font
+3llkoz|Confident 9|legacyConfident|white text, yellow highlighted words, Futura font
+nky3f1|Confident 10|legacyConfident|white text, yellow highlighted words, Impact font
+6uvdcg|Confident 11|legacyConfident|white text, yellow highlighted words, GillSans font
+dz8247|Confident 2|legacyConfident|white text, yellow highlighted words, AvenirNext font
+uomrs7|Confident 3|legacyConfident|white text, yellow highlighted words, AvenirNext font
+akx8yq|Confident 4|legacyConfident|white text, yellow highlighted words, HelveticaNeue font
+m5ivwo|Confident 5|legacyConfident|white text, yellow highlighted words, Avenir font
+p207mt|Confident 6|legacyConfident|white text, yellow highlighted words, AlNile font
+xynzu7|Confident 7|legacyConfident|white text, yellow highlighted words, AppleSDGothicNeo font
+bcjfi1|Friendly 1|legacyFriendly|white text, yellow highlighted words, GillSans font
+k6mt9y|Friendly 2|legacyFriendly|white text, yellow highlighted words, ChalkboardSE font
+xvbv1q|Friendly 3|legacyFriendly|white text, yellow highlighted words, ArialRoundedMTBold font
+2rfize|Friendly 4|legacyFriendly|white text, yellow highlighted words, Baskerville font
+ijq5d1|Friendly 5|legacyFriendly|white text, yellow highlighted words, Avenir font
+awj0t8|Friendly 6|legacyFriendly|white text, yellow highlighted words, Optima font
+dkfmp2|Italic 1|legacyItalic|white text, yellow highlighted words, AvenirNext font
+03l0xg|Italic 2|legacyItalic|white text, yellow highlighted words, HoeflerText font
+a7574n|Italic 3|legacyItalic|white text, yellow highlighted words, Baskerville font
+ggf6ky|Italic 4|legacyItalic|white text, yellow highlighted words, Optima font
+oslxz4|Italic 5|legacyItalic|white text, yellow highlighted words, SnellRoundhand font
+qkfx4e|Italic 6|legacyItalic|white text, yellow highlighted words, TimesNewRomanPS font
+56jbho|Serif 1|legacySerif|white text, yellow highlighted words, Rockwell font
+j832qo|Serif 3|legacySerif|white text, yellow highlighted words, AmericanTypewriter font
+zhw013|Serif 2|legacySerif|white text, yellow highlighted words, CourierNewPS font
+mzty8g|Serif 4|legacySerif|white text, yellow highlighted words, AmericanTypewriter font
+tovji7|Serif 5|legacySerif|white text, yellow highlighted words, AmericanTypewriter font
+hjfetf|Grand 1|legacyGrand|white text, yellow highlighted words, Baskerville font
+4ic6up|Grand 2|legacyGrand|white text, yellow highlighted words, AcademyEngravedLetPlain font
+psugvv|Grand 3|legacyGrand|white text, yellow highlighted words, BodoniSvtyTwoSCITCTT font
+iy7idl|Grand 4|legacyGrand|white text, yellow highlighted words, Charter font
+3k9eta|Grand 5|legacyGrand|white text, yellow highlighted words, Didot font
+whc6ze|Grand 6|legacyGrand|white text, yellow highlighted words, Copperplate font
+hff1zo|Light 1|legacyLight|white text, yellow highlighted words, AvenirNext font
+i8pqm7|Light 2|legacyLight|white text, yellow highlighted words, AvenirNextCondensed font
+yi6ng0|Light 3|legacyLight|white text, yellow highlighted words, EuphemiaUCAS font
+agfmmk|Light 4|legacyLight|white text, yellow highlighted words, GillSans font
+0h9vwi|Light 5|legacyLight|white text, yellow highlighted words, HiraMinProN font
+bparpo|Cute 1|legacyCute|white text, yellow highlighted words, BradleyHandITCTT font
+a9162u|Cute 2|legacyCute|white text, yellow highlighted words, ChalkDuster font
+2smack|Cute 3|legacyCute|white text, yellow highlighted words, MarkerFelt font
+jwkrsc|Cute 4|legacyCute|white text, yellow highlighted words, Noteworthy font
+mbom5b|Cute 5|legacyCute|white text, yellow highlighted words, SavoyeLetPlain font
+67wexc|Cute 6|legacyCute|white text, yellow highlighted words, PartyLetPlain font
+xpe7ov|Cute 7|legacyCute|white text, yellow highlighted words, Papyrus font
+ED3F1913-1884-45ED-813D-7B531ABDB7B1|Gothic Diva||white text, gray box behind the spoken word, pink spoken word, Truculenta font
+6CE45E74-1A54-47DB-AEE1-A98E71FBC7D1|Citrus||white text, green spoken word, AvenirNextCondensed font
+D4ADC057-ED24-4AF0-AE2D-111C9EE7E88C|Formik||white text, red box behind the spoken word, yellow spoken word, HelveticaNeueLTStd font
+B2CDFD32-FE8A-431C-808E-A3E76BA91379|Sorbet||light purple text, yellow spoken word, FredokaOne font
+2CE539CF-F7B8-4E3B-8FE0-459E02205E91|Lisa||white text, yellow spoken word, AvenirNext font
+F9760AD1-2494-433F-A8FB-683DFB624A7D|Promo||green text, black box behind captions, Montserrat font
+3CC573A2-F137-464A-8D4F-C61EDC0F9898|Clean||white text, AbhayaLibre font
+F405EA06-96AF-4EB0-B7A2-E5D6DA59E941|Night||black text, blue spoken word, Montserrat font
+4EBDF486-4D71-4E83-A6FD-70573B182678|Blush Bloom|bold|green text, pink spoken word, white box behind captions, Gorditas font
+F7E0A717-BBB4-481A-AA10-BD488F26C161|Pastel Bunny|minimalClean|white text, light green box behind the spoken word, light purple spoken word, DeliusSwashCaps font
+9D4BECF5-CCE7-4A38-8344-C7D9034D23E4|Readline Serif|minimalClean|dark red text, dark red spoken word, white box behind captions, Rosmatika font
+57FFBDC6-28C3-468F-81C4-AA0CB7C0DF66|Pop Layers|colorPop|white text, Staatliches font
+4B95E918-431C-4A64-9EAA-41978E6A3D29|Glow Marker|colorPop|white text, green spoken word, Jua font
+8C421EF2-EAC2-44AA-B628-80DCF66BFC41|Modern Serif|minimalClean|white text, SteelworksVintageDemo font
+E84FBAD8-B91A-46E0-B843-E2538F26758A|Soft Glow|playful|light yellow text, pink spoken word, Dynalight font
+00288E63-68E5-4E3D-BC64-FBA273F316A4|Argentina|worldCup|white text, blue box behind the spoken word, yellow spoken word, Saturdate font
+26DD15DA-8214-425A-90F7-0D5820513296|Uzbekistan|worldCup|green text, white spoken word, RammettoOne font
+D6565E61-7C33-4BA3-AA87-77EB27BFC325|Japan|worldCup|red text, white spoken word, ChineseRocksRg font
+EA7F6041-E487-4147-8383-1265E02BBCCE|USA|worldCup|red text, blue spoken word, white box behind captions, ElsieSwashCaps font
+27F7B85F-3C53-4A93-8EAD-873390CBD106|Brazil|worldCup|green text, yellow box behind the spoken word, dark blue spoken word, Montserrat font
+A490C711-0C2F-4E20-B3FF-EF4B7F861FD3|Portugal|worldCup|red text, dark green spoken word, Roboto font
+7E0A8A45-19B9-415F-9D6F-79036EA577C8|India|worldCup|green text, white box behind the spoken word, orange spoken word, Truculenta font
+3E266DEB-F0C2-4BB0-8E29-AC0213F88B49|England|worldCup|white text, red box behind the spoken word, Staatliches font
+370916AB-18AE-4EE9-9DA2-6BF078384A23|Pakistan|worldCup|white text, dark green box behind the spoken word, Mulish font
+766499A0-777D-437B-A63F-DAD20FDBDBBB|Germany|worldCup|red text, black box behind the spoken word, yellow spoken word, Righteous font
+E732EEBA-8635-42B2-8173-B56FA3124645|Spain|worldCup|yellow text, red box behind captions, HappyMonkey font
+9C23EB0E-7F70-48FA-8644-A75710C40F76|France|worldCup|red text, white spoken word, dark blue box behind captions, HappyMonkey font
+69348A9C-EE58-4713-82C0-B766B433B51C|Mexico|worldCup|white text, red spoken word, dark green box behind captions, SteelworksVintageDemo font
+52B4A319-EA31-4ACD-9601-666A24183426|Midnight Witch|halloween|orange text, black box behind the spoken word, red spoken word, HalloweenWhispers font
+42270B43-63C4-4234-9BA1-62B0FF2D790C|Pumpkin Patch 🎃|halloween|orange text, dark green box behind captions, HalloweenBonesRegular font
+2271ACAE-E9AE-47E6-9F10-C7EBED50BA98|Boo Cute 👻|halloween|orange text, dark purple box behind the spoken word, light purple spoken word, HalloweenGuises font
+0418E192-F60B-4B62-B9F9-F02AEDDBA944|Magic Halloween 🧪|halloween|white text, green spoken word, blue box behind captions, HalloweenPlaque font

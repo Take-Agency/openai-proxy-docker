@@ -409,5 +409,20 @@ export const CASES = [
     { id: 146, group: 'look', instruction: 'make the captions better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
     // a quality with no part: which part, as changes
     { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['changeOptions'], accept: [{ clarify: true }] },
+    // from a user report (2026-11-27): a quality said while choosing presets picks brighter presets, not a part of the current style
+    {
+        id: 148, group: 'look', instruction: 'More bright colors',
+        history: [
+            'User: The look',
+            'AI Edit asked: What kind of look would you like? Options: Bold / Playful / Clean / Keep as is',
+            'User: Playful',
+            'AI Edit asked: Which playful style would you like? Options: Candy Bar / Bubblegum / Pastel / Keep as is',
+            'User: Different more colorful options',
+            'AI Edit asked: Which colorful style would you like? Options: Showgirl / Pop Layers / Candy Bar / Keep as is',
+        ],
+        offered: ['Showgirl', 'Pop Layers', 'Candy Bar', 'Bubblegum', 'Pastel'], checks: ['presetOptions'], accept: [{ clarify: true }],
+    },
+    // a new look with a color quality goes straight to presets that look like it
+    { id: 149, group: 'look', instruction: 'give me a style with bright colors', checks: ['presetOptions'], accept: [{ clarify: true }] },
     { id: 145, group: 'look', instruction: 'surprise me with a new style', accept: [{ calls: [['apply_preset', { preset_id: { anyOf: presets.filter((preset) => preset.name !== 'Mosy').map((preset) => preset.id) } }]] }] },
 ];
