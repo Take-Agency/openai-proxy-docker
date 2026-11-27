@@ -439,5 +439,10 @@ export const CASES = [
     },
     // "surprise me" still shows choices (user report 2026-11-27): 3 presets the model picks
     { id: 151, group: 'pop', fixture: 'F1bg', instruction: 'more contrast', checks: ['lookOptions'], accept: [{ clarify: true }] },
+    // a way picked in answer to how gets looks, never a direct change (user report 2026-11-27: a white
+    // outline on white letters was applied straight away)
+    { id: 152, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Thicker outline' }, checks: ['lookOptions'], accept: [{ clarify: true }] },
+    // a new outline on light letters is dark
+    { id: 153, group: 'style2', fixture: 'F1n', instruction: 'add an outline', accept: [{ calls: [['set_style', { outline_color: '#000000' }]], style: { outline: { outline: { color: '#000000', minWidth: 1, maxWidth: 12 } } } }] },
     { id: 145, group: 'look', instruction: 'surprise me with a new style', checks: ['lookOptions'], accept: [{ clarify: true }] },
 ];
