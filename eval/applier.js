@@ -1040,10 +1040,12 @@ export function apply(edit, original) {
     const state = clone(original);
     const pacingBefore = state.style.pacing;
 
-    // 1. preset: replaces the preset's own fields; others fall through to the project override
+    // 1. preset: replaces the preset's own fields; others fall through to the project override,
+    // except colors: a preset picked in AI Edit brings its own, else the app's defaults (EditApplier)
     if (edit.preset) {
         const { id, name, category, ...fields } = edit.preset;
-        state.style = { ...state.style, ...fields, preset: id };
+        const colors = { fill: '#FFFFFF', emphasis: '#FFFF00', caption_bg: 'none', word_bg: 'none' };
+        state.style = { ...state.style, ...colors, ...fields, preset: id };
         if ('preset_name' in state.style) state.style.preset_name = name;
         for (const key of ['font', 'shadow']) if (!(key in original.style)) delete state.style[key];
     }

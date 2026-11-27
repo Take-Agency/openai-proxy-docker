@@ -47,6 +47,14 @@ function parseStyle(block) {
         if (!COLOR_KEYS[role]) continue;
         preset[COLOR_KEYS[role]] = Number(alpha) > 0 ? `#${byte(red)}${byte(green)}${byte(blue)}` : 'none';
     }
+    // UIColor(hex: 0xRRGGBB) and the named UIColors (.accent is an asset color, left out)
+    for (const [, role, hex] of colors.matchAll(/\.(\w+):\s*UIColor\(hex:\s*0x([0-9A-Fa-f]{6})\)/g)) {
+        if (COLOR_KEYS[role]) preset[COLOR_KEYS[role]] = `#${hex.toUpperCase()}`;
+    }
+    const NAMED = { black: '#000000', white: '#FFFFFF', yellow: '#FFFF00' };
+    for (const [, role, name] of colors.matchAll(/\.(\w+):\s*\.(black|white|yellow)\b/g)) {
+        if (COLOR_KEYS[role]) preset[COLOR_KEYS[role]] = NAMED[name];
+    }
     const size = field('presetFontSize');
     if (size) preset.size = Math.round(Number(size));
     const pacing = field('presetPacing');

@@ -15,7 +15,8 @@
   "case": "none",
   "highlight": "spoken_word",
   "font": "AvenirNext-Bold",
-  "shadow": "custom"
+  "shadow": "custom",
+  "word_bg": "#000000"
  },
  {
   "id": "j4zf4f",
@@ -24,7 +25,8 @@
   "case": "none",
   "highlight": "static",
   "font": "Helvetica Neue LT Std",
-  "shadow": "custom"
+  "shadow": "custom",
+  "emphasis": "#F7CF4A"
  },
  {
   "id": "wv2rex",
@@ -33,7 +35,8 @@
   "case": "none",
   "highlight": "static",
   "font": "Helvetica Neue LT Std",
-  "shadow": "custom"
+  "shadow": "custom",
+  "emphasis": "#F7CF4A"
  },
  {
   "id": "wh0sil",
@@ -42,7 +45,9 @@
   "case": "none",
   "highlight": "none",
   "font": "Instrument Sans",
-  "shadow": "custom"
+  "shadow": "custom",
+  "caption_bg": "#3B2C59",
+  "fill": "#FFFFFF"
  },
  {
   "id": "f7xsde",
@@ -52,6 +57,8 @@
   "highlight": "none",
   "font": ".System-100",
   "shadow": "none",
+  "caption_bg": "#218AFF",
+  "fill": "#FFFFFF",
   "overflow": "wrap"
  },
  {
@@ -270,7 +277,8 @@
   "case": "none",
   "highlight": "spoken_word",
   "font": "Truculenta-Bold",
-  "shadow": "custom"
+  "shadow": "custom",
+  "emphasis": "#FFFF00"
  },
  {
   "id": "B9D7331F-7818-408A-85F2-9DAD021E1B36",
@@ -300,7 +308,8 @@
   "case": "none",
   "highlight": "static",
   "font": "FredokaOne-Regular",
-  "shadow": "custom"
+  "shadow": "custom",
+  "fill": "#FFFFFF"
  },
  {
   "id": "48ql8z",
@@ -346,7 +355,8 @@
   "case": "none",
   "highlight": "static",
   "font": "Bangers",
-  "shadow": "custom"
+  "shadow": "custom",
+  "emphasis": "#FDD53F"
  },
  {
   "id": "59D5271F-DF13-48B9-9611-87ECE02C40DB",
@@ -417,7 +427,8 @@
   "case": "uppercase",
   "highlight": "spoken_word",
   "font": "GoldenSans-Black",
-  "shadow": "none"
+  "shadow": "none",
+  "emphasis": "#FFFFFF"
  },
  {
   "id": "AE4B19A3-83C7-48A2-9C72-B786FA322690",
@@ -764,7 +775,9 @@
   "case": "none",
   "highlight": "none",
   "font": "Helvetica",
-  "shadow": "custom"
+  "shadow": "custom",
+  "fill": "#FFFFFF",
+  "caption_bg": "#000000"
  },
  {
   "id": "BB33281A-AD01-4CC6-BB5C-D6853A7A5D66",
