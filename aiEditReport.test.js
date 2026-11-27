@@ -43,6 +43,17 @@ test('a report is stored whole under ai-edit-reports/<date>/', async () => {
         assert.equal(record.contact, 'me@example.com');
         assert.equal(record.installId, 'install-1');
         assert.equal(record.snapshot, 'c0 0.0-1.2 | 0 Hello');
+        assert.equal(record.arms, null);
+    });
+});
+
+test('a report keeps the A/B arms the reporter is in, and drops anything else', async () => {
+    await withServer({}, async (post, writes) => {
+        const { status } = await post({ conversation, arms: { ai_edit_start_tool: 'style', 'Bad Name!': 'x', long_arm: 'y'.repeat(41), nested: { a: 1 } } });
+        assert.equal(status, 200);
+        assert.deepEqual(JSON.parse(writes[0].Body).arms, { ai_edit_start_tool: 'style' });
+        await post({ conversation, arms: ['style'] });
+        assert.equal(JSON.parse(writes[1].Body).arms, null);
     });
 });
 

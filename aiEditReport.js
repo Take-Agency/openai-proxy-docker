@@ -61,6 +61,14 @@ export function createAIEditReportRouter({ s3Client, spacesBucket, feedbackSecre
         next();
     }
 
+    const arms = (value) => {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+        const entries = Object.entries(value)
+            .filter(([name, arm]) => /^[a-z0-9_]{1,40}$/.test(name) && typeof arm === 'string' && arm.length <= 40)
+            .slice(0, 10);
+        return entries.length ? Object.fromEntries(entries) : null;
+    };
+
     async function postReport(req, res) {
         if (!s3Client || !spacesBucket) {
             return res.status(503).json({ success: false, error: 'storage_not_configured' });
@@ -96,6 +104,9 @@ export function createAIEditReportRouter({ s3Client, spacesBucket, feedbackSecre
             model: str(body.model, 64),
             appVersion: str(body.appVersion, 32),
             locale: str(body.locale, 32),
+            // the A/B arms the reporter is in ({ ai_edit_start_tool: 'style' }), so feedback can be
+            // read per arm; anything that isn't a few short strings is left out, not an error
+            arms: arms(body.arms),
         };
         try {
             await s3Client.send(new PutObjectCommand({
