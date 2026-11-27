@@ -261,9 +261,10 @@ export const CASES = [
     // "Make captions pop" (a starter chip): ask with concrete options, and when the answer is
     // still a quality ("brighter colors"), ask which part, in the context of the current style
     // a quality for the current style: 3 versions of it, previewed (prompt's "Which version")
-    { id: 96, group: 'pop', instruction: 'Make captions pop', checks: ['lookOptions'], accept: [{ clarify: true }] },
-    { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['lookOptions'], accept: [{ clarify: true }] },
-    { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['lookOptions'], optionsMatch: /box|background/i, accept: [{ clarify: true }] },
+    // vague about how: ask how first, "a different preset" among the ways (user report 2026-11-27)
+    { id: 96, group: 'pop', instruction: 'Make captions pop', checks: ['kindOptions', 'offersPresets'], accept: [{ clarify: true }] },
+    { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['lookOptions', 'mixedLooks'], accept: [{ clarify: true }] },
+    { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['lookOptions', 'mixedLooks'], accept: [{ clarify: true }] },
     { id: 99, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Yellow text' }, accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW } }] },
     // Parts named the way they look (the snapshot's "looks" line)
     // Mosy has no caption box: caption_bg adds one, as the style editor's Caption Background toggle does
@@ -408,7 +409,7 @@ export const CASES = [
     },
     { id: 146, group: 'look', instruction: 'make the captions better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
     // a quality with no part: which part, as changes
-    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['lookOptions'], accept: [{ clarify: true }] },
+    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['lookOptions', 'mixedLooks'], accept: [{ clarify: true }] },
     // from a user report (2026-11-27): a quality said while choosing presets picks brighter presets, not a part of the current style
     {
         id: 148, group: 'look', instruction: 'More bright colors',

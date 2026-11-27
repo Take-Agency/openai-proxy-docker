@@ -46,24 +46,28 @@ const STYLE_FIELDS = {
     font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
 };
 
-// One answer the user can tap. type says what tapping it does: a look (a preset, changes to the
-// current style, or a preset with changes) is previewed and applied by the app itself; a change
-// that isn't about the look and a direction (narrowing to the next question) go back to you.
+// One answer the user can tap in a question: a change that isn't about the look (sent back to you
+// and applied), or a direction that narrows to the next question. Looks are suggest_looks.
 const CLARIFICATION_OPTION = {
     type: 'object',
     properties: {
-        label: { type: 'string', description: 'What the user sees, in the reply language: what the look is ("Showgirl with white text", "Bright yellow text, red box"), or what the change or direction is.' },
-        type: { type: 'string', enum: ['look', 'change', 'direction'] },
-        preset_id: { type: ['string', 'null'], description: 'type look only: the preset it starts from, an id from <presets>; null starts from the current style.' },
-        style: {
-            anyOf: [
-                { type: 'object', properties: STYLE_FIELDS, required: Object.keys(STYLE_FIELDS), additionalProperties: false },
-                { type: 'null' },
-            ],
-            description: 'type look only: the set_style fields it changes, on top of the preset or the current style (null leaves a field as is); null for a preset as it is.',
-        },
+        label: { type: 'string', description: 'What the user sees, in the reply language.' },
+        type: { type: 'string', enum: ['change', 'direction'] },
     },
-    required: ['label', 'type', 'preset_id', 'style'],
+    required: ['label', 'type'],
+    additionalProperties: false,
+};
+
+// A version in suggest_looks: changes to the current style, or to a preset. style is required, so a
+// version is always a real change the app can preview.
+const LOOK_VERSION = {
+    type: 'object',
+    properties: {
+        label: { type: 'string', description: 'What the look is, in the reply language ("Bright yellow text, red spoken word").' },
+        preset_id: { type: ['string', 'null'], description: 'The preset it starts from, an id from <presets>; null starts from the current style.' },
+        style: { type: 'object', properties: STYLE_FIELDS, required: Object.keys(STYLE_FIELDS), additionalProperties: false, description: 'The set_style fields it changes (null leaves a field as is). At least one is set.' },
+    },
+    required: ['label', 'preset_id', 'style'],
     additionalProperties: false,
 };
 
@@ -182,9 +186,15 @@ export const EDIT_TOOLS = [
         name: { type: 'string' },
     }),
     tool('undo_last_edit', 'Undo the previous edit because the new instruction corrects it. Only when <previous> says it is applied. The app undoes it and sends you both instructions again. Never combined with other calls.', {}),
-    tool('ask_clarification', 'Ask the user one question with 2-3 options (see Asking). The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. Never combined with other calls.', {
+    tool('ask_clarification', 'Ask the user one question with 2-4 options (see Asking). The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. Never combined with other calls.', {
         question: { type: 'string' },
         options: { type: 'array', items: CLARIFICATION_OPTION },
+        offer_presets: { type: 'boolean', description: 'true only when asking how to improve the look: the app then adds its own "A different preset" option, so never add one yourself.' },
+    }),
+    tool('suggest_looks', 'Show the user looks to pick from, each previewed on their captions and applied when tapped (see Asking). Never combined with other calls.', {
+        question: { type: 'string' },
+        versions: { type: 'array', items: LOOK_VERSION, description: 'Versions of the current style, or presets with changes.' },
+        presets: { type: 'array', items: { type: 'string' }, description: 'Presets as they are: ids from <presets>, never the current one.' },
     }),
     tool('cannot_do', 'Say that (part of) the instruction is not possible, and offer what is, or answer a question that asks for no change. May be combined with edits. Never a confirmation of edits you made.', {
         reason: { type: 'string', enum: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'] },

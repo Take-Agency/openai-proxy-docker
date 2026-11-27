@@ -239,6 +239,29 @@ function noOpEdits(calls, fixture) {
     return found;
 }
 
+// WCAG contrast, as the app's AIEditStyleCards.isReadable checks a look before offering it: the
+// text against the caption box, the spoken word against its box (3:1), the outline against the
+// letters (2:1). Only pairs the look's own changes touch: a preset as designed is trusted (many
+// rely on an outline or shadow, not contrast alone).
+const luminance = (hex) => {
+    if (!/^#[0-9A-Fa-f]{6}$/.test(hex || '')) return null;
+    const channel = (shift) => { const c = ((parseInt(hex.slice(1), 16) >> shift) & 0xFF) / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+    return 0.2126 * channel(16) + 0.7152 * channel(8) + 0.0722 * channel(0);
+};
+const contrast = (first, second) => {
+    const [a, b] = [luminance(first), luminance(second)];
+    return a == null || b == null ? 21 : (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+};
+export function readable(state, changes) {
+    const { style, boxes = {} } = state;
+    const changed = (...keys) => keys.some((key) => changes?.[key] != null);
+    if (changed('fill_color', 'caption_background_color') && boxes.caption && style.caption_bg !== 'none' && contrast(style.fill, style.caption_bg) < 3) return false;
+    const spoken = style.highlight === 'none' ? style.fill : style.emphasis;
+    if (changed('fill_color', 'emphasis_color', 'word_background_color', 'highlight') && boxes.word && style.word_bg !== 'none' && contrast(spoken, style.word_bg) < 3) return false;
+    if (changed('fill_color', 'outline_color', 'outline_width') && style.outline && style.outline !== 'none' && style.outline.width > 0 && contrast(style.fill, style.outline.color) < 2) return false;
+    return true;
+}
+
 function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
     const failures = [];
     for (const check of testCase.checks || []) {
@@ -257,7 +280,7 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
                     ...(option.style ? [{ name: 'set_style', arguments: option.style }] : []),
                 ];
                 const result = applyCalls(calls, fixture, presets, FONTS);
-                return result.errors.length ? null : JSON.stringify(result.state.style);
+                return result.errors.length || !readable(result.state, option.style) ? null : JSON.stringify(result.state.style);
             });
             return results.every((look) => look && look !== JSON.stringify(fixture.style)) && new Set(results).size === results.length;
         };
@@ -268,6 +291,11 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
             // starting from a preset in another font
             const fontOf = (option) => option.style?.font ?? presets.find((preset) => preset.id === option.preset_id)?.font;
             if (check === 'fontOptions' && (!looksOk() || !typed.every((option) => fontOf(option) && fontOf(option) !== fixture.style.font && (option.style?.font == null || FONTS.includes(option.style.font))))) failures.push(check);
+            // looks for a way to improve the captions: versions of the current style and presets, mixed
+            if (check === 'mixedLooks' && !(typed.some((option) => option.type === 'look' && option.preset_id && !option.style)
+                && typed.some((option) => option.type === 'look' && option.style))) failures.push(check);
+            // a how-question about the look: the app adds "A different preset"
+            if (check === 'offersPresets' && !edit.clarification.offerPresets) failures.push(check);
             if (check === 'kindOptions' && !(typed.length && typed.every((option) => option.type === 'direction'))) failures.push(check);
         }
     }
