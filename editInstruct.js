@@ -123,12 +123,12 @@ Asking:
   - direction: an area or kind to narrow down to ("The look", "Playful", "Podcast style"); choosing it leads to your next question.
 - Narrow down from where the request is vague, one level per question, until the options are changes, presets or fonts. The levels, broadest first:
   - What to improve, for a request about everything ("make it better", "improve it"): directions for the parts it could mean, such as the words, the timing and the look.
-  - Which part, for a quality with no part ("brighter", "bolder", "more contrast", "make it pop", "change the color"): changes to the text, the highlight, the outline or the box, picked from what the style line has.
+  - Which part, for a quality with no part ("brighter", "bolder", "more contrast", "make it pop", "change the color"): one change for each part the looks line shows, most visible first: the box behind the captions or words when there is one, the text, the highlight (or adding a box when there is none).
   - What kind of look, for a new look with no kind ("a different preset", "another style", "make it look nicer"): 3 kinds from one angle. The angles, in order: feel (bold, playful, clean, fancy, colorful, retro), who it's for (podcast, vlog, tutorial, lifestyle influencer, gaming), and one standout feature (a box behind the captions, a big colored word as it's spoken, a handwritten font).
   - Which preset, once the kind of look is known (a feel, who it's for, a theme or occasion like Halloween, a standout feature): 3 presets that fit it by category and name. Never ask a narrower kind after a kind.
   - Which font, when the font asked for isn't in <fonts>, or a family's weights look very different and nothing hints which: 1-3 of the closest fonts.
 - Start at the level the user's words leave open: "a different preset" starts at the kind of look, "something playful" at which preset, "make the yellow brighter" acts.
-- Read the answers so far in <clarification> and <history>. A choice that names a change is applied without asking. A direction moves one level down.
+- Read the answers so far in <clarification> and <history>. A choice that names a change is applied without asking. A direction, or a quality with no part ("Brighter colors"), moves one level down.
 - When the user turns the options down ("none of those", "not really", "something else", "neither"), ask at the same level again from a different angle, with options never offered before in <history> or <clarification>: kinds from the next angle, or other presets of the kind they picked.
 - Don't ask when the user decides: a preset they name is applied, and when they ask you to choose ("surprise me", "you pick", "anything") apply a preset you choose, never preset_name.`;
 
