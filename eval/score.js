@@ -258,6 +258,17 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
             if (check === 'presetOptions' && (!allOf('preset') || typed.length < 2 || typed.some(currentPreset))) failures.push(check);
             if (check === 'kindOptions' && !allOf('direction')) failures.push(check);
             if (check === 'changeOptions' && !allOf('change')) failures.push(check);
+            // versions of the current style (prompt's "Which version"): 2-3 changes that each carry a
+            // style the app can apply, each changing the look, no two the same
+            if (check === 'variationOptions') {
+                const looks = typed.map((option) => {
+                    if (option.type !== 'change' || !option.style) return null;
+                    const result = applyCalls([{ name: 'set_style', arguments: option.style }], fixture, presets, FONTS);
+                    return result.errors.length ? null : JSON.stringify(result.state.style);
+                });
+                const unchanged = JSON.stringify(fixture.style);
+                if (typed.length < 2 || looks.some((look) => !look || look === unchanged) || new Set(looks).size !== looks.length) failures.push(check);
+            }
         }
     }
     // offered: options already offered earlier in the conversation must not come back

@@ -193,7 +193,7 @@ export const CASES = [
     { id: 62, group: 'style2', instruction: 'change the font to Montserrat', accept: [{ calls: [['set_style', { font: { anyOf: FONTS.filter((font) => font.startsWith('Montserrat')) } }]] }] },
     { id: 63, group: 'style2', instruction: 'use Comic Sans', checks: ['fontOptions'], accept: [{ clarify: true }] },
     { id: 64, group: 'style2', fixture: 'P3', locale: 'hi', instruction: 'आउटलाइन हटाओ', accept: [{ calls: [['set_style', { outline_color: 'none' }]] }] },
-    { id: 65, group: 'style2', instruction: 'make the text bolder', accept: [{ clarify: true }, { calls: [['set_style', { outline_width: 8 }]], style: { outline: { outline: { color: '#000000', minWidth: 5, maxWidth: 12 } } } }] },
+    { id: 65, group: 'style2', instruction: 'make the text bolder', checks: ['variationOptions'], accept: [{ clarify: true }, { calls: [['set_style', { outline_width: 8 }]], style: { outline: { outline: { color: '#000000', minWidth: 5, maxWidth: 12 } } } }] },
     {
         id: 69, group: 'style2', instruction: 'capitalize the first word of every line',
         // "um" counts as the first word, or the first real word after it
@@ -261,9 +261,10 @@ export const CASES = [
     },
     // "Make captions pop" (a starter chip): ask with concrete options, and when the answer is
     // still a quality ("brighter colors"), ask which part, in the context of the current style
-    { id: 96, group: 'pop', instruction: 'Make captions pop', accept: [{ clarify: true }] },
-    { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, accept: [{ clarify: true }] },
-    { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, optionsMatch: /box|background/i, accept: [{ clarify: true }] },
+    // a quality for the current style: 3 versions of it, previewed (prompt's "Which version")
+    { id: 96, group: 'pop', instruction: 'Make captions pop', checks: ['variationOptions'], accept: [{ clarify: true }] },
+    { id: 97, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['variationOptions'], accept: [{ clarify: true }] },
+    { id: 98, group: 'pop', fixture: 'F1bg', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Brighter colors' }, checks: ['variationOptions'], optionsMatch: /box|background/i, accept: [{ clarify: true }] },
     { id: 99, group: 'pop', instruction: 'Make captions pop', clarification: { question: 'How should the captions pop?', choice: 'Yellow text' }, accept: [{ calls: [['set_style', { fill_color: '#FFD600' }]], style: { fill: YELLOW } }] },
     // Parts named the way they look (the snapshot's "looks" line)
     // Mosy has no caption box: caption_bg adds one, as the style editor's Caption Background toggle does
@@ -408,7 +409,7 @@ export const CASES = [
     },
     { id: 146, group: 'look', instruction: 'make the captions better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
     // a quality with no part: which part, as changes
-    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['changeOptions'], accept: [{ clarify: true }] },
+    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['variationOptions'], accept: [{ clarify: true }] },
     // from a user report (2026-11-27): a quality said while choosing presets picks brighter presets, not a part of the current style
     {
         id: 148, group: 'look', instruction: 'More bright colors',
@@ -437,5 +438,6 @@ export const CASES = [
         offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['presetOptions'], accept: [{ clarify: true }],
     },
     // "surprise me" still shows choices (user report 2026-11-27): 3 presets the model picks
+    { id: 151, group: 'pop', fixture: 'F1bg', instruction: 'more contrast', checks: ['variationOptions'], accept: [{ clarify: true }] },
     { id: 145, group: 'look', instruction: 'surprise me with a new style', checks: ['presetOptions'], accept: [{ clarify: true }] },
 ];

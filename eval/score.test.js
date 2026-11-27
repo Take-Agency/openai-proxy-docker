@@ -133,3 +133,12 @@ test('outline, shadow, position and font', () => {
     // an untyped answer (a build without typed options) can't pass a type check
     assert.equal(score(63, [{ name: 'ask_clarification', arguments: { question: 'Which?', options: ['Bangers-Regular'] } }]).success, false);
 });
+
+test('style versions must each apply, change the look and differ', () => {
+    const blank = { fill_color: null, emphasis_color: null, caption_background_color: null, word_background_color: null, font_size: null, position: null, case: null, highlight: null, overflow: null, position_y: null, outline_color: null, outline_width: null, shadow: null, font: null };
+    const version = (label, fields) => ({ label, type: 'change', preset_id: null, font: null, style: { ...blank, ...fields } });
+    const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Which version?', options } }];
+    assert.equal(score(96, ask(version('Yellow text', { fill_color: '#FFD600' }), version('Thick outline', { outline_color: '#000000', outline_width: 10 }))).success, true);
+    assert.equal(score(96, ask(version('Yellow text', { fill_color: '#FFD600' }), version('Also yellow', { fill_color: '#FFD600' }))).success, false);
+    assert.equal(score(96, ask(version('Yellow text', { fill_color: '#FFD600' }), { label: 'Bigger', type: 'change', preset_id: null, font: null, style: null })).success, false);
+});

@@ -117,14 +117,13 @@ Deciding:
 
 Asking:
 - Ask one question with ask_clarification, alone. Each option has a type, which says what tapping it does:
-  - change: an edit you can apply as it is, fitted to the current style line; the label says what changes and how ("Yellow text", "Black box behind the captions", "Thicker outline"). Offer a change to the background box only when the style has one (caption_bg or word_bg isn't "none"), or adding one when it has none.
+  - change: an edit you can apply as it is, fitted to the current style line; the label says what changes and how ("Yellow text", "Black box behind the captions", "Thicker outline"). A change to the style sets style to its set_style fields: the app shows it as a preview of the user's captions and applies it when tapped. Offer a change to the background box only when the style has one (caption_bg or word_bg isn't "none"), or adding one when it has none.
   - preset: a preset from <presets>, by preset_id, never the current one (preset_name). The app shows it as a preview and applies it when tapped.
   - font: a font from <fonts>, by font. The app shows it as a preview and applies it when tapped.
   - direction: an area or kind to narrow down to ("The look", "Playful", "Podcast style"); choosing it leads to your next question.
 - Narrow down from where the request is vague, one level per question, until the options are changes, presets or fonts. The levels, broadest first:
   - What to improve, for a request about everything ("make it better", "improve it"): directions for the parts it could mean, such as the words, the timing and the look.
-  - Which part, for a quality with no part ("brighter", "brighter colors", "more contrast", "make it pop", "change the color"): one change for each part the looks line shows, most visible first: the box behind the captions or words when there is one, the text, the highlight (or adding a box when there is none).
-  - Which way, for a quality that different changes give ("bolder", "thicker"): one change for each (a heavier font, a thicker outline).
+  - Which version, for a quality the current style should have, with no part or no one way to get it ("make it pop", "brighter", "brighter colors", "more contrast", "bolder", "change the color"): 3 changes to the current style, each with its style set. Each is a whole version that may change several parts at once (text, highlight, box, outline, shadow, font), the 3 clearly different from each other, and each with the quality the user asked for. Label each by what it does ("Bright yellow text, white box").
   - What kind of look, for a new look with no kind ("a different preset", "another style", "make it look nicer"): 3 kinds from one angle. The angles, in order: feel (bold, playful, clean, fancy, colorful, retro), who it's for (podcast, vlog, tutorial, lifestyle influencer, gaming), and one standout feature (a box behind the captions, a big colored word as it's spoken, a handwritten font).
   - Which preset, once the kind of look is known (a feel, who it's for, a theme or occasion like Halloween, a standout feature, a color): 3 presets whose look, category and name fit it best. Never ask a narrower kind after a kind.
   - Which font, when the font asked for isn't in <fonts>, or a family's weights look very different and nothing hints which: 1-3 of the closest fonts.
@@ -320,6 +319,7 @@ export function normalizeOptions(calls, { presets, fonts }) {
             let type = option?.type;
             let presetId = null;
             let font = null;
+            let style = null;
             if (type === 'preset') {
                 const byName = presetList.filter((preset) => squash(preset.name) === squash(label));
                 const preset = presetList.find((preset) => preset.id === option.preset_id) ?? (byName.length === 1 ? byName[0] : null);
@@ -335,11 +335,17 @@ export function normalizeOptions(calls, { presets, fonts }) {
                 if (!font) continue;
                 label = font;
             }
+            // a change to the style keeps the fields it sets (a font only if it's in the catalog)
+            if (type === 'change' && isPlainObject(option.style)) {
+                const set = Object.entries(option.style).filter(([, value]) => value != null);
+                const fields = Object.fromEntries(set.map(([key, value]) => [key, key === 'font' ? matchFont(value, fontList) : value]).filter(([, value]) => value != null));
+                if (Object.keys(fields).length) style = { ...Object.fromEntries(Object.keys(option.style).map((key) => [key, null])), ...fields };
+            }
             if (!label) continue;
-            const key = presetId ? `preset ${presetId}` : font ? `font ${font}` : `label ${label.toLowerCase()}`;
+            const key = presetId ? `preset ${presetId}` : font ? `font ${font}` : style ? `style ${JSON.stringify(style)}` : `label ${label.toLowerCase()}`;
             if (seen.has(key)) continue;
             seen.add(key);
-            options.push({ label, type, preset_id: presetId, font });
+            options.push({ label, type, preset_id: presetId, font, style });
         }
         return { ...call, arguments: { ...call.arguments, options: options.slice(0, 3) } };
     });

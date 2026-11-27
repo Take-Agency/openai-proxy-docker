@@ -30,7 +30,7 @@ const setStyle = call('set_style', {
     font_size: 104, position: null, case: null, highlight: null, overflow: null,
     position_y: null, outline_color: null, outline_width: null, shadow: null, font: null,
 });
-const option = (label, type = 'change', presetId = null, font = null) => ({ label, type, preset_id: presetId, font });
+const option = (label, type = 'change', presetId = null, font = null, style = null) => ({ label, type, preset_id: presetId, font, style });
 const askClarification = call('ask_clarification', { question: 'Which color?', options: [option('Text'), option('Emphasis')] });
 
 // Builds a fake OpenAI Responses endpoint. `respond({ model, request })` returns the `output`
@@ -598,6 +598,10 @@ test('options are checked against the catalogs', () => {
         [option('ChalkboardSE-Bold', 'font', null, 'ChalkboardSE-Bold'), option('Fredoka One', 'font', null, 'Fredoka One')]);
     // repeats dropped, at most 3
     assert.deepEqual(options(ask(option('Boo', 'preset', 'boo'), option('Boo Cute', 'preset', 'boo'), option('A'), option('B'), option('C'))).map((entry) => entry.label), ['Boo Cute', 'A', 'B']);
+    // a change to the style keeps the fields it sets; an unknown font is dropped, an empty style is null
+    const nulls = { fill_color: null, font: null, shadow: null };
+    assert.deepEqual(options(ask(option('Yellow text, comic font', 'change', null, null, { ...nulls, fill_color: '#FFD600', font: 'Fredoka One' }), option('Comic Sans', 'change', null, null, { ...nulls, font: 'Comic Sans' }))),
+        [option('Yellow text, comic font', 'change', null, null, { ...nulls, fill_color: '#FFD600', font: 'Fredoka One' }), option('Comic Sans', 'change')]);
     // other calls pass through
     const other = [{ name: 'set_style', arguments: { font: 'x' } }];
     assert.deepEqual(normalizeOptions(other, { presets, fonts }), other);

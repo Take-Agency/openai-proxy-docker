@@ -28,7 +28,26 @@ const wordRefs = {
     },
 };
 
-// One answer the user can tap. type says what tapping it does: a change is sent back to you as
+// set_style's fields; a change option carries the same fields as its style.
+const STYLE_FIELDS = {
+    fill_color: { type: ['string', 'null'], pattern: HEX },
+    emphasis_color: { type: ['string', 'null'], pattern: HEX },
+    caption_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
+    word_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
+    font_size: { type: ['integer', 'null'] },
+    position: nullableEnum(['bottom', 'center', 'top']),
+    case: nullableEnum(['none', 'uppercase', 'capitalized']),
+    highlight: nullableEnum(['none', 'static', 'spoken_word']),
+    overflow: nullableEnum(['none', 'resize_to_fit', 'wrap']),
+    position_y: { type: ['number', 'null'], description: 'Vertical position, 0 = bottom edge, 1 = top edge (the style line\'s y; the bottom/center/top presets are about 0.2/0.5/0.9). For "a bit higher/lower" move 0.08-0.12 from the current y. Keep within 0.05-0.95.' },
+    outline_color: { type: ['string', 'null'], pattern: HEX_OR_NONE, description: '"none" removes the outline.' },
+    outline_width: { type: ['number', 'null'], description: 'Without an outline yet: thin about 2, medium about 4, thick about 8. With one, relative words move from the current width (outline.width in the style line).' },
+    shadow: nullableEnum(['none', 'soft', 'strong']),
+    font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
+};
+
+// One answer the user can tap. type says what tapping it does: a change to the style carries its
+// set_style fields and is previewed and applied by the app, any other change is sent back to you as
 // the answer and applied; a preset or font is shown as a preview and applied by the app itself; a
 // direction is sent back to you as the answer and leads to the next question.
 const CLARIFICATION_OPTION = {
@@ -38,8 +57,15 @@ const CLARIFICATION_OPTION = {
         type: { type: 'string', enum: ['change', 'preset', 'font', 'direction'] },
         preset_id: { type: ['string', 'null'], description: 'type preset only: the id from <presets>. Null otherwise.' },
         font: { type: ['string', 'null'], description: 'type font only: exactly one name from <fonts>. Null otherwise.' },
+        style: {
+            anyOf: [
+                { type: 'object', properties: STYLE_FIELDS, required: Object.keys(STYLE_FIELDS), additionalProperties: false },
+                { type: 'null' },
+            ],
+            description: 'type change only, when the change is to the current style: the set_style fields it sets (null leaves a field as is). The app shows it as a preview and applies it when tapped. Null otherwise.',
+        },
     },
-    required: ['label', 'type', 'preset_id', 'font'],
+    required: ['label', 'type', 'preset_id', 'font', 'style'],
     additionalProperties: false,
 };
 
@@ -59,22 +85,7 @@ function tool(name, description, properties) {
 }
 
 export const EDIT_TOOLS = [
-    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. fill_color is the text color; emphasis_color is the highlight color (the spoken or emphasized word, "highlight the word being spoken in green"). case: "capitalized" = Every Word Capitalized, "none" = as written. position is one of three presets; position_y is any height.', {
-        fill_color: { type: ['string', 'null'], pattern: HEX },
-        emphasis_color: { type: ['string', 'null'], pattern: HEX },
-        caption_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
-        word_background_color: { type: ['string', 'null'], pattern: HEX_OR_NONE },
-        font_size: { type: ['integer', 'null'] },
-        position: nullableEnum(['bottom', 'center', 'top']),
-        case: nullableEnum(['none', 'uppercase', 'capitalized']),
-        highlight: nullableEnum(['none', 'static', 'spoken_word']),
-        overflow: nullableEnum(['none', 'resize_to_fit', 'wrap']),
-        position_y: { type: ['number', 'null'], description: 'Vertical position, 0 = bottom edge, 1 = top edge (the style line\'s y; the bottom/center/top presets are about 0.2/0.5/0.9). For "a bit higher/lower" move 0.08-0.12 from the current y. Keep within 0.05-0.95.' },
-        outline_color: { type: ['string', 'null'], pattern: HEX_OR_NONE, description: '"none" removes the outline.' },
-        outline_width: { type: ['number', 'null'], description: 'Without an outline yet: thin about 2, medium about 4, thick about 8. With one, relative words move from the current width (outline.width in the style line).' },
-        shadow: nullableEnum(['none', 'soft', 'strong']),
-        font: { type: ['string', 'null'], description: 'Exactly one name from <fonts>.' },
-    }),
+    tool('set_style', 'Change global caption style. Call it at most once per instruction, with every field to change. Set only the fields the user asked to change; null leaves a field as is. At least one field must be set. font_size is absolute (40-120), computed from the current size in the snapshot. fill_color is the text color; emphasis_color is the highlight color (the spoken or emphasized word, "highlight the word being spoken in green"). case: "capitalized" = Every Word Capitalized, "none" = as written. position is one of three presets; position_y is any height.', STYLE_FIELDS),
     tool('apply_preset', 'Apply a style preset by its id from the presets list. Resets style overrides, so it is applied before set_style. When the user also asks for changes to the preset ("X but with white text"), also call set_style with those changes in the same batch.', {
         preset_id: { type: 'string' },
     }),
