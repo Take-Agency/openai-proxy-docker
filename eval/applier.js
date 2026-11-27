@@ -148,7 +148,7 @@ export const SCHEMAS = {
     shift_timing: { from: 'string?', to: 'string?', offset_ms: 'int' },
     set_caption_timing: { caption: 'string', start_s: 'number?', end_s: 'number?' },
     set_emphasis: { caption: 'string', from: 'string?', to: 'string?' },
-    ask_clarification: { question: 'string', options: 'strings' },
+    ask_clarification: { question: 'string', options: 'options' },
     undo_last_edit: {},
     // bulk tools: the model names what to change, the app finds every target
     split_in_half: { captions: 'ids?' },
@@ -180,6 +180,9 @@ function typeOk(type, value) {
     case 'bool': return typeof value === 'boolean';
     case 'strings':
     case 'ids': return Array.isArray(value) && value.every((item) => typeof item === 'string');
+    // ask_clarification options: plain strings from builds without typed_options, else {label, type, preset_id, font}
+    case 'options': return Array.isArray(value) && (value.every((item) => typeof item === 'string')
+        || value.every((item) => item && typeof item.label === 'string' && ['change', 'preset', 'font', 'direction'].includes(item.type)));
     case 'refs': return Array.isArray(value) && value.every((item) => item && typeof item.id === 'string' && typeof item.expect === 'string');
     default: return false;
     }
@@ -818,7 +821,12 @@ export function validate(calls, state, presets, fonts = [], appState = null) {
             if (!args.question.trim()) errors.push(`${name}: question is empty`);
             // the app adds its own "Keep as is", so one option (a font, say) is enough
             if (args.options.length < 1 || args.options.length > 3) errors.push(`${name}: give 1 to 3 options`);
-            edit.clarification = { question: args.question, options: args.options };
+            // options are the labels the user sees; typed keeps the objects when the server sent them
+            edit.clarification = {
+                question: args.question,
+                options: args.options.map((option) => (typeof option === 'string' ? option : option.label)),
+                typed: args.options.every((option) => typeof option === 'object') ? args.options : null,
+            };
             break;
         case 'undo_last_edit':
             edit.undo = true;

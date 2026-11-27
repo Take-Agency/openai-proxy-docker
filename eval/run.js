@@ -340,6 +340,8 @@ async function main() {
                 // as 4.0 (6) and later send it: the build's own tools and the clip's state
                 app_tools: EVAL_APP_TOOLS,
                 app_state: { silences_removed: false, audio_cleaned: false, music_added: false, ...testCase.appState },
+                // as builds that read typed question options send it
+                typed_options: true,
             };
             // a follow-up turn: the user's answer to the model's earlier question
             if (testCase.clarification) body.clarification = testCase.clarification;

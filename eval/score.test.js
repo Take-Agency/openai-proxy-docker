@@ -123,13 +123,13 @@ test('outline, shadow, position and font', () => {
     assert.equal(score(61, style({ position: 'top' })).success, false);
     assert.equal(score(62, style({ font: 'Montserrat-ExtraBold' })).success, true);
     assert.equal(score(62, style({ font: 'Montserrat' })).success, false);
-    // the proxy reduces font options to catalog names; the app adds "Keep current font"
-    const ask = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available. Which of these?', options: ['Bangers-Regular', 'LuckiestGuy-Regular'] } }];
-    assert.equal(score(63, ask).success, true);
-    const one = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Fredoka One'] } }];
-    assert.equal(score(63, one).success, true);
-    const withKeep = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Fredoka One', 'Keep current font'] } }];
-    assert.equal(score(63, withKeep).success, false);
-    const worded = [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options: ['Bangers-Regular', 'Comic-style Fredoka One'] } }];
-    assert.equal(score(63, worded).success, false);
+    // font options are typed, with exact catalog names (the proxy maps them); the app adds "Keep current font"
+    const font = (name) => ({ label: name, type: 'font', preset_id: null, font: name });
+    const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available. Which of these?', options } }];
+    assert.equal(score(63, ask(font('Bangers-Regular'), font('LuckiestGuy-Regular'))).success, true);
+    assert.equal(score(63, ask(font('Fredoka One'))).success, true);
+    assert.equal(score(63, ask(font('Fredoka One'), { label: 'Keep current font', type: 'change', preset_id: null, font: null })).success, false);
+    assert.equal(score(63, ask(font('Bangers-Regular'), font('Comic-style Fredoka One'))).success, false);
+    // an untyped answer (a build without typed options) can't pass a type check
+    assert.equal(score(63, [{ name: 'ask_clarification', arguments: { question: 'Which?', options: ['Bangers-Regular'] } }]).success, false);
 });

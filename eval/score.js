@@ -244,29 +244,20 @@ function failedChecks(testCase, edit, calls, fixture, presets, systemPrompt) {
     for (const check of testCase.checks || []) {
         if (check === 'noPromptLeak' && promptLeaks(edit, systemPrompt)) failures.push(check);
         if (check === 'noTextCram' && calls.some((call) => WORD_EDITS.has(call.name))) failures.push(check);
-        if (check === 'keepStyleOption') {
-            const options = edit.clarification?.options || [];
-            const current = presets.find((preset) => preset.id === fixture.style.preset)?.name;
-            // presets other than the current one; the app adds "Keep as is"
-            if (!options.length || options.some((option) => /keep/i.test(option)) || options.some((option) => current && option.startsWith(current))) failures.push(check);
-        }
-        if (check === 'fontOptions') {
-            // plain font names (a catalog name, or a family name the next turn can map), no
-            // descriptions or prefixes, plus an optional "keep" option
-            // only exact catalog names: the app applies them as they are and adds its own
-            // localized "Keep current font"
-            const options = edit.clarification?.options || [];
-            if (!options.length || !options.every((option) => FONTS.includes(option))) failures.push(check);
-        }
+        // the option types the server sent (eval requests ask for typed options)
+        const typed = edit.clarification?.typed || [];
+        const allOf = (type) => typed.length > 0 && typed.every((option) => option.type === type);
+        const currentPreset = (option) => option.preset_id === fixture.style.preset;
+        // presets other than the current one; the app adds "Keep as is"
+        if (check === 'keepStyleOption' && (!allOf('preset') || typed.some(currentPreset))) failures.push(check);
+        // exact catalog fonts: the app applies them as they are and adds its own "Keep current font"
+        if (check === 'fontOptions' && (!allOf('font') || !typed.every((option) => FONTS.includes(option.font)))) failures.push(check);
         // only when it asked: whether a case must ask is the accept list's call
-        if ((check === 'presetOptions' || check === 'kindOptions') && edit.clarification) {
-            // narrowing a new look (prompt rule 20): kinds first, then exactly 3 preset names
-            const options = edit.clarification?.options || [];
-            const current = presets.find((preset) => preset.id === fixture.style.preset)?.name;
-            const isPreset = (option) => presets.some((preset) => preset.name.toLowerCase() === option.trim().toLowerCase());
-            if (check === 'presetOptions' && (!options.length || !options.every(isPreset) || options.some((option) => current && option.trim() === current))) failures.push(check);
-            // a kind may share a name with a preset ("Clean"); the app shows previews only when every option is one
-            if (check === 'kindOptions' && (!options.length || options.every(isPreset))) failures.push(check);
+        if (edit.clarification) {
+            // narrowing (prompt's Asking): directions first, then 2-3 presets, never the current one
+            if (check === 'presetOptions' && (!allOf('preset') || typed.length < 2 || typed.some(currentPreset))) failures.push(check);
+            if (check === 'kindOptions' && !allOf('direction')) failures.push(check);
+            if (check === 'changeOptions' && !allOf('change')) failures.push(check);
         }
     }
     // offered: options already offered earlier in the conversation must not come back

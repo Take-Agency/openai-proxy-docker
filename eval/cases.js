@@ -138,7 +138,8 @@ export const CASES = [
     { id: 41, group: 'emphasis', instruction: 'highlight "channel" and "day"', accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.3', to: 'c4.3' }]] }] },
 
     // Ambiguous, unsupported, adversarial
-    { id: 42, group: 'abstain', instruction: 'make it better', accept: [{ clarify: true }] },
+    // a request about everything asks what to improve first: directions, one of them the look
+    { id: 42, group: 'abstain', instruction: 'make it better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
     { id: 43, group: 'abstain', instruction: 'change the color', accept: [{ clarify: true }] },
     {
         id: 44, group: 'abstain', instruction: 'make only Dennis red',
@@ -405,5 +406,8 @@ export const CASES = [
         // 3 more playful presets is what the prompt asks for; a new angle is also fine, as long as nothing repeats
         offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], accept: [{ clarify: true }],
     },
+    { id: 146, group: 'look', instruction: 'make the captions better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
+    // a quality with no part: which part, as changes
+    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['changeOptions'], accept: [{ clarify: true }] },
     { id: 145, group: 'look', instruction: 'surprise me with a new style', accept: [{ calls: [['apply_preset', { preset_id: { anyOf: presets.filter((preset) => preset.name !== 'Mosy').map((preset) => preset.id) } }]] }] },
 ];
