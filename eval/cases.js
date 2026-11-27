@@ -424,5 +424,17 @@ export const CASES = [
     },
     // a new look with a color quality goes straight to presets that look like it
     { id: 149, group: 'look', instruction: 'give me a style with bright colors', checks: ['presetOptions'], accept: [{ clarify: true }] },
+    // the app's "More like these" chip under preview cards: 3 more of the same kind, no repeats
+    {
+        id: 150, group: 'look', instruction: 'Playful',
+        history: [
+            'User: use a different preset',
+            'AI Edit asked: What kind of style are you looking for? Options: Bold / Playful / Clean / Keep as is',
+            'User: Playful',
+            'AI Edit asked: Which playful style would you like? Options: Candy Bar / Bubblegum / Cartoony / More like these / Keep as is',
+        ],
+        clarification: { question: 'Which playful style would you like?', choice: 'More like these' },
+        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['presetOptions'], accept: [{ clarify: true }],
+    },
     { id: 145, group: 'look', instruction: 'surprise me with a new style', accept: [{ calls: [['apply_preset', { preset_id: { anyOf: presets.filter((preset) => preset.name !== 'Mosy').map((preset) => preset.id) } }]] }] },
 ];
