@@ -436,5 +436,6 @@ export const CASES = [
         clarification: { question: 'Which playful style would you like?', choice: 'More like these' },
         offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['presetOptions'], accept: [{ clarify: true }],
     },
-    { id: 145, group: 'look', instruction: 'surprise me with a new style', accept: [{ calls: [['apply_preset', { preset_id: { anyOf: presets.filter((preset) => preset.name !== 'Mosy').map((preset) => preset.id) } }]] }] },
+    // "surprise me" still shows choices (user report 2026-11-27): 3 presets the model picks
+    { id: 145, group: 'look', instruction: 'surprise me with a new style', checks: ['presetOptions'], accept: [{ clarify: true }] },
 ];
