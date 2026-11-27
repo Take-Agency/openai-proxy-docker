@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import express from 'express';
-import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, appToolsPrompt, resolveAppTools, languageName, cleanFontOptions, INTENT_PROMPT } from './editInstruct.js';
+import { createEditInstructRouter, validateToolCalls, SYSTEM_PROMPT, appToolsPrompt, resolveAppTools, languageName, normalizeOptions, flattenOptions, INTENT_PROMPT } from './editInstruct.js';
 import { EDIT_TOOLS, APP_TOOLS, LEGACY_APP_TOOLS, appToolDefinitions, TOOL_NAMES } from './editInstructTools.js';
 
 const INSTALL_ID = 'test-install-0001';
@@ -30,7 +30,8 @@ const setStyle = call('set_style', {
     font_size: 104, position: null, case: null, highlight: null, overflow: null,
     position_y: null, outline_color: null, outline_width: null, shadow: null, font: null,
 });
-const askClarification = call('ask_clarification', { question: 'Which color?', options: ['Text', 'Emphasis'] });
+const option = (label, type = 'change', presetId = null, font = null) => ({ label, type, preset_id: presetId, font });
+const askClarification = call('ask_clarification', { question: 'Which color?', options: [option('Text'), option('Emphasis')] });
 
 // Builds a fake OpenAI Responses endpoint. `respond({ model, request })` returns the `output`
 // array, a full response ({ status, json }), or throws, to exercise the failure paths.
@@ -193,12 +194,30 @@ test('ask_clarification mixed with an edit on both models returns 502', async ()
     });
 });
 
-test('ask_clarification on its own is returned', async () => {
+test('ask_clarification on its own is returned, flattened to labels for builds without typed_options', async () => {
     const { fetch } = fakeFetch(() => [askClarification]);
     await withServer({ fetch }, async (post) => {
         const { status, body } = await post(validBody({ instruction: 'change the color' }));
         assert.equal(status, 200);
         assert.deepEqual(body.tool_calls, [{ name: 'ask_clarification', arguments: { question: 'Which color?', options: ['Text', 'Emphasis'] } }]);
+    });
+});
+
+test('builds with typed_options get the options as objects', async () => {
+    const { fetch } = fakeFetch(() => [askClarification]);
+    await withServer({ fetch }, async (post) => {
+        const { status, body } = await post(validBody({ instruction: 'change the color', typed_options: true }));
+        assert.equal(status, 200);
+        assert.deepEqual(body.tool_calls[0].arguments.options, [option('Text'), option('Emphasis')]);
+    });
+});
+
+test('typed_options must be a boolean', async () => {
+    const { fetch } = fakeFetch(() => [askClarification]);
+    await withServer({ fetch }, async (post) => {
+        const { status, body } = await post(validBody({ typed_options: 'yes' }));
+        assert.equal(status, 400);
+        assert.equal(body.error, 'invalid_typed_options');
     });
 });
 
@@ -564,16 +583,25 @@ test('logs counts only, never instruction or caption text', async () => {
     assert.ok(!lines[0].includes('SECRET'));
 });
 
-test('font question options become exact catalog names', () => {
+test('options are checked against the catalogs', () => {
     const fonts = 'System\nChalkboardSE-Bold\nFredoka One\nFredokaOne-Regular\nMontserrat-Black';
-    const ask = (options) => [{ name: 'ask_clarification', arguments: { question: 'Comic Sans isn’t available.', options } }];
-    const options = (calls) => cleanFontOptions(calls, fonts)[0].arguments.options;
-    assert.deepEqual(options(ask(['ChalkboardSE-Bold', 'Comic-style option: Comic Sans not listed'])), ['ChalkboardSE-Bold']);
-    assert.deepEqual(options(ask(['Comic Sans?', 'FredokaOne-Regular', 'Keep current font'])), ['FredokaOne-Regular']);
-    assert.deepEqual(options(ask(['Comic Sans unavailable; choose Fredoka One', 'Comic Sans unavailable; choose ChalkboardSE-Bold', 'Keep current font'])), ['Fredoka One', 'ChalkboardSE-Bold']);
-    // other questions pass through
-    assert.deepEqual(options(ask(['Text', 'Highlight', 'Background box'])), ['Text', 'Highlight', 'Background box']);
-    assert.deepEqual(cleanFontOptions(ask(['A', 'B']), null)[0].arguments.options, ['A', 'B']);
+    const presets = 'clean|Clean|minimalClean\nspook|Spookspire 🎃|halloween\nboo|Boo Cute|halloween';
+    const ask = (...options) => [{ name: 'ask_clarification', arguments: { question: 'Which one?', options } }];
+    const options = (calls) => normalizeOptions(calls, { presets, fonts })[0].arguments.options;
+    // a preset gets its catalog name; an unknown id is matched by name, else it is a direction
+    assert.deepEqual(options(ask(option('Spooky one', 'preset', 'spook'), option('boo cute', 'preset', 'nope'), option('Witchy', 'preset', 'nope'))),
+        [option('Spookspire 🎃', 'preset', 'spook'), option('Boo Cute', 'preset', 'boo'), option('Witchy', 'direction')]);
+    // a kind named like a preset stays a kind
+    assert.deepEqual(options(ask(option('Clean', 'direction', 'clean'), option('Playful', 'direction'))), [option('Clean', 'direction'), option('Playful', 'direction')]);
+    // a font gets an exact catalog name; one naming no catalog font is dropped
+    assert.deepEqual(options(ask(option('Chalkboard', 'font', null, 'ChalkboardSE-Bold'), option('Comic Sans', 'font', null, 'Comic Sans'), option('x', 'font', null, 'Comic Sans unavailable; choose Fredoka One'))),
+        [option('ChalkboardSE-Bold', 'font', null, 'ChalkboardSE-Bold'), option('Fredoka One', 'font', null, 'Fredoka One')]);
+    // repeats dropped, at most 3
+    assert.deepEqual(options(ask(option('Boo', 'preset', 'boo'), option('Boo Cute', 'preset', 'boo'), option('A'), option('B'), option('C'))).map((entry) => entry.label), ['Boo Cute', 'A', 'B']);
+    // other calls pass through
+    const other = [{ name: 'set_style', arguments: { font: 'x' } }];
+    assert.deepEqual(normalizeOptions(other, { presets, fonts }), other);
+    assert.deepEqual(flattenOptions(ask(option('Boo Cute', 'preset', 'boo'), option('Text'))), [{ name: 'ask_clarification', arguments: { question: 'Which one?', options: ['Boo Cute', 'Text'] } }]);
 });
 
 test('the bulk tools are strict and in the tool list', () => {

@@ -16,7 +16,7 @@
 // Install ids rotate over five synthetic `eval-<label>-<n>` ids, keeping each under the
 // per-install limits (10/min, 150/day).
 
-import { readFileSync, writeFileSync, mkdirSync, statSync, openSync, readSync, closeSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, statSync, openSync, readSync, closeSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { run as applyCalls, snapshotText, presetCatalog } from './applier.js';
@@ -37,7 +37,10 @@ const EVAL_APP_TOOLS = {
 };
 
 const presets = JSON.parse(readFileSync(new URL('./presets.json', import.meta.url), 'utf8'));
-const PRESETS = presetCatalog(presets);
+// the app's own catalog text, looks included (InstructionEditTests.testPresetCatalog writes it);
+// the id|name|category lines built here are the fallback
+const CATALOG_FILE = new URL('./preset-catalog.txt', import.meta.url);
+const PRESETS = existsSync(CATALOG_FILE) ? readFileSync(CATALOG_FILE, 'utf8').trim() : presetCatalog(presets);
 const CLIENT_TIMEOUT_MS = 15_000; // the app's
 // $ per 1M tokens: input / cached input / output (docs/instruction_editing_plan.md §2.2)
 const PRICES = { 'gpt-6-luna': [0.10, 0.01, 0.50], 'gpt-5.6-luna': [0.10, 0.01, 0.50] };
@@ -340,6 +343,8 @@ async function main() {
                 // as 4.0 (6) and later send it: the build's own tools and the clip's state
                 app_tools: EVAL_APP_TOOLS,
                 app_state: { silences_removed: false, audio_cleaned: false, music_added: false, ...testCase.appState },
+                // as builds that read typed question options send it
+                typed_options: true,
             };
             // a follow-up turn: the user's answer to the model's earlier question
             if (testCase.clarification) body.clarification = testCase.clarification;

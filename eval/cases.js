@@ -18,7 +18,9 @@
 // `checks` are extra pass conditions: noPromptLeak, noTextCram (no word edit or merge may carry
 // the new text of an insertion), keepStyleOption (presets other than the current one, and no
 // keep option: the app adds "Keep as is" to every question), fontOptions (every option is an exact catalog font name; the app adds its own
-// "Keep current font").
+// "Keep current font"), presetOptions (every option is a catalog preset name, not the current one),
+// kindOptions (options name kinds of style, not all of them preset names). `offered` lists options asked before
+// in the conversation; offering one again fails (noRepeatOptions).
 // No-op edits (a word replaced by itself, a style field set to its current value) are reported,
 // not failed: the app drops them. Every case fails on a question or message in the wrong language: `reply` names it (en, es,
 // ja, hi-deva, hi-latn), defaulting to en for the en locale. Every case with an English locale also
@@ -74,7 +76,7 @@ export const CASES = [
     { id: 11, group: 'preset', instruction: 'use the Boo Cute style', accept: [{ calls: [['apply_preset', { preset_id: presetId('Boo Cute') }]] }] },
     { id: 12, group: 'preset', instruction: 'Boo Cute but with white text', accept: [{ calls: [['apply_preset', { preset_id: presetId('Boo Cute') }], ['set_style', { fill_color: '#FFFFFF' }]] }] },
     {
-        id: 13, group: 'preset', instruction: 'something spooky for Halloween',
+        id: 13, group: 'preset', instruction: 'something spooky for Halloween', checks: ['presetOptions'],
         accept: [{ calls: [['apply_preset', { preset_id: { anyOf: category('halloween') } }]] }, { clarify: true }],
     },
     { id: 14, group: 'preset', instruction: 'one word at a time', accept: [{ calls: [['set_pacing', { pacing: 'fast' }]] }] },
@@ -136,7 +138,8 @@ export const CASES = [
     { id: 41, group: 'emphasis', instruction: 'highlight "channel" and "day"', accept: [{ calls: [['set_emphasis', { caption: 'c4', from: 'c4.3', to: 'c4.3' }]] }] },
 
     // Ambiguous, unsupported, adversarial
-    { id: 42, group: 'abstain', instruction: 'make it better', accept: [{ clarify: true }] },
+    // a request about everything asks what to improve first: directions, one of them the look
+    { id: 42, group: 'abstain', instruction: 'make it better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
     { id: 43, group: 'abstain', instruction: 'change the color', accept: [{ clarify: true }] },
     {
         id: 44, group: 'abstain', instruction: 'make only Dennis red',
@@ -374,4 +377,65 @@ export const CASES = [
     { id: 135, group: 'apptools', appState: { silences_removed: true }, instruction: 'you cut too much, it sounds rushed', accept: [{ calls: [], open: ['remove_silences'] }] },
     { id: 136, group: 'apptools', instruction: "there's a fan humming the whole time", accept: [{ calls: [], open: ['cleanup_audio'] }] },
     { id: 137, group: 'apptools', appState: { audio_cleaned: true }, instruction: 'now make my voice sound more professional', accept: [{ calls: [], open: ['cleanup_audio'] }] },
+    // a new look is taste (prompt rule 20): narrow it down with questions, kinds first, then 3 presets
+    // as previews, and a new angle when the user turns options down. Dennis's report 2026-11-26:
+    // "Use a different preset" applied Sunshine without asking.
+    { id: 138, group: 'look', instruction: 'use a different preset', checks: ['kindOptions'], accept: [{ clarify: true }] },
+    { id: 139, group: 'look', instruction: 'Better caption style', checks: ['kindOptions'], accept: [{ clarify: true }] },
+    { id: 140, group: 'look', instruction: 'make the captions better', clarification: { question: 'How do you want the captions better?', choice: 'A different style' }, checks: ['kindOptions'], accept: [{ clarify: true }] },
+    { id: 141, group: 'look', instruction: 'A different style', clarification: { question: 'What kind of style are you looking for?', choice: 'Playful' }, checks: ['presetOptions'], accept: [{ clarify: true }] },
+    { id: 142, group: 'look', instruction: 'something playful', checks: ['presetOptions'], accept: [{ clarify: true }] },
+    {
+        id: 143, group: 'look', instruction: 'none of those really',
+        history: [
+            'User: make the captions better',
+            'AI Edit asked: How do you want the captions better? Options: Brighter colors / Bigger text / A different style / Keep as is',
+            'User: A different style',
+            'AI Edit asked: What kind of style are you looking for? Options: Bold / Playful / Clean / Keep as is',
+        ],
+        offered: ['Bold', 'Playful', 'Clean'], checks: ['kindOptions'], accept: [{ clarify: true }],
+    },
+    {
+        id: 144, group: 'look', instruction: 'none of those',
+        history: [
+            'User: use a different preset',
+            'AI Edit asked: What kind of style are you looking for? Options: Bold / Playful / Clean / Keep as is',
+            'User: Playful',
+            'AI Edit asked: Which playful preset would you like? Options: Candy Bar / Bubblegum / Cartoony / Keep as is',
+        ],
+        // 3 more playful presets is what the prompt asks for; a new angle is also fine, as long as nothing repeats
+        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], accept: [{ clarify: true }],
+    },
+    { id: 146, group: 'look', instruction: 'make the captions better', checks: ['kindOptions'], optionsMatch: /look|style/i, accept: [{ clarify: true }] },
+    // a quality with no part: which part, as changes
+    { id: 147, group: 'look', instruction: 'make the captions brighter', checks: ['changeOptions'], accept: [{ clarify: true }] },
+    // from a user report (2026-11-27): a quality said while choosing presets picks brighter presets, not a part of the current style
+    {
+        id: 148, group: 'look', instruction: 'More bright colors',
+        history: [
+            'User: The look',
+            'AI Edit asked: What kind of look would you like? Options: Bold / Playful / Clean / Keep as is',
+            'User: Playful',
+            'AI Edit asked: Which playful style would you like? Options: Candy Bar / Bubblegum / Pastel / Keep as is',
+            'User: Different more colorful options',
+            'AI Edit asked: Which colorful style would you like? Options: Showgirl / Pop Layers / Candy Bar / Keep as is',
+        ],
+        offered: ['Showgirl', 'Pop Layers', 'Candy Bar', 'Bubblegum', 'Pastel'], checks: ['presetOptions'], accept: [{ clarify: true }],
+    },
+    // a new look with a color quality goes straight to presets that look like it
+    { id: 149, group: 'look', instruction: 'give me a style with bright colors', checks: ['presetOptions'], accept: [{ clarify: true }] },
+    // the app's "More like these" chip under preview cards: 3 more of the same kind, no repeats
+    {
+        id: 150, group: 'look', instruction: 'Playful',
+        history: [
+            'User: use a different preset',
+            'AI Edit asked: What kind of style are you looking for? Options: Bold / Playful / Clean / Keep as is',
+            'User: Playful',
+            'AI Edit asked: Which playful style would you like? Options: Candy Bar / Bubblegum / Cartoony / More like these / Keep as is',
+        ],
+        clarification: { question: 'Which playful style would you like?', choice: 'More like these' },
+        offered: ['Candy Bar', 'Bubblegum', 'Cartoony'], checks: ['presetOptions'], accept: [{ clarify: true }],
+    },
+    // "surprise me" still shows choices (user report 2026-11-27): 3 presets the model picks
+    { id: 145, group: 'look', instruction: 'surprise me with a new style', checks: ['presetOptions'], accept: [{ clarify: true }] },
 ];

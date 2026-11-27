@@ -28,6 +28,21 @@ const wordRefs = {
     },
 };
 
+// One answer the user can tap. type says what tapping it does: a change is sent back to you as
+// the answer and applied; a preset or font is shown as a preview and applied by the app itself; a
+// direction is sent back to you as the answer and leads to the next question.
+const CLARIFICATION_OPTION = {
+    type: 'object',
+    properties: {
+        label: { type: 'string', description: 'What the user sees, in the reply language. For a preset or font the app shows its own name instead.' },
+        type: { type: 'string', enum: ['change', 'preset', 'font', 'direction'] },
+        preset_id: { type: ['string', 'null'], description: 'type preset only: the id from <presets>. Null otherwise.' },
+        font: { type: ['string', 'null'], description: 'type font only: exactly one name from <fonts>. Null otherwise.' },
+    },
+    required: ['label', 'type', 'preset_id', 'font'],
+    additionalProperties: false,
+};
+
 function tool(name, description, properties) {
     return {
         type: 'function',
@@ -158,9 +173,9 @@ export const EDIT_TOOLS = [
         name: { type: 'string' },
     }),
     tool('undo_last_edit', 'Undo the previous edit because the new instruction corrects it. Only when <previous> says it is applied. The app undoes it and sends you both instructions again. Never combined with other calls.', {}),
-    tool('ask_clarification', 'Ask the user to choose between 2-3 readings of the instruction. The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. When the question is which font to use, options are 1-3 font names copied exactly from <fonts>. Never combined with other calls.', {
+    tool('ask_clarification', 'Ask the user one question with 2-3 options (see Asking). The app adds a "Keep as is" option itself, so never add a keep, cancel or "none of these" option. Never combined with other calls.', {
         question: { type: 'string' },
-        options: { type: 'array', items: { type: 'string' } },
+        options: { type: 'array', items: CLARIFICATION_OPTION },
     }),
     tool('cannot_do', 'Say that (part of) the instruction is not possible, and offer what is, or answer a question that asks for no change. May be combined with edits. Never a confirmation of edits you made.', {
         reason: { type: 'string', enum: ['per_word_style', 'translate', 'cut_audio', 'emoji', 'horizontal_position', 'retranscribe', 'other'] },

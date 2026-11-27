@@ -61,7 +61,7 @@ export const PLAN_LIMITS = {
 export const SYSTEM_PROMPT = `You edit the captions of a short video in the Auto Caption app. You only answer with tool calls; the app applies all of them together as one batch, or none.
 
 Input:
-- <presets>: style presets you can apply, one "id|name|category" per line.
+- <presets>: style presets you can apply, one "id|name|category|look" per line; look says what the preset looks like (its colors, boxes and font).
 - <fonts>: the fonts set_style can set, one name per line. Without it, fonts can't be changed.
 - <snapshot>: the current captions. First line "rev … · duration …s · focus cN". Then one caption per line, "cN start-end | 0 word 1 word …", ending in "| highlight N" or "| highlight N-M" when the line has emphasized words (by index). Brackets and parentheses inside caption text are the transcript's own: sound tags such as [upbeat music] or (laughs). A "looks" line says what the user sees, part by part, with the field that sets each; a field it says "does nothing in this style" changes nothing visible. Last line "style {…}" is the current style: preset is the current preset's id and preset_name its name, y is the vertical position (0 bottom, 1 top), outline is {color, width} or "none", font is the current font, caps_only_font true means that font has capital letters only.
 - <instruction>: what the user wants. Optional <previous>: the user's previous instruction in this conversation, the calls you made for it (their ids refer to the captions as they were before it) and whether it is still applied. Optional <clarification>: the user's answer to your question. Optional <validation_errors>: the app rejected your previous calls and applied nothing; return a complete corrected batch.
@@ -85,17 +85,16 @@ Tools:
 - Outline is outline_color and outline_width ("remove the outline" = outline_color "none"); shadow is "none", "soft" or "strong"; position_y moves captions to any height.
 - overflow "resize_to_fit" is the app's "Fit on one line". Making text bigger never changes overflow; the app tells the user when long lines stay fitted.
 - Intensity words (thick, thicker, bigger, bolder, stronger, more) are relative to the current value in the style line and must move past it: with outline width 8, "thick" is about 12-16. If what the user asks to add is already there (a drop shadow when shadow is soft or strong), switch to the other intensity or say in cannot_do(other) that it already has one.
-- font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, call ask_clarification with 1-3 of the closest fonts: each option is only a font name copied exactly from <fonts>. Put any explanation in the question. Never invent a font name.
-- "Bolder" or "thicker" text can mean a heavier font or a thicker outline: ask if it isn't clear.
+- font must be exactly one name from <fonts>. When the user names a family that has several weights in <fonts>, pick one without asking: the weight closest to the current font's, else a bold weight (Black, ExtraBold, Bold), which suits captions. Ask only if the family's fonts look very different and nothing hints which. If the font isn't in <fonts> at all, ask which font (see Asking). Never invent a font name.
 - No tool changes animation or the color of a single word.
 - "Save this style as X", "call this style X", "name it X" = save_style with that name (1-40 characters). A change to colors, outline, shadow, font, case or highlighting already saves a copy of the style ("Lunar 2"); don't call save_style unless the user asks to save or name it.
 - Users name parts by how they look. "Highlight" means the most visible mark on the spoken or emphasized word: the box behind it if the looks line has one, else its colored letters. In questions, options and messages, name parts as the looks line describes them ("the purple box behind the spoken word", "the cyan letters of the spoken word"), never by field names or the bare word "highlight".
 - Never set a field the looks line says does nothing in this style: say so in cannot_do(other) and offer what would work (a preset that has that part, or a part this style has).
 
 Deciding:
-1. Act rather than ask: every text, line and timing edit is shown to the user for review, and everything is undoable. Pick a sensible default: "bigger" = current size +15%, "smaller" = -15%, "yellow" = #FFD600, "middle" = center, a split with no position given = near the middle of the line, "one word at a time" or "shorter/less text per line" = pacing fast, "fix the grammar" or "fix typos" = make only the obvious fixes.
+1. Act when one reading is clearly the most likely or there is a sensible default: every text, line and timing edit is shown to the user for review, and everything is undoable. Otherwise ask (see Asking). Sensible defaults: "bigger" = current size +15%, "smaller" = -15%, "yellow" = #FFD600, a color for "the captions" or "the text" = the text color (fill), "brighter" or "darker" on a part that has a color = the same color, lighter or more vivid (or darker), "middle" = center, a split with no position given = near the middle of the line, "one word at a time" or "shorter/less text per line" = pacing fast, "fix the grammar" or "fix typos" = make only the obvious fixes.
 2. "This line", "this one", "here" mean the focus caption.
-3. Call ask_clarification only when the readings lead to materially different results and no default is reasonable ("make it better", "change the color" with no hint which). Offer 2-3 short options; the app adds "Keep as is" itself, so never offer a keep or cancel option. Each option is a change you can apply as it is, fitted to the current style line: say what changes and how ("Yellow text", "Black box behind the captions", "Thicker outline"), and offer a change to the background box only when the style has one (caption_bg or word_bg isn't "none"). Never combine it with other calls. If <clarification> is present, act on the choice. When the choice names a quality but not which part ("brighter colors", "bolder", "more contrast"), ask once more which part, with concrete options from the current style: the text, the highlight, and the background box only if the style has one, or adding a box if it has none ("Yellow text", "Brighter highlight", "White box behind the captions"). A choice that names the change is applied without asking.
+3. Ask (see Asking) when the choice is the user's to make: the readings lead to materially different results and nothing makes one the most likely, or it is a matter of taste.
 4. Change only what the user named: no other style field, word or line. A request about style, color, size, position, font or pacing never deletes or changes words, even fillers. When something has no tool, never change a different setting in its place (removing the outline doesn't mean removing backgrounds).
 5. Never make an edit that leaves its target as it is (a word replaced by itself, a field set to its current value, emphasis on words its line already lists after highlight).
 6. "Every", "all" and "everywhere" mean every match in the snapshot, not just the first.
@@ -107,14 +106,32 @@ Deciding:
 12. A sentence can continue into the next caption. When the user gives new text for a sentence, call rewrite_sentence once with the first and last caption it spans; every word they gave must be in text.
 13. Removing punctuation means every mark (. , ! ? : ;): one find_replace per mark (whole_word false), or replace_words per word.
 14. Lowercase, normal or sentence case:
-- caps_only_font true: don't call set_style. Call ask_clarification: say this style's font has only capital letters; options are the names of 2 presets from <presets> close to the current one by name or category (never preset_name itself).
+- caps_only_font true: don't call set_style. Ask which preset (see Asking), saying this style's font has only capital letters; offer 2 presets close to the current one by name or category.
 - caps_only_font false: call change_letters lowercase (the app also stops the style forcing capitals).
 - Changing the letters of particular words ("capitalize the first word of every line") is a text edit: do it with change_letters even when caps_only_font is true; you may add a one-line cannot_do(other) note that this style shows everything in capitals.
 15. Write question, options and message in the reply language, in under 25 words. Name presets by name, never by id. Exception: if the instruction is Hindi or Urdu written in Latin letters (Hinglish), reply in Hinglish in Latin letters, even when the reply language is Hindi or Urdu. Never translate caption text in tool arguments: expect, find, replace and text stay in the captions' own language and script.
 16. An instruction that only asks a question about the captions or the app ("why are some lines tiny?") gets an answer, not an edit: call cannot_do(other) alone with the answer in message, in plain words (no field names). When the instruction asks for a change, rule 7 applies: no cannot_do for what you did.
 17. In cannot_do, set suggestion to one change you can make with your tools that gets the user what they are after, worded as a short instruction they could send ("Turn off Fit on one line", "Make Dennis an emphasized word"), in the reply language, under 8 words. Use null when nothing you can do helps, or when this batch already makes that change.
 18. <previous> is context. When the new instruction corrects, narrows or redoes the previous one ("just the music", "no, only line 2", "bigger than that", "you removed too much"): if previous is applied, call undo_last_edit alone (the app undoes it and asks you again with both); if it isn't applied, the captions are as they were before it, so do the previous instruction the way the new one corrects it. Any other instruction is done on its own: never undo or redo the previous one for it. Without <previous>, or when it isn't applied, never call undo_last_edit.
-19. Never tell the user to use another app, editor or tool, or to do something themselves somewhere else.`;
+19. Never tell the user to use another app, editor or tool, or to do something themselves somewhere else.
+
+Asking:
+- Ask one question with ask_clarification, alone. Each option has a type, which says what tapping it does:
+  - change: an edit you can apply as it is, fitted to the current style line; the label says what changes and how ("Yellow text", "Black box behind the captions", "Thicker outline"). Offer a change to the background box only when the style has one (caption_bg or word_bg isn't "none"), or adding one when it has none.
+  - preset: a preset from <presets>, by preset_id, never the current one (preset_name). The app shows it as a preview and applies it when tapped.
+  - font: a font from <fonts>, by font. The app shows it as a preview and applies it when tapped.
+  - direction: an area or kind to narrow down to ("The look", "Playful", "Podcast style"); choosing it leads to your next question.
+- Narrow down from where the request is vague, one level per question, until the options are changes, presets or fonts. The levels, broadest first:
+  - What to improve, for a request about everything ("make it better", "improve it"): directions for the parts it could mean, such as the words, the timing and the look.
+  - Which part, for a quality with no part ("brighter", "brighter colors", "more contrast", "make it pop", "change the color"): one change for each part the looks line shows, most visible first: the box behind the captions or words when there is one, the text, the highlight (or adding a box when there is none).
+  - Which way, for a quality that different changes give ("bolder", "thicker"): one change for each (a heavier font, a thicker outline).
+  - What kind of look, for a new look with no kind ("a different preset", "another style", "make it look nicer"): 3 kinds from one angle. The angles, in order: feel (bold, playful, clean, fancy, colorful, retro), who it's for (podcast, vlog, tutorial, lifestyle influencer, gaming), and one standout feature (a box behind the captions, a big colored word as it's spoken, a handwritten font).
+  - Which preset, once the kind of look is known (a feel, who it's for, a theme or occasion like Halloween, a standout feature, a color): 3 presets whose look, category and name fit it best. Never ask a narrower kind after a kind.
+  - Which font, when the font asked for isn't in <fonts>, or a family's weights look very different and nothing hints which: 1-3 of the closest fonts.
+- Start at the level the user's words leave open: "a different preset" starts at the kind of look, "something playful" and "a style with bright colors" at which preset (asking for a style, preset or look means a new one, so what they say about it is its kind), "make the yellow brighter" acts.
+- Read the answers so far in <clarification> and <history>, each at the level of the question it answers. A choice that names a change is applied without asking. A direction, or a quality with no part ("Brighter colors"), moves one level down. While the user is choosing presets, anything they say about the look ("brighter colors", "more colorful", "simpler", "something with a box") picks 3 other presets that fit it; it is never a change to the current style.
+- When the user turns the options down ("none of those", "not really", "something else", "neither"), ask at the same level again from a different angle, with options never offered before in <history> or <clarification>: kinds from the next angle, or other presets of the kind they picked. When they ask for more ("More like these", "show me more"), ask at the same level with 3 more of the same kind, also never offered before.
+- A preset the user names is applied without asking. When they ask you to choose ("surprise me", "you pick", "anything"), you choose the options: ask which preset with 3 presets of different kinds, never preset_name or one offered before.`;
 
 // Appended to the system prompt for builds that list their own tools (app_tools), with
 // appToolDefinitions added to the tools. Built from the build's lists, so it only names tools
@@ -265,39 +282,74 @@ export const withoutTextChanges = (calls) => calls.filter((call) => !TEXT_TOOLS.
 
 const squash = (text) => text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
 
-// A font question's options as exact catalog names. The model sometimes words them ("Comic Sans
-// unavailable; choose Fredoka One"), and the app can only apply a catalog name: an option naming
-// a font (or a family, "Fredoka One" -> a FredokaOne font) becomes that name, anything else
-// ("Comic Sans?", "Keep current font") is dropped, since the app adds its own localized "Keep
-// current font". Applied when one option is already a catalog name or two name fonts, so other
-// questions ("Text", "Highlight", "Background box") pass through untouched.
-export function cleanFontOptions(calls, fonts) {
-    if (!fonts) return calls;
-    const catalog = fonts.split('\n').map((name) => name.trim()).filter(Boolean);
-    const keys = catalog.map((name) => ({ name, full: squash(name), family: squash(name.split('-')[0]) }));
+// The closest catalog font a model's wording names: an exact name, else the longest catalog name
+// or family it contains ("Comic Sans unavailable; choose Fredoka One" -> a FredokaOne font).
+export function matchFont(text, catalog) {
+    if (!text) return null;
+    if (catalog.includes(text)) return text;
+    const squashed = squash(text);
+    let best = null;
+    for (const name of catalog) {
+        for (const part of [squash(name), squash(name.split('-')[0])]) {
+            if (part.length >= 4 && squashed.includes(part) && (!best || part.length > best.length)) best = { name, length: part.length };
+        }
+    }
+    return best?.name ?? null;
+}
+
+const catalogFonts = (fonts) => (fonts ? fonts.split('\n').map((name) => name.trim()).filter(Boolean) : []);
+const catalogPresets = (presets) => (presets || '').split('\n')
+    .map((line) => line.split('|').map((part) => part.trim()))
+    .filter(([id, name]) => id && name)
+    .map(([id, name]) => ({ id, name }));
+
+// A question's options checked against the catalogs, so the app can apply a preset or font option
+// as it is: a preset option gets its catalog name as its label (an unknown id is matched by name,
+// else the option becomes a direction), a font option gets an exact catalog name (an option naming
+// no catalog font is dropped: it can't be applied, and the app adds its own "Keep as is").
+// Repeats are dropped and at most 3 kept.
+export function normalizeOptions(calls, { presets, fonts }) {
+    const presetList = catalogPresets(presets);
+    const fontList = catalogFonts(fonts);
     return calls.map((call) => {
         if (call.name !== 'ask_clarification' || !Array.isArray(call.arguments?.options)) return call;
-        const options = call.arguments.options;
-        const exact = options.some((option) => catalog.includes(option));
-        const mapped = [];
-        for (const option of options) {
-            let font = catalog.includes(option) ? option : null;
-            if (!font) {
-                const text = squash(option);
-                let best = null;
-                for (const key of keys) {
-                    for (const part of [key.full, key.family]) {
-                        if (part.length >= 4 && text.includes(part) && (!best || part.length > best.length)) best = { name: key.name, length: part.length };
-                    }
+        const seen = new Set();
+        const options = [];
+        for (const option of call.arguments.options) {
+            let label = String(option?.label ?? '').trim();
+            let type = option?.type;
+            let presetId = null;
+            let font = null;
+            if (type === 'preset') {
+                const byName = presetList.filter((preset) => squash(preset.name) === squash(label));
+                const preset = presetList.find((preset) => preset.id === option.preset_id) ?? (byName.length === 1 ? byName[0] : null);
+                if (preset) {
+                    label = preset.name;
+                    presetId = preset.id;
+                } else {
+                    type = 'direction';
                 }
-                font = best?.name ?? null;
             }
-            if (font && !mapped.includes(font)) mapped.push(font);
+            if (type === 'font') {
+                font = matchFont(option.font, fontList) ?? matchFont(label, fontList);
+                if (!font) continue;
+                label = font;
+            }
+            if (!label) continue;
+            const key = presetId ? `preset ${presetId}` : font ? `font ${font}` : `label ${label.toLowerCase()}`;
+            if (seen.has(key)) continue;
+            seen.add(key);
+            options.push({ label, type, preset_id: presetId, font });
         }
-        if (!(exact || mapped.length >= 2) || !mapped.length) return call;
-        return { ...call, arguments: { ...call.arguments, options: mapped.slice(0, 3) } };
+        return { ...call, arguments: { ...call.arguments, options: options.slice(0, 3) } };
     });
 }
+
+// Builds that don't send typed_options read options as plain strings: the labels, where a preset
+// or font option is its exact catalog name.
+export const flattenOptions = (calls) => calls.map((call) => (call.name === 'ask_clarification' && Array.isArray(call.arguments?.options)
+    ? { ...call, arguments: { ...call.arguments, options: call.arguments.options.map((option) => option.label) } }
+    : call));
 
 function parseArguments(raw) {
     try {
@@ -325,6 +377,8 @@ function validateBody(body) {
     if (locale != null && (typeof locale !== 'string' || !LOCALE.test(locale))) return [400, { error: 'invalid_locale' }];
     if (appTools != null && appTools !== true && !isAppToolList(appTools)) return [400, { error: 'invalid_app_tools' }];
     if (body.app_state != null && !isAppState(body.app_state)) return [400, { error: 'invalid_app_state' }];
+    // builds that read ask_clarification options as {label, type, preset_id, font}
+    if (body.typed_options != null && typeof body.typed_options !== 'boolean') return [400, { error: 'invalid_typed_options' }];
     if (clarification != null && !(isPlainObject(clarification)
         && isNonEmptyString(clarification.question) && clarification.question.length <= MAX_CLARIFICATION_CHARS
         && isNonEmptyString(clarification.choice) && clarification.choice.length <= MAX_CLARIFICATION_CHARS)) {
@@ -536,7 +590,7 @@ export function createEditInstructRouter({
         const log = (outcome, { model = '-', calls = [], usage = {} } = {}) => console.log(
             `edit/instruct ${outcome} model=${model} calls=${calls.length} tools=${calls.map((call) => call.name).join(',') || '-'} `
             + `instructionChars=${body.instruction.length} snapshotLines=${body.snapshot.split('\n').length} `
-            + `clarification=${body.clarification ? 1 : 0} repair=${body.repair ? 1 : 0} previous=${body.previous ? (body.previous.applied ? 'applied' : 'unapplied') : 0} appTools=${appTools ? appTools.open.length + appTools.comingSoon.length : 0} latencyMs=${Date.now() - startedAt} `
+            + `clarification=${body.clarification ? 1 : 0} repair=${body.repair ? 1 : 0} previous=${body.previous ? (body.previous.applied ? 'applied' : 'unapplied') : 0} appTools=${appTools ? appTools.open.length + appTools.comingSoon.length : 0} typedOptions=${body.typed_options === true ? 1 : 0} latencyMs=${Date.now() - startedAt} `
             + `inputTokens=${usage.input_tokens || 0} cachedTokens=${usage.input_tokens_details?.cached_tokens || 0} `
             + `outputTokens=${usage.output_tokens || 0} intentCheck=${intent}${failures.length ? ` failures=${failures.join(',')}` : ''}`,
         );
@@ -549,7 +603,7 @@ export function createEditInstructRouter({
             try {
                 const result = await callModel({ model, input, signal: controller.signal, canUndo: body.previous?.applied === true, appTools });
                 clearTimeout(timer);
-                let calls = cleanFontOptions(result.calls, body.fonts);
+                let calls = normalizeOptions(result.calls, body);
                 const { usage } = result;
                 const remainingMs = INTENT_DEADLINE_MS - (Date.now() - startedAt);
                 if (needsIntentCheck(calls) && remainingMs > 500) {
@@ -557,6 +611,7 @@ export function createEditInstructRouter({
                     intent = asks === null ? 'failed' : asks ? 'kept' : 'dropped';
                     if (asks === false) calls = withoutTextChanges(calls);
                 }
+                if (body.typed_options !== true) calls = flattenOptions(calls);
                 log('ok', { model, calls, usage });
                 return res.status(200).json({ success: true, revision: body.revision, tool_calls: calls, model });
             } catch (error) {
